@@ -28,7 +28,7 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
 Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
-Global Const $expireDate = "06/19/2021" ; format MM/DD/YYYY
+Global Const $expireDate = "06/25/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
@@ -221,7 +221,7 @@ Func Auto()
 	  If @error Then
 		  writelog("1. DA HET LUOT HUYEN CANH...." & _NowTime() & @CRLF) ; write console
 		  IniWrite($pathstatus&$Title&".tmp", $status, $huyencanh,$done) ; change status done
-		  $huyencanhDone == True
+		  $huyencanhDone = True
 	  Else
 		  IniWrite($pathstatus&$Title&".tmp", $status, $huyencanh,$notyet) ; change status wait
 	  EndIf
@@ -245,7 +245,7 @@ Func Auto()
 		  If @error Then
 			 writelog("2. DA HET LUOT BLOOD...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $blood,$done) ; change status
-			 $bloodDONE == True
+			 $bloodDONE = True
 		  Else
 			 IniWrite($pathstatus&$Title&".tmp", $status, $blood,$notyet) ; change status wait
 		  EndIf
@@ -269,7 +269,7 @@ Func Auto()
 			 If @error Then
 				writelog("3. DA HET LUOT DAO MO...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$done) ; change status done
-				$DaoMoDone == True
+				$DaoMoDone = True
 			 Else
 			    IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$notyet) ; change status wait
 			 EndIf
@@ -293,7 +293,7 @@ Func Auto()
 			 If @error Then
 				writelog("4. DA HET LUOT CUOP MO...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $cuopmo,$done) ; change status done
-				$CuopMoDone == True
+				$CuopMoDone = True
 			 Else
 				IniWrite($pathstatus&$Title&".tmp", $status, $cuopmo,$notyet) ; change status done
 			 EndIf
@@ -341,7 +341,7 @@ Func Auto()
 		  If @error Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $tienthuong,$done) ; change status done
 			 writelog("6. DA HET LUOT NV TIEN THUONG...." & _NowTime() & @CRLF) ; write console
-			 $NVTIENTHUONGDONE == True
+			 $NVTIENTHUONGDONE = True
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $tienthuong,$notyet) ; change status wait
 		  EndIf
@@ -369,7 +369,7 @@ Func Auto()
 			 IniWrite($pathstatus&$Title&".tmp", $status, $treomay,$done) ; change status done
 			 writelog("7. Hoan Thanh Train Quai...." & _NowTime() & @CRLF) ; write console
 			 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-			 $TrainQuai == True
+			 $TrainQuai = True
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $treomay,$notyet) ; change status wait
 		   EndIf
@@ -397,7 +397,7 @@ Func Auto()
 			 IniWrite($pathstatus&$Title&".tmp", $status, $nvguild,$done) ; change status done
 			 writelog("8. Hoan Thanh NV Guide...." & _NowTime() & @CRLF) ; write console
 			 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-			 $NVGuide == True
+			 $NVGuide = True
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $nvguild,$notyet) ; change status wait
 		  EndIf
@@ -425,7 +425,7 @@ Func Auto()
 			 IniWrite($pathstatus&$Title&".tmp", $status, $tinhanh,$done) ; change status done
 			 writelog("9. Hoan Thanh NV Tinh Anh...." & _NowTime() & @CRLF) ; write console
 			 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-			 $NVTinhAnh == True
+			 $NVTinhAnh = True
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $tinhanh,$notyet) ; change status wait
 		   EndIf
@@ -451,7 +451,7 @@ Func Auto()
 		  If @error Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$done) ; change status done
 			 writelog("10. Hoan Thanh Lay Thanh Vat..." & _NowTime() & @CRLF) ; write console
-			 $LayThanhVatDone == True
+			 $LayThanhVatDone = True
 		   Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$notyet) ; change status wait
 		   EndIf
@@ -476,7 +476,7 @@ Func Auto()
 		  If $var1 > $timeend Then
 			 writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-			 $Boss12hDone == True
+			 $Boss12hDone = True
 		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
 			 $rs = _openMenu()
@@ -488,10 +488,10 @@ Func Auto()
 			 If @error Then
 				writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-				$Boss12hDone == True
+				$Boss12hDone = True
 			 EndIf
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-			 $Boss12hDone == True
+			 $Boss12hDone = True
 		  EndIf
 	   EndIf
     EndIf
@@ -511,7 +511,7 @@ Func Auto()
 		  If $var1 > $timeend Then
 			 writelog("Het Thoi Gian Vao Tu Hoi Guild...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-			 $TuhoiDone == True
+			 $TuhoiDone = True
 		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
 			 $rs = _openMenu()
@@ -523,10 +523,10 @@ Func Auto()
 			 If @error Then
 				writelog("Het Thoi Gian Vao Tu Hoi Guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-				$TuhoiDone == True
+				$TuhoiDone = True
 			 EndIf
 			 IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-			 $TuhoiDone == True
+			 $TuhoiDone = True
 		  EndIf
 	  EndIf
 	EndIf
@@ -668,7 +668,7 @@ Func _checkbossguild()
 		  If $var1 > $timeend Then
 			 writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-			 $Boss12hDone == True
+			 $Boss12hDone = True
 			 Return
 		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
@@ -677,27 +677,27 @@ Func _checkbossguild()
 			 If @error Then
 				writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-				$Boss12hDone == True
+				$Boss12hDone = True
 				Return 1
 			 EndIf
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-			 $Boss12hDone == True
+			 $Boss12hDone = True
 			 Return 1
 		  EndIf
 		  If $var1 > $timewait And $var1 < $timeend Then
 			 Local $wait = 1160 - $var1
 			 writelog("Cho "&$wait &" phut vo boss guild 12 gio"& @CRLF) ; write console
-			 Sleep($wait*60000)
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$doing) ; change status doing
+			 Sleep($wait*60000)
 			 _GotoNVBossGuild($Title,$emuport,$hwnd) ;Boss guild #tinhanh.au3
 			 If @error Then
 				writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-				$Boss12hDone == True
+				$Boss12hDone = True
 				Return 1
 			 EndIf
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
-			 $Boss12hDone == True
+			 $Boss12hDone = True
 			 Return 1
 		  EndIf
 	   EndIf
@@ -742,8 +742,8 @@ Func _checktuhoiguild()
 	   If $var1 > $timewait And $var1 < $timeend Then
 		  Local $wait = 1935 - $var1
 		  writelog("Cho "&$wait &" phut vo tu hoi guild"& @CRLF) ; write console
-		  Sleep($wait*60000)
 		  IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$doing) ; change status doing
+		  Sleep($wait*60000)
 		  _GotoNVTuHoiGuild($Title,$emuport,$hwnd) ;Tu hoi guild #tinhanh.au3
 		  If @error Then
 			 writelog("Het Thoi Gian Vao Tu Hoi Guild...." & _NowTime() & @CRLF) ; write console
@@ -824,6 +824,7 @@ Func _searchNVAdvance($Handle, $imageHet, $imageCon,$torHet = 115, $torCon = 115
 			Sleep(1800)
 		 EndIf
 	  WEnd
+	  _closeSimple($Handle)
 	  Return 2 ; ko tim thay hinh nao het return 2
 EndFunc   ;==> Search NV
 Func _getNameCharacter()

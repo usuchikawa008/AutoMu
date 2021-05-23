@@ -43,11 +43,11 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 	  While $maxloop < 30
 	  $maxloop = $maxloop + 1
 	  $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-	  $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,2, 0, 0, -1, -1,99, 2);search icon thoat pho ban
+	  $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,2, 0, 0, -1, -1,95, 2);search icon thoat pho ban
 	  If @error Then
 		 ContinueLoop
 	  Else ; neu tim thay nut thoat
-		 If $count == 0 Then _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 620 800"); di chuyen vuot len 1 chut
+		 If $count == 0 Then _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 570 800"); di chuyen vuot len 1 chut
 		 Sleep(500)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1174 54");click server the gioi
 		 Sleep(1500)

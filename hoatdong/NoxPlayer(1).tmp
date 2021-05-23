@@ -1,13 +1,13 @@
 [Hoat Dong]
-HuyenCanh=True
-Blood=True
-BossCaNhan=True
-TienThuong=True
-DaoMo=True
-CuopMo=True
-TreoMay=True
-NVGuild=True
-TinhAnh=True
+HuyenCanh=False
+Blood=False
+BossCaNhan=False
+TienThuong=False
+DaoMo=False
+CuopMo=False
+TreoMay=False
+NVGuild=False
+TinhAnh=False
 LayThanhVat=True
-bossguild12=True
-Tuhoiguild8h=True
+bossguild12=False
+Tuhoiguild8h=False

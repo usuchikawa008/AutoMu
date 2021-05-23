@@ -48,6 +48,15 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 		WinActivate($myLastWin)
 	 EndIf
 	 Sleep(1000)
+	 Local $dayofweek = _getDayofWeek()
+	 If $dayofweek == $T7 Then ; xu li vo boss thu 7
+		_closeSimple($Handle); dong cua so
+;~ 		While 1
+
+;~ 		WEnd
+
+		Return
+	 EndIf
 	 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 325 130") ;chuyen sang tab hoat dong han gio
 		 $Imagebossguild = @ScriptDir & "\image\bossguild.bmp"
 		 $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,120, 2);search boss guild icon
