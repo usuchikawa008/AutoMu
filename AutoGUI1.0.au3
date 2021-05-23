@@ -22,7 +22,8 @@ Global $idDelete, $idEdit ,$oDictionary
 $oDictionary = ObjCreate("Scripting.Dictionary")
 Global $currentAuto
 ;dir config file
-Global Const $path = @ScriptDir&"\config\"
+Global Const $path = @ScriptDir&"\hoatdong\"
+Global Const $pathstatus = @ScriptDir&"\status\"
 Global Const $pathAuto = @ScriptDir&"\auto\"
 Global Const $pathImage = @ScriptDir&"\image\"
 Global Const $general = "General"
@@ -105,6 +106,7 @@ Func Gui()
 ;~ 		   GUICtrlSetFont($hListEmulators, 9, 800, 0, $sFont)
 		   _FileCreate($path&$aList[$i][0]&".tmp")
 		   _FileCreate($pathAuto&$aList[$i][0]&".tmp")
+		   _FileCreate($pathstatus&$aList[$i][0]&".tmp")
 		   ; init checkbox
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $huyencanh, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $blood, True)
@@ -119,18 +121,18 @@ Func Gui()
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $bossguild12h, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $tuhoiguild8h, True)
 		   ; init status
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $blood, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $bosscanhan, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $tienthuong, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $daomo, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $cuopmo, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $treomay, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $nvguild, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $tinhanh, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $laythanhvat, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $bossguild12h, $notyet)
-		   IniWrite($path&$aList[$i][0]&".tmp", $status, $tuhoiguild8h, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $blood, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bosscanhan, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $tienthuong, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $daomo, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $cuopmo, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $treomay, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $nvguild, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $tinhanh, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $laythanhvat, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bossguild12h, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $tuhoiguild8h, $notyet)
 		   ; init Run
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $pid, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $finish, "")
@@ -456,7 +458,7 @@ Func _updateAcTion()
 ;~      _ProcessSuspend(_getProcess()) ;pause script
      ;update huyen canh line 0
      Local $sReadhuyencanh = IniRead($path&$currentAuto&".tmp", $hoatdong, $huyencanh, False)
-	 Local $statushuyencanh = IniRead($path&$currentAuto&".tmp", $status, $huyencanh, $notyet)
+	 Local $statushuyencanh = IniRead($pathstatus&$currentAuto&".tmp", $status, $huyencanh, $notyet)
 	 GUICtrlSetData($idItemHuyenCanh, "|"&$statushuyencanh&"")
 	 GUICtrlSetColor($idItemHuyenCanh,_changeColor($statushuyencanh))
 	 If $sReadhuyencanh == True Then
@@ -466,7 +468,7 @@ Func _updateAcTion()
 	 EndIf
      ;update blood line 1
      Local $sReadblood = IniRead($path&$currentAuto&".tmp", $hoatdong, $blood, False)
-	 Local $statusblood = IniRead($path&$currentAuto&".tmp", $status, $blood, $notyet)
+	 Local $statusblood = IniRead($pathstatus&$currentAuto&".tmp", $status, $blood, $notyet)
 	 GUICtrlSetData($idItemBlood, "|"&$statusblood)
 	 GUICtrlSetColor($idItemBlood,_changeColor($statusblood))
 	 If $sReadblood == True Then
@@ -476,7 +478,7 @@ Func _updateAcTion()
 	 EndIf
 	 ;update boss ca nhan line 2
      Local $sReadbosscanhan = IniRead($path&$currentAuto&".tmp", $hoatdong, $bosscanhan, False)
-	 Local $statusbosscanhan = IniRead($path&$currentAuto&".tmp", $status, $bosscanhan, $notyet)
+	 Local $statusbosscanhan = IniRead($pathstatus&$currentAuto&".tmp", $status, $bosscanhan, $notyet)
 	 GUICtrlSetData($idItemBossCaNhan, "|"&$statusbosscanhan)
 	 GUICtrlSetColor($idItemBossCaNhan,_changeColor($statusbosscanhan))
 	 If $sReadbosscanhan == True Then
@@ -486,7 +488,7 @@ Func _updateAcTion()
 	 EndIf
      ;update nv tien thuong line 3
      Local $sReadtienthuong = IniRead($path&$currentAuto&".tmp", $hoatdong, $tienthuong, False)
-	 Local $statustienthuong = IniRead($path&$currentAuto&".tmp", $status, $tienthuong, $notyet)
+	 Local $statustienthuong = IniRead($pathstatus&$currentAuto&".tmp", $status, $tienthuong, $notyet)
 	 GUICtrlSetData($idItemTienThuong, "|"&$statustienthuong)
 	 GUICtrlSetColor($idItemTienThuong,_changeColor($statustienthuong))
 	 If $sReadtienthuong == True Then
@@ -496,7 +498,7 @@ Func _updateAcTion()
 	 EndIf
 	 ;update dao mo line 4
      Local $sReaddaomo = IniRead($path&$currentAuto&".tmp", $hoatdong, $daomo, False)
-	 Local $statusdaomo = IniRead($path&$currentAuto&".tmp", $status, $daomo, $notyet)
+	 Local $statusdaomo = IniRead($pathstatus&$currentAuto&".tmp", $status, $daomo, $notyet)
 	 GUICtrlSetData($idItemDaoMo, "|"&$statusdaomo)
 	 GUICtrlSetColor($idItemDaoMo,_changeColor($statusdaomo))
 	 If $sReaddaomo == True Then
@@ -506,7 +508,7 @@ Func _updateAcTion()
 	 EndIf
 	 ;update cuop mo line 5
      Local $sReadcuopmo = IniRead($path&$currentAuto&".tmp", $hoatdong, $cuopmo, False)
-	 Local $statuscuopmo = IniRead($path&$currentAuto&".tmp", $status, $cuopmo, $notyet)
+	 Local $statuscuopmo = IniRead($pathstatus&$currentAuto&".tmp", $status, $cuopmo, $notyet)
 	 GUICtrlSetData($idItemCuopMo, "|"&$statuscuopmo)
 	 GUICtrlSetColor($idItemCuopMo,_changeColor($statuscuopmo))
 	 If $sReadcuopmo == True Then
@@ -516,7 +518,7 @@ Func _updateAcTion()
 	 EndIf
 	  ;update treomay line 6
      Local $sReadtreomay = IniRead($path&$currentAuto&".tmp", $hoatdong, $treomay, False)
-	 Local $statustreomay = IniRead($path&$currentAuto&".tmp", $status, $treomay, $notyet)
+	 Local $statustreomay = IniRead($pathstatus&$currentAuto&".tmp", $status, $treomay, $notyet)
 	 GUICtrlSetData($idItemTreoMay, "|"&$statustreomay)
 	 GUICtrlSetColor($idItemTreoMay,_changeColor($statustreomay))
 	 If $sReadtreomay == True Then
@@ -526,7 +528,7 @@ Func _updateAcTion()
 	 EndIf
 	  ;update nv guild line 7
      Local $sReadnvguild = IniRead($path&$currentAuto&".tmp", $hoatdong, $nvguild, False)
-	 Local $statusnvguild = IniRead($path&$currentAuto&".tmp", $status, $nvguild, $notyet)
+	 Local $statusnvguild = IniRead($pathstatus&$currentAuto&".tmp", $status, $nvguild, $notyet)
 	 GUICtrlSetData($idItemNVGuild, "|"&$statusnvguild)
 	 GUICtrlSetColor($idItemNVGuild,_changeColor($statusnvguild))
 	 If $sReadnvguild == True Then
@@ -536,7 +538,7 @@ Func _updateAcTion()
 	 EndIf
 	  ;update nv tinh anh line 8
      Local $sReadnvtinhanh = IniRead($path&$currentAuto&".tmp", $hoatdong, $tinhanh, False)
-	 Local $statustinhanh = IniRead($path&$currentAuto&".tmp", $status, $tinhanh, $notyet)
+	 Local $statustinhanh = IniRead($pathstatus&$currentAuto&".tmp", $status, $tinhanh, $notyet)
 	 GUICtrlSetData($idItemTinhAnh, "|"&$statustinhanh)
 	 GUICtrlSetColor($idItemTinhAnh,_changeColor($statustinhanh))
 	 If $sReadnvtinhanh == True Then
@@ -546,7 +548,7 @@ Func _updateAcTion()
 	 EndIf
 	  ;update nv lay thanh vat line 9
      Local $sReadLayThanhVat = IniRead($path&$currentAuto&".tmp", $hoatdong, $laythanhvat, False)
-	 Local $statuslaythanhvat = IniRead($path&$currentAuto&".tmp", $status, $laythanhvat, $notyet)
+	 Local $statuslaythanhvat = IniRead($pathstatus&$currentAuto&".tmp", $status, $laythanhvat, $notyet)
 	 GUICtrlSetData($idItemLayThanhVat, "|"&$statuslaythanhvat)
 	 GUICtrlSetColor($idItemLayThanhVat,_changeColor($statuslaythanhvat))
 	 If $sReadLayThanhVat == True Then
@@ -556,7 +558,7 @@ Func _updateAcTion()
 	 EndIf
       ;update bossguild 12h line 10
      Local $sReadBossGuild12h = IniRead($path&$currentAuto&".tmp", $hoatdong, $bossguild12h, False)
-	 Local $statusbossguild12h = IniRead($path&$currentAuto&".tmp", $status, $bossguild12h, $notyet)
+	 Local $statusbossguild12h = IniRead($pathstatus&$currentAuto&".tmp", $status, $bossguild12h, $notyet)
 	 GUICtrlSetData($idItemBossGuild12h, "|"&$statusbossguild12h)
 	 GUICtrlSetColor($idItemBossGuild12h,_changeColor($statusbossguild12h))
 	 If $sReadBossGuild12h == True Then
@@ -566,7 +568,7 @@ Func _updateAcTion()
 	 EndIf
 	  ;update bossguild 12h line 11
      Local $sReadTuHoiGuild = IniRead($path&$currentAuto&".tmp", $hoatdong, $tuhoiguild8h, False)
-	 Local $statusTuHoiGuild = IniRead($path&$currentAuto&".tmp", $status, $tuhoiguild8h, $notyet)
+	 Local $statusTuHoiGuild = IniRead($pathstatus&$currentAuto&".tmp", $status, $tuhoiguild8h, $notyet)
 	 GUICtrlSetData($idItemTuHoiGuild12h, "|"&$statusTuHoiGuild)
 	 GUICtrlSetColor($idItemTuHoiGuild12h,_changeColor($statusTuHoiGuild))
 	 If $sReadTuHoiGuild == True Then
@@ -605,18 +607,18 @@ Func _changeColor($status)
      Return 0
 EndFunc
 Func _resetStatus()
-     IniWrite($path&$currentAuto&".tmp", $status, $huyencanh, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $blood, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $bosscanhan, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $tienthuong, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $daomo, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $cuopmo, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $treomay, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $nvguild, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $tinhanh, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $laythanhvat, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $bossguild12h, $notyet)
-	 IniWrite($path&$currentAuto&".tmp", $status, $tuhoiguild8h, $notyet)
+     IniWrite($pathstatus&$currentAuto&".tmp", $status, $huyencanh, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $blood, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bosscanhan, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $tienthuong, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $daomo, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $cuopmo, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $treomay, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $nvguild, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $tinhanh, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $laythanhvat, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossguild12h, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $tuhoiguild8h, $notyet)
      _updateAcTion()
 
 EndFunc
@@ -737,18 +739,18 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $bossguild12h, True)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $tuhoiguild8h, True)
 		; init status
-		IniWrite($path&$NoxOff&".tmp", $status, $huyencanh, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $blood, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $bosscanhan, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $tienthuong, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $daomo, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $cuopmo, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $treomay, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $nvguild, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $tinhanh, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $laythanhvat, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $bossguild12h, $notyet)
-		IniWrite($path&$NoxOff&".tmp", $status, $tuhoiguild8h, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $huyencanh, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $blood, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bosscanhan, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $tienthuong, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $daomo, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $cuopmo, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $treomay, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $nvguild, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $tinhanh, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $laythanhvat, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bossguild12h, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $tuhoiguild8h, $notyet)
 		; init Run
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $pid, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $finish, "")

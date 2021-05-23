@@ -6,33 +6,34 @@ Func _GotoNVTinhAnh($Title,$emuport,$Handle)
 		WinActivate($Title)
 		WinActivate($myLastWin)
 	 EndIf
-	 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 550 550"); di chuyen 1 chut
-	 Sleep(1500)
-		 $Imageconluottinhanh = @ScriptDir & "\image\conluottinhanh.bmp"
-		 $p = _HandleImgSearch($Handle,$Imageconluottinhanh, 0, 0, -1, -1,120, 2);search nv treo may con luot
-		 If @error Then ;het luot
+		 Local $Imageconluottinhanh = @ScriptDir & "\image\conluottinhanh.bmp"
+		 Local $Imagehetluottinhanh = @ScriptDir & "\image\hetluottinhanh.bmp"
+		 $p = _searchNVAdvance($Handle,$Imagehetluottinhanh,$Imageconluottinhanh,95,115);search nv tien thuong
+		 If @error Then ; het luot
 			Return SetError(3)
-		 Else
-			writelog("Di den pb Tinh Anh " & _NowTime() & @CRLF) ; write console
-			Opt("WinTitleMatchMode", 3)
-			ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
-			Sleep(4000)
-			Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-		    Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,4, 0, 0, -1, -1,90, 2);search icon thoat pho ban
+		 EndIf
+		 If $p == 2 Then ; ko tim thay hinh nao het
+			Return
+		 EndIf
+		 writelog("Di den pb Tinh Anh " & _NowTime() & @CRLF) ; write console
+		 Opt("WinTitleMatchMode", 3)
+		 ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
+		 Sleep(4000)
+		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,4, 0, 0, -1, -1,90, 2);search icon thoat pho ban
+		 If Not @error Then
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1500 100");click to map
+			Sleep(3000)
+			Local $Imageiconmapthegioi = @ScriptDir & "\image\iconmapthegioi.bmp"
+			Local $rs = _HandleImgWaitExist($Handle, $Imageiconmapthegioi,4, 0, 0, -1, -1,80, 2);search icon map the gioi
 			If Not @error Then
-			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1500 100");click to map
-			   Sleep(3000)
-			   Local $Imageiconmapthegioi = @ScriptDir & "\image\iconmapthegioi.bmp"
-		       Local $rs = _HandleImgWaitExist($Handle, $Imageiconmapthegioi,4, 0, 0, -1, -1,80, 2);search icon map the gioi
-			   If Not @error Then
-				  Sleep(1000)
-				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 750 274");click to toa do tinh anh
-				  Sleep(1000)
-				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-				  Sleep(7000)
-				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1146 838");click to auto
-				  Sleep(50000); cho 50s de finnish
-			   EndIf
+			   Sleep(1000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 750 274");click to toa do tinh anh
+			   Sleep(1000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+			   Sleep(7000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1146 838");click to auto
+			   Sleep(50000); cho 50s de finnish
 			EndIf
 		 EndIf
 	   Sleep(2000)
@@ -70,7 +71,7 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
 		 EndIf
 		 ;wait boss die
-		 Local $Now = _getCurrentTime();time hien tai
+		 Local $Now = _NowTime(4);time hien tai
 		 Local $var1 = StringRegExpReplace($Now, "[:]", "")
 		 Local $timeend = StringRegExpReplace("12:10", "[:]", "")
 		 Local $remaintime = $timeend - $var1
@@ -130,7 +131,7 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 		 If not @error Then ; neu thay icon co vu kiem
 			ExitLoop
 		 EndIf
-		 Local $Now = _getCurrentTime();time hien tai
+		 Local $Now = _NowTime(4);time hien tai
 		 $var1 = StringRegExpReplace($Now, "[:]", "")
 	     $timestart = StringRegExpReplace("20:01", "[:]", "")
 	     $timeend = StringRegExpReplace("20:10", "[:]", "")
@@ -150,7 +151,7 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
 	  EndIf
 		 ;wait boss die
-	  Local $Now = _getCurrentTime();time hien tai
+	  Local $Now = _NowTime(4);time hien tai
 	  Local $var1 = StringRegExpReplace($Now, "[:]", "")
 	  Local $timeend = StringRegExpReplace("20:10", "[:]", "")
 	  Local $remaintime = $timeend - $var1

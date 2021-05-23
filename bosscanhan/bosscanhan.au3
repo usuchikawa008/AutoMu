@@ -33,7 +33,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
       Sleep(3000)
 	  $Imagehetluot = @ScriptDir & "\image\hetluotbosscanhan3.bmp"
 	  $Rshetluot = _HandleImgWaitExist($Handle,$Imagehetluot,2, 0, 0, -1, -1,115, 10);search icon het luot boss
-	  If not @error Then
+	  If not @error Then ; thay icon mua them luot => het luot boss ca nhan
 		 writelog("Het Luot " & _NowTime() & @CRLF) ; write console
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
 		 return SetError(3)

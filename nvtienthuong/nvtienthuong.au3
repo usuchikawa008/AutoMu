@@ -6,14 +6,17 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 		WinActivate($myLastWin)
 	 EndIf
 	 Sleep(500)
-		 $ImagePath = @ScriptDir & "\image\tienthuongconluot1.bmp"
-		 $p = _HandleImgSearch($Handle,$ImagePath, 0, 0, -1, -1,115, 2);search nv tien thuong con luot
+		 $ImagePathHet = @ScriptDir & "\image\tienthuonghetluot.bmp"
+		 $ImagePathCon = @ScriptDir & "\image\tienthuongconluot1.bmp"
+		 $p = _searchNVAdvance($Handle,$ImagePathHet,$ImagePathCon,90,115);search nv tien thuong
 		 If @error Then
 			Return SetError(3)
-		 Else
-			writelog("NV tien thuong con luot " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+20) ; click toi
 		 EndIf
+		 If $p == 2 Then ; ko tim thay hinh nao het
+			Return
+		 EndIf
+	  writelog("NV tien thuong con luot " & _NowTime() & @CRLF) ; write console
+	  ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+20) ; click toi
 	  ;cho menu xuat hien
 	  $Imagemenu = @ScriptDir & "\image\menutienthuong.bmp"
 	  $Result = _HandleImgWaitExist($Handle, $Imagemenu,20, 0, 0, -1, -1,90, 2); search menu trong 20s
@@ -109,12 +112,15 @@ Func _GotoTrainQuai($Title,$emuport,$Handle,$pos)
 	 EndIf
 	 Sleep(1000)
 		 $Imagetreomayconluot = @ScriptDir & "\image\treomay.bmp"
-		 $p = _searchNV($Handle, $Imagetreomayconluot) ; search NV treo may
+		 $Imagetreomayhetluot = @ScriptDir & "\image\treomayhetluot.bmp"
+		 $p = _searchNVAdvance($Handle, $Imagetreomayhetluot,$Imagetreomayconluot,90,115) ; search NV treo may
 		 If @error Then
 			Return SetError(3)
-		 Else
-			_TreoMay($Handle,$p)
 		 EndIf
+		 If $p == 2 Then ; ko tim thay hinh nao het
+			Return
+		 EndIf
+		 _TreoMay($Handle,$p)
 	   Sleep(2000)
 	EndFunc   ;==>Goto Treo Quai
 
@@ -153,166 +159,158 @@ Func _TreoMay($Handle,$p)
 	EndFunc   ;==>Goto Treo Quai
 
 Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
-    $lastone = False
-	If BitAND(WinGetState($Title), 16) Then
+	  $lastone = False
+	  If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
 		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
 		WinActivate($Title)
 		WinActivate($myLastWin)
-	 EndIf
-	 Sleep(1000)
-		 $Imageconluotnvguide = @ScriptDir & "\image\conluotnvguide.bmp"
-		 $p = _searchNV($Handle, $Imageconluotnvguide,115,5) ; search guild con luot
-		 If @error Then
-			Return SetError(3)
+	  EndIf
+	  Sleep(1000)
+	  $Imageconluotnvguide = @ScriptDir & "\image\conluotnvguide.bmp"
+	  $Imagehetluotnvguide = @ScriptDir & "\image\hetnhiemvuguildicon.bmp"
+	  $p = _searchNVAdvance($Handle, $Imagehetluotnvguide,$Imageconluotnvguide,95,115) ; search NV treo may
+	  If @error Then ; thay icon het luot
+		 Return SetError(3)
+	  EndIf
+	  If $p == 2 Then ; ko tim thay hinh nao het
+		 Return
+	  EndIf
+	  writelog("NV guild con luot" & _NowTime() & @CRLF) ; write console
+	  Sleep(500)
+	  Opt("WinTitleMatchMode", 3)
+	  ControlClick($Title, "", "","", 2,$p[1][0]+275, $p[1][1]+20) ; click toi
+	  Sleep(500)
+	  $Imagelinhthuongstart = @ScriptDir & "\image\linhthuong.bmp"
+	  $linhthuong = _HandleImgSearch($Handle, $Imagelinhthuongstart, 0, 0, -1, -1,85, 2);search button linh thuong
+	  If Not @error Then
+		 writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
+		 Opt("WinTitleMatchMode", 3)
+		 ControlClick($Title, "", "","", 1,$linhthuong[1][0], $linhthuong[1][1]) ; click linh thuong
+		 Sleep(2000)
+		 ;lay nv moi
+		 $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
+		 $nhannv = _HandleImgWaitExist($Handle, $Imagelaynvguide,2, 0, 0, -1, -1,80, 2);search button lay nv guild
+		 If not @error Then
 		 Else
-			writelog("NV guild con luot" & _NowTime() & @CRLF) ; write console
+			Sleep(10000); cho 10s
+			Return
+		 EndIf
+	  EndIf
+	  ;lay nv moi
+	  $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
+	  $nhannv = _HandleImgWaitExist($Handle, $Imagelaynvguide,1, 0, 0, -1, -1,80, 2);search button lay nv guild
+	  If not @error Then ;bat dau nv
+		 While 1 ;loop cho toi khi het nv guild
+			writelog("Start NV guild" & _NowTime() & @CRLF) ; write console
+			_reloadNV($Title,$Handle)
+			If @error Then;neu thay nv rank S stop nv guild
+			   Return SetError(3)
+			EndIf
+			;check co fai nv cuoi cung hay ko
+			$Imagenvcuoi = @ScriptDir & "\image\nvguildcuoicung.bmp"
+			$last = _HandleImgSearch($Handle, $Imagenvcuoi, 0, 0, -1, -1,100, 2);search nv cuoi cung
+			If not @error Then;neu day la nv cuoi
+			   writelog("NV cuoi" & _NowTime() & @CRLF) ; write console
+			   $lastone = True
+			EndIf
 			Sleep(500)
 			Opt("WinTitleMatchMode", 3)
-			ControlClick($Title, "", "","", 2,$p[1][0]+275, $p[1][1]+20) ; click toi
-			Sleep(500)
-			$Imagelinhthuongstart = @ScriptDir & "\image\linhthuong.bmp"
-			$linhthuong = _HandleImgSearch($Handle, $Imagelinhthuongstart, 0, 0, -1, -1,85, 2);search button linh thuong
+			ControlClick($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click lay nv
+			Sleep(30000) ;cho lam xong nv khoang 20s
+			$count = 0
+			While 1 ;loop click
+			   $count = $count + 1
+			   If $count > 15 Then
+				  Return
+			   EndIf
+			   Sleep(2000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
+			   $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
+			   $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
+			   If Not @error Then
+				  writelog("Thay NV Tien Thuong" & _NowTime() & @CRLF) ; write console
+				  Sleep(1000)
+				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 250");click Nhan/Toi Nhiem Vu
+				  Sleep(1000)
+				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+				  ContinueLoop
+			   EndIf
+			   Local $Imagelinhthuong = @ScriptDir & "\image\linhthuong.bmp"
+			   $p = _HandleImgSearch($Handle, $Imagelinhthuong, 0, 0, -1, -1,80, 2);search button linh thuong
+			   If Not @error Then
+				  writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
+				  Opt("WinTitleMatchMode", 3)
+				  ControlClick($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click
+				  If $lastone Then
+					 Return SetError(3)
+				  Else
+					 ExitLoop
+				  EndIf
+			   EndIf
+			   $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
+			   $p1 = _HandleImgSearch($Handle, $Imagelaynvguide, 0, 0, -1, -1,80, 2);search button lay nv guild
+			   If Not @error Then
+				  writelog("Thay buttion lay nv guild" & _NowTime() & @CRLF) ; write console
+				  ExitLoop
+			   EndIf
+			   _close($Handle) ;close cua so
+			WEnd
+		 WEnd
+		 Return
+	  EndIf
+	  ;Lam tiep NV cu~
+	  $Imagetoingaynvguild = @ScriptDir & "\image\toingaynvguild.bmp"
+	  $nhannv = _HandleImgWaitExist($Handle, $Imagetoingaynvguild,1, 0, 0, -1, -1,80, 2);search button toi ngay nv guild
+	  If not @error Then ;lam not nv guild
+		 writelog("Lam Tiep NV guild" & _NowTime() & @CRLF) ; write console
+		 ;check nv S
+		 Sleep(1500)
+		 $ImagenvS = @ScriptDir & "\image\nvS.bmp"
+		 $ps = _HandleImgWaitExist($Handle, $ImagenvS,2, 0, 0, -1, -1,90, 2);search nv rank S
+		 If not @error Then ; tim thay nv rank Abs
+			writelog("Thay NV rank S-- Stop" & _NowTime() & @CRLF) ; write console
+			Return SetError(3)
+		 EndIf
+		 Sleep(500)
+		 Opt("WinTitleMatchMode", 3)
+		 ControlClick($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click toi nv guild
+		 Sleep(30000) ;cho lam xong nv khoang 30s
+		 $count = 0
+		 While 1 ;loop click
+			$count = $count + 1
+			If $count > 15 Then
+			   Return
+			EndIf
+			Sleep(2000)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
+			$ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
+			$Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
+			If Not @error Then
+			   writelog("Thay NV Tien Thuong" & _NowTime() & @CRLF) ; write console
+			   Sleep(1000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 250");click Nhan/Toi Nhiem Vu
+			   Sleep(1000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+			   ContinueLoop
+			EndIf
+			$Imagelinhthuong = @ScriptDir & "\image\linhthuong.bmp"
+			$p = _HandleImgSearch($Handle, $Imagelinhthuong, 0, 0, -1, -1,80, 2);search button linh thuong
 			If Not @error Then
 			   writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
 			   Opt("WinTitleMatchMode", 3)
-			   ControlClick($Title, "", "","", 1,$linhthuong[1][0], $linhthuong[1][1]) ; click linh thuong
-			   Sleep(2000)
-			   ;lay nv moi
-			   $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
-			   $nhannv = _HandleImgWaitExist($Handle, $Imagelaynvguide,2, 0, 0, -1, -1,80, 2);search button lay nv guild
-			   If not @error Then
-			   Else
-				  Sleep(10000); cho 10s
-				  Return
-			   EndIf
-			EndIf
-			;lay nv moi
-			$Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
-		    $nhannv = _HandleImgWaitExist($Handle, $Imagelaynvguide,1, 0, 0, -1, -1,80, 2);search button lay nv guild
-			If not @error Then ;bat dau nv
-			   While 1 ;loop cho toi khi het nv guild
-				  writelog("Start NV guild" & _NowTime() & @CRLF) ; write console
-				  _reloadNV($Title,$Handle)
-				  If @error Then;neu thay nv rank S stop nv guild
-					 Return SetError(3)
-				  EndIf
-				  ;check co fai nv cuoi cung hay ko
-				  $Imagenvcuoi = @ScriptDir & "\image\nvguildcuoicung.bmp"
-				  $last = _HandleImgSearch($Handle, $Imagenvcuoi, 0, 0, -1, -1,100, 2);search nv cuoi cung
-				  If not @error Then;neu day la nv cuoi
-					 writelog("NV cuoi" & _NowTime() & @CRLF) ; write console
-					 $lastone = True
-				  EndIf
-				  Sleep(500)
-				  Opt("WinTitleMatchMode", 3)
-				  ControlClick($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click lay nv
-				  Sleep(30000) ;cho lam xong nv khoang 20s
-				  $count = 0
-				  While 1 ;loop click
-					 $count = $count + 1
-					 If $count > 12 Then
-						Return SetError(3)
-					 EndIf
-					 Sleep(2000)
-					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
-					 $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
-					 $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
-					 If Not @error Then
-						writelog("Thay NV Tien Thuong" & _NowTime() & @CRLF) ; write console
-						Sleep(1000)
-						_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 250");click Nhan/Toi Nhiem Vu
-						Sleep(1000)
-						_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-						ContinueLoop
-					 EndIf
-					 Local $Imagelinhthuong = @ScriptDir & "\image\linhthuong.bmp"
-					 $p = _HandleImgSearch($Handle, $Imagelinhthuong, 0, 0, -1, -1,80, 2);search button linh thuong
-					 If Not @error Then
-						writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
-						Opt("WinTitleMatchMode", 3)
-						ControlClick($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click
-						If $lastone Then
-						    Return SetError(3)
-						Else
-						   ExitLoop
-						EndIf
-					 EndIf
-					 $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
-					 $p1 = _HandleImgSearch($Handle, $Imagelaynvguide, 0, 0, -1, -1,80, 2);search button lay nv guild
-					 If Not @error Then
-						writelog("Thay buttion lay nv guild" & _NowTime() & @CRLF) ; write console
-						ExitLoop
-					 EndIf
-					 _close($Handle) ;close cua so
-				  WEnd
-			   WEnd
+			   ControlClick($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click
 			   Return
 			EndIf
-			;Lam tiep NV cu~
-			$Imagetoingaynvguild = @ScriptDir & "\image\toingaynvguild.bmp"
-		    $nhannv = _HandleImgWaitExist($Handle, $Imagetoingaynvguild,1, 0, 0, -1, -1,80, 2);search button toi ngay nv guild
-			If not @error Then ;lam not nv guild
-			   writelog("Lam Tiep NV guild" & _NowTime() & @CRLF) ; write console
-			   ;check nv S
-			   Sleep(1500)
-			   $ImagenvS = @ScriptDir & "\image\nvS.bmp"
-			   $ps = _HandleImgWaitExist($Handle, $ImagenvS,2, 0, 0, -1, -1,90, 2);search nv rank S
-			   If not @error Then ; tim thay nv rank Abs
-				  writelog("Thay NV rank S-- Stop" & _NowTime() & @CRLF) ; write console
-				  Return SetError(3)
-			   EndIf
-			   ;check co fai nv cuoi cung hay ko
-			   $Imagenvcuoi = @ScriptDir & "\image\nvguildcuoicung1.bmp"
-			   $last = _HandleImgSearch($Handle, $Imagenvcuoi, 0, 0, -1, -1,100, 2);search nv cuoi cung
-			   If not @error Then;neu day la nv cuoi
-				  writelog("NV cuoi" & _NowTime() & @CRLF) ; write console
-				  $lastone = True
-			   EndIf
-			   Sleep(500)
-			   Opt("WinTitleMatchMode", 3)
-			   ControlClick($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click toi nv guild
-			   Sleep(30000) ;cho lam xong nv khoang 30s
-			   $count = 0
-			   While 1 ;loop click
-				  $count = $count + 1
-				  If $count > 12 Then
-					 Return
-				  EndIf
-				  Sleep(2000)
-				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
-				  $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
-				  $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
-				  If Not @error Then
-					 writelog("Thay NV Tien Thuong" & _NowTime() & @CRLF) ; write console
-					 Sleep(1000)
-					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 250");click Nhan/Toi Nhiem Vu
-					 Sleep(1000)
-					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-					 ContinueLoop
-				  EndIf
-				  $Imagelinhthuong = @ScriptDir & "\image\linhthuong.bmp"
-				  $p = _HandleImgSearch($Handle, $Imagelinhthuong, 0, 0, -1, -1,80, 2);search button linh thuong
-				  If Not @error Then
-					 writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
-					 Opt("WinTitleMatchMode", 3)
-					 ControlClick($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click
-					 If $lastone Then
-						Return SetError(3) ;het nv guild
-					 Else
-						Return ;con nv guild
-					 EndIf
-				  EndIf
-				  $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
-				  $p1 = _HandleImgSearch($Handle, $Imagelaynvguide, 0, 0, -1, -1,80, 2);search button lay nv guild
-				  If Not @error Then
-					 Return ;con nv guild
-				  EndIf
-				  _close($Handle) ;close cua so
-			   WEnd
+			$Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
+			$p1 = _HandleImgSearch($Handle, $Imagelaynvguide, 0, 0, -1, -1,80, 2);search button lay nv guild
+			If Not @error Then
+			   Return ;con nv guild
 			EndIf
-		 EndIf
-	   Sleep(2000)
+			_close($Handle) ;close cua so
+		 WEnd
+	  EndIf
+	  Sleep(2000)
 	EndFunc   ;==>Goto NV GUIDE
 Func _reloadNV($Title,$Handle)
 		 While 1

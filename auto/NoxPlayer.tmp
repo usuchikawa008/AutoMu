@@ -1,7 +1,7 @@
 [Run]
-PID = 10152
-Finish = 
-Name_In_Game = SUNTAXI
+PID = 
+Finish = True
+Name_In_Game = SmartBoy
 
 
 StatusNox =Onl

@@ -82,7 +82,7 @@ Func GotoDaoMo($Title,$emuport,$Handle)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 900 600");click xac nhan
 			Sleep(1000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1485 211");back to menu hoat dong
-			Return SetError(3) ;het luot dao mo
+;~ 			Return SetError(3) ;het luot dao mo
 		 EndIf
 		 $sNewTime = _DateAdd('n', 40, _NowCalc()); lay time hien tai + 40p
 		 Return $sNewTime

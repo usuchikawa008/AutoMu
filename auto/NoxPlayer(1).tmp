@@ -1,9 +1,10 @@
 [Run]
-PID = 14664
-Finish = 
+PID = 
+Finish = True
 Name_In_Game = Lee
 
 
+__. .. . «£1 = 
 StatusNox =Onl
 cmdStart = Nox.exe -clone:Nox_1
 

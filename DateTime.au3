@@ -5,11 +5,6 @@ Func _getCurrentDate()
    Return $Dateconvert
 EndFunc
 
-Func _getCurrentTime()
-  Local $Date = _TimeFromNTP("pool.ntp.org")
-  Local $Dateconvert = StringMid(StringSplit($Date,' ',$STR_ENTIRESPLIT)[2],1,5)  ;get script name : example Noxplayer
-  Return $Dateconvert
-EndFunc
 
 Func _getDayofWeek()
   ; Retrieve the long name
