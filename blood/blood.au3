@@ -29,28 +29,34 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 		   $Imagehetve = @ScriptDir & "\image\hetveblood.bmp"
 	       $rshetve = _HandleImgSearch($Handle, $Imagehetve, 0, 0, -1, -1,85, 2);search so luot pb blood
 		   If not @error Then
-			  writelog("Het ve blood...." & _NowTime() & @CRLF) ; write console
-			  ;xu li het ve
-			  ControlClick($Title, "", "","", 1,$rshetve[1][0], $rshetve[1][1]) ; click vao het ve
-			  Sleep(1000)
-			  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
-			  Sleep(1000)
-			  $Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
-			  $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,80, 2);search icon gep ve
-			  If not @error Then
-				   ControlClick($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+270) ; click vao ghep ve
-			  Else
-				   writelog("Loi..ko the ghep ve luc nay...." & _NowTime() & @CRLF) ; write console
-				   Return
-				EndIf
-			   Sleep(3000)
-			   For $i = 0 to 10 Step + 1
-				  Sleep(100)
-				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1300 550");click + 10 lan
-			   Next
-			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click ghep
-			   _closeSimple($Handle)
-			   Sleep(3000)
+			   writelog("Het ve blood...." & _NowTime() & @CRLF) ; write console
+			   ;xu li het ve
+			   Local $flagghepVe = IniRead($pathImage&"1.tmp", $general, $ghepveblood, ""); check flag ghep ve
+			   If $flagghepVe == True Then
+					ControlClick($Title, "", "","", 1,$rshetve[1][0], $rshetve[1][1]) ; click vao het ve
+					Sleep(1000)
+					_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
+					Sleep(1000)
+					$Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
+					$rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,80, 2);search icon gep ve
+					If not @error Then
+						 ControlClick($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+270) ; click vao ghep ve
+					Else
+						 writelog("Loi..ko the ghep ve luc nay...." & _NowTime() & @CRLF) ; write console
+						 Return
+					 EndIf
+					 Sleep(3000)
+					 For $i = 0 to 10 Step + 1
+						Sleep(100)
+						_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1300 550");click + 10 lan
+					 Next
+					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click ghep
+					 _closeSimple($Handle)
+					 Sleep(3000)
+			   Else
+				  Return SetError(3)
+			   EndIf
+
 		   EndIf
 		   writelog("Chuan bi vao blood...." & _NowTime() & @CRLF) ; write console
 		   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click Khieu chien

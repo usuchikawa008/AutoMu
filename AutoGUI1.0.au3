@@ -30,6 +30,11 @@ Global Const $general = "General"
 Global Const $hardmode = "HardMode"
 Global Const $mac = "MAC"
 Global Const $noxpath = "NoxPath"
+Global Const $anExp = "AnDonExp"
+Global Const $camtrain = "CamTrain"
+Global Const $ghepveblood = "GhepVeBlood"
+Global Const $autoAnThit = "AutoAnThit"
+Global Const $boquaQuestS = "$BoQuaQuestS"
 ;config hoat dong start
 Global Const $status = "Status"
 Global Const $notyet = "Wait"
@@ -60,6 +65,11 @@ Global Const $off = "Off"
 Global Const $cmdStart = "cmdStart"
 _checkMacIP()
 _setHardMode(False)
+_setAnExp(True)
+_setCamTrainKhiHetNV(True)
+_setAutoGhepVeBlood(True)
+_setAutoAnThit(True)
+_setBoQuaQuestS(True)
 $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
 Global $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
 Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
@@ -185,11 +195,14 @@ Func Gui()
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
 	_GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	GUICtrlCreateTabItem("Tiện ích")
-	Local $idCheckBoxAnExp = GUICtrlCreateCheckbox("Tự ăn đan EXP ", 20, 145, 100, 25)
+	Local $idCheckBoxAnExp = GUICtrlCreateCheckbox("Tự ăn đan EXP khi làm xong hết NV ", 20, 145, 200, 25)
+	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxCamTrain = GUICtrlCreateCheckbox("Cắm train khi hết NV ", 20, 170, 120, 25)
+	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxGhepVeBlood = GUICtrlCreateCheckbox("Tự ghép vé blood khi hết ", 20, 195, 140, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxAnThitTuHoi = GUICtrlCreateCheckbox("Tự ăn thịt trong tụ hội guild ", 20, 220, 150, 25)
+	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Bỏ qua nv guild cấp S ", 20, 245, 150, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
     GUISetState(@SW_SHOW)
@@ -232,6 +245,36 @@ Func Gui()
 				   _setHardMode(True)
                 Else
 				   _setHardMode(False)
+			    EndIf
+			Case $idCheckBoxAnExp
+		        If _IsChecked($idCheckBoxAnExp) Then
+				   _setAnExp(True)
+                Else
+				   _setAnExp(False)
+			    EndIf
+			Case $idCheckBoxCamTrain
+		        If _IsChecked($idCheckBoxCamTrain) Then
+				   _setCamTrainKhiHetNV(True)
+                Else
+				   _setCamTrainKhiHetNV(False)
+			    EndIf
+			Case $idCheckBoxGhepVeBlood
+		        If _IsChecked($idCheckBoxGhepVeBlood) Then
+				   _setAutoGhepVeBlood(True)
+                Else
+				   _setAutoGhepVeBlood(False)
+			    EndIf
+			Case $idCheckBoxAnThitTuHoi
+		        If _IsChecked($idCheckBoxAnThitTuHoi) Then
+				   _setAutoAnThit(True)
+                Else
+				   _setAutoAnThit(False)
+			    EndIf
+			Case $idCheckBoxNVGuildRankS
+		        If _IsChecked($idCheckBoxNVGuildRankS) Then
+				   _setBoQuaQuestS(True)
+                Else
+				   _setBoQuaQuestS(False)
 			    EndIf
        EndSwitch
     WEnd
@@ -641,7 +684,24 @@ EndFunc
 
 Func _setHardMode($sState)
      IniWrite($pathImage&"1.tmp", $general, $hardmode, $sState)
-EndFunc
+  EndFunc
+Func _setAnExp($sState)
+     IniWrite($pathImage&"1.tmp", $general, $anExp, $sState)
+  EndFunc
+Func _setCamTrainKhiHetNV($sState)
+     IniWrite($pathImage&"1.tmp", $general, $camtrain, $sState)
+  EndFunc
+Func _setAutoGhepVeBlood($sState)
+     IniWrite($pathImage&"1.tmp", $general, $ghepveblood, $sState)
+  EndFunc
+Func _setAutoAnThit($sState)
+     IniWrite($pathImage&"1.tmp", $general, $autoAnThit, $sState)
+  EndFunc
+Func _setBoQuaQuestS($sState)
+     IniWrite($pathImage&"1.tmp", $general, $boquaQuestS, $sState)
+  EndFunc
+
+
 Func _updateEmulatorAuto() ; refresh status AUTO emulator
      For $i = 0 to _GUICtrlListView_GetItemCount($hListEmulators)-1 ;total list size item
 		$checkfn = IniRead($pathAuto&_GUICtrlListView_GetItemText($hListEmulators, $i)&".tmp", $run, $finish, False)

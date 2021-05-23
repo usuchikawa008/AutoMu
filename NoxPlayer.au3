@@ -39,6 +39,11 @@ Global Const $OCRFlag = "OCR"
 Global Const $general = "General"
 Global Const $hardmode = "HardMode"
 Global Const $noxpath = "NoxPath"
+Global Const $anExp = "AnDonExp"
+Global Const $camtrain = "CamTrain"
+Global Const $ghepveblood = "GhepVeBlood"
+Global Const $autoAnThit = "AutoAnThit"
+Global Const $boquaQuestS = "$BoQuaQuestS"
 ;config hoat dong start
 Global Const $status = "Status"
 Global Const $notyet = "Wait"
@@ -208,9 +213,10 @@ Func Auto()
 	1.Di Huyen Canh tren khong
 	#ce
 	Sleep(1000)
-	If $huyencanhDone == False Then
+;~ 	If $huyencanhDone == False Then
 	  Local $sReadhuyencanh = IniRead($path&$Title&".tmp", $hoatdong, $huyencanh, False)
-	  If $sReadhuyencanh == True Then
+	  Local $statushuyencanh = IniRead($pathstatus&$Title&".tmp", $status, $huyencanh, $notyet)
+	  If $sReadhuyencanh == True And $statushuyencanh <> $done Then
 		 $countNV = $countNV + 1
 		 $rs = _openHoatDong()
 		 If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -227,14 +233,15 @@ Func Auto()
 	  EndIf
 	  Sleep(1500)
 	  EndIf
-	EndIf
+;~ 	EndIf
 
    #cs
 	2.Di Blood castle
 	#ce
-	If $bloodDONE == False Then
+;~ 	If $bloodDONE == False Then
 	   Local $sReadblood = IniRead($path&$Title&".tmp", $hoatdong, $blood, False)
-	   If $sReadblood == True Then
+	   Local $statusblood = IniRead($pathstatus&$Title&".tmp", $status, $blood, $notyet)
+	   If $sReadblood == True And $statusblood <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -251,13 +258,14 @@ Func Auto()
 		  EndIf
 		  Sleep(2000)
 	   EndIf
-	EndIf
+;~ 	EndIf
    ;~    #cs
    ;~ 	3. Dao mo
    ;~ 	#ce
-   If $DaoMoDone == False Then
+;~    If $DaoMoDone == False Then
 	  Local $sReaddaomo = IniRead($path&$Title&".tmp", $hoatdong, $daomo, False)
-	   If $sReaddaomo == True Then
+	  Local $statusdaovo = IniRead($pathstatus&$Title&".tmp", $status, $daomo, $notyet)
+	   If $sReaddaomo == True And $statusdaovo <> $done Then
 		  $countNV = $countNV + 1
 		  If _NowCalc() > $sNewTime Then
 			 $rs = _openHoatDong()
@@ -276,13 +284,14 @@ Func Auto()
 		  EndIf
 	   Sleep(2000)
        EndIf
-   EndIf
+;~    EndIf
     #cs
 	4. cuop mo
 	#ce
-	  If $CuopMoDone == False Then
+;~ 	  If $CuopMoDone == False Then
 		 Local $sReadcuopmo = IniRead($path&$Title&".tmp", $hoatdong, $cuopmo, False)
-		  If $sReadcuopmo == True Then
+		 Local $statuscuopmo = IniRead($pathstatus&$Title&".tmp", $status, $cuopmo, $notyet)
+		  If $sReadcuopmo == True And $statuscuopmo <> $done Then
 			 $countNV = $countNV + 1
 			 $rs = _openHoatDong()
 			 If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -299,13 +308,14 @@ Func Auto()
 			 EndIf
 			 Sleep(2000)
 		  EndIf
-	  EndIf
+;~ 	  EndIf
    #cs
 	5.boss ca nhan
 	#ce
-	If $BossCaNhanDONE == False Then
+;~ 	If $BossCaNhanDONE == False Then
 	   Local $checkboxbosscanhan = IniRead($path&$Title&".tmp", $hoatdong, $bosscanhan, False)
-	   If $checkboxbosscanhan == True Then
+	   Local $statusbosscanhan = IniRead($pathstatus&$Title&".tmp", $status, $bosscanhan, $notyet)
+	   If $checkboxbosscanhan == True And $statusbosscanhan <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -322,15 +332,16 @@ Func Auto()
 		  EndIf
 	   Sleep(2000)
 	   EndIf
-	EndIf
+;~ 	EndIf
 
 
 ;~    #cs
 ;~ 	6.Di NV tien thuong
 ;~ 	#ce
-   If $NVTIENTHUONGDONE == False Then
+;~    If $NVTIENTHUONGDONE == False Then
 	  Local $scheckboxtienthuong = IniRead($path&$Title&".tmp", $hoatdong, $tienthuong, False)
-	   If $scheckboxtienthuong == True Then
+	  Local $statustienthuong = IniRead($pathstatus&$Title&".tmp", $status, $tienthuong, $notyet)
+	   If $scheckboxtienthuong == True And $statustienthuong <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -347,16 +358,17 @@ Func Auto()
 		  EndIf
 		  Sleep(2000)
 	   EndIf
-   EndIf
+;~    EndIf
 
 
 
     #cs
 	7. train quai
 	#ce
-	If $TrainQuai == False Then
+;~ 	If $TrainQuai == False Then
 	   Local $scheckboxtreomay = IniRead($path&$Title&".tmp", $hoatdong, $treomay, False)
-	   If $scheckboxtreomay == True Then
+	   Local $statustreomay = IniRead($pathstatus&$Title&".tmp", $status, $treomay, $notyet)
+	   If $scheckboxtreomay == True And $statustreomay <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -375,16 +387,17 @@ Func Auto()
 		   EndIf
 		  Sleep(2000)
 	   EndIf
-	EndIf
+;~ 	EndIf
 
 
 
 	#cs
 	8. NV guild
 	#ce
-	If $NVGuide == False Then
+;~ 	If $NVGuide == False Then
 	   Local $scheckboxnvguild = IniRead($path&$Title&".tmp", $hoatdong, $nvguild, False)
-	   If $scheckboxnvguild == True Then
+	   Local $statusnvguild = IniRead($pathstatus&$Title&".tmp", $status, $nvguild, $notyet)
+	   If $scheckboxnvguild == True And $statusnvguild <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -403,16 +416,17 @@ Func Auto()
 		  EndIf
 		  Sleep(2000)
 	   EndIf
-	EndIf
+;~ 	EndIf
 
 
 
 	#cs
 	9. San Tinh Anh
 	#ce
-	If $NVTinhAnh == False Then
+;~ 	If $NVTinhAnh == False Then
 	   Local $scheckboxtinhanh = IniRead($path&$Title&".tmp", $hoatdong, $tinhanh, False)
-	   If $scheckboxtinhanh == True Then
+	   Local $statustinhanh = IniRead($pathstatus&$Title&".tmp", $status, $tinhanh, $notyet)
+	   If $scheckboxtinhanh == True And $statustinhanh <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -431,15 +445,16 @@ Func Auto()
 		   EndIf
 		  Sleep(2000)
 	   EndIf
-	EndIf
+;~ 	EndIf
 
 
 	#cs
 	10. Lay Thanh Vat
 	#ce
-	If $LayThanhVatDone == False Then
+;~ 	If $LayThanhVatDone == False Then
 	   Local $scheckboxlaythanhvat = IniRead($path&$Title&".tmp", $hoatdong, $laythanhvat, False)
-	   If $scheckboxlaythanhvat == True Then
+	   Local $statuslaythanhvat = IniRead($pathstatus&$Title&".tmp", $status, $laythanhvat, $notyet)
+	   If $scheckboxlaythanhvat == True And $statuslaythanhvat <> $done Then
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -457,16 +472,17 @@ Func Auto()
 		   EndIf
 		  Sleep(2000)
 	   EndIf
-	EndIf
+;~ 	EndIf
 
 
 
 	#cs
 	11. Boss guild 12h
 	#ce
-	If $Boss12hDone == False Then
+;~ 	If $Boss12hDone == False Then
 	  Local $scheckboxbossguild12h = IniRead($path&$Title&".tmp", $hoatdong, $bossguild12h, False)
-	  If $scheckboxbossguild12h == True Then
+	  Local $statusbossguild12h = IniRead($pathstatus&$Title&".tmp", $status, $bossguild12h, $notyet)
+	  If $scheckboxbossguild12h == True And $statusbossguild12h <> $done Then
 		  $countNVHenGio = $countNVHenGio + 1 ; van con nv de lam
 		  Local $Now = _NowTime(4);time hien tai
 		  Local $var1 = StringRegExpReplace($Now, "[:]", "")
@@ -494,14 +510,15 @@ Func Auto()
 			 $Boss12hDone = True
 		  EndIf
 	   EndIf
-    EndIf
+;~     EndIf
 
 	#cs
 	12. Tu Hoi Guild + Boss Guild 8h
 	#ce
-	If $TuhoiDone == False Then
+;~ 	If $TuhoiDone == False Then
 	  Local $scheckboxtuhoiguild = IniRead($path&$Title&".tmp", $hoatdong, $tuhoiguild8h, False)
-	  If $scheckboxtuhoiguild == True Then
+	  Local $statustuhoiguild = IniRead($pathstatus&$Title&".tmp", $status, $tuhoiguild8h, $notyet)
+	  If $scheckboxtuhoiguild == True And $statustuhoiguild <> $done Then
 		  $countNVHenGio = $countNVHenGio + 1 ; van con nv de lam
 		  Local $Now = _NowTime(4);time hien tai
 		  Local $var1 = StringRegExpReplace($Now, "[:]", "")
@@ -529,7 +546,7 @@ Func Auto()
 			 $TuhoiDone = True
 		  EndIf
 	  EndIf
-	EndIf
+;~ 	EndIf
 
 
 	Sleep(2000)
@@ -539,6 +556,8 @@ Func Auto()
 		 $resetNV = $resetNV + 1
 		 writelog("Reset auto lan "&$resetNV& @CRLF) ; write console
 		 _resetStatus()
+		 _anDanExp()
+		 _diCamTrain()
 		 Return ;next
 	  EndIf
    EndIf
@@ -656,9 +675,10 @@ Func _openHoatDong()
 EndFunc   ;==>Example
 
 Func _checkbossguild()
-   If $Boss12hDone = False Then
+;~    If $Boss12hDone = False Then
 	  Local $scheckboxbossguild12h = IniRead($path&$Title&".tmp", $hoatdong, $bossguild12h, False)
-	  If $scheckboxbossguild12h == True Then
+	  Local $statusbossguild12h = IniRead($pathstatus&$Title&".tmp", $status, $bossguild12h, $notyet)
+	  If $scheckboxbossguild12h == True And $statusbossguild12h <> $done Then
 		  Local $Now = _NowTime(4);time hien tai
 		  Local $var1 = StringRegExpReplace($Now, "[:]", "")
 		  Local $timestart = StringRegExpReplace("11:59", "[:]", "")
@@ -701,15 +721,13 @@ Func _checkbossguild()
 			 Return 1
 		  EndIf
 	   EndIf
-   EndIf
+;~    EndIf
 
 
 
 EndFunc   ;==>Example
 
 Func _checktuhoiguild()
-   If $TuhoiDone == False Then
-   EndIf
 
    Local $scheckboxtuhoiguild = IniRead($path&$Title&".tmp", $hoatdong, $tuhoiguild8h, False)
    Local $statustuhoiguild = IniRead($pathstatus&$Title&".tmp", $status, $tuhoiguild8h, $notyet)
@@ -868,7 +886,106 @@ Func _resetStatus()
 	 IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat, $notyet)
 	 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h, $notyet)
 	 IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h, $notyet)
-  EndFunc
+EndFunc
+Func _anDanExp()
+   Local $flagAnExp = IniRead($pathImage&"1.tmp", $general, $anExp, ""); check flag an exp
+   If $flagAnExp <> True Then Return
+   ;check an Dan
+   _findIconMenu($hwnd)
+   Local $count = 0
+   While $count < 5
+	  $count = $count + 1
+	  Local $ImageIconBalo = @ScriptDir & "\image\iconBalo.bmp"
+	  Local $Result = _HandleImgWaitExist($hwnd, $ImageIconBalo,2, 687, 328, 45, 45,80, 2);search balo
+	  If not @error Then ; thay balo -> click
+		 writelog("Thay Balo" & @CRLF) ; write console
+		 ControlClick($Title, "", "","", 1,$Result[1][0]+687, $Result[1][1]+328) ; click balo
+		 Sleep(2000)
+		 ;search Dan Exp
+		 While 1
+			;search exp lon
+			Local $Imageexplon = @ScriptDir & "\image\expLon.bmp"
+			$Result = _HandleImgWaitExist($hwnd,$Imageexplon,1, 0, 0, -1, -1,80, 10);search exp lon
+			If not @error Then ; thay exp -> click
+			   ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp Lon
+			   Sleep(1000)
+			   Local $Imagesudungbtn = @ScriptDir & "\image\sudungbtn.bmp"
+			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,80, 10);search btn su dung
+			   If not @error Then ; thay su dung btn -> click
+				  ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click su dung btn
+				  Sleep(1000)
+				  ContinueLoop
+			   EndIf
+			EndIf
+			;search exp nho
+			Local $Imageexpnho = @ScriptDir & "\image\expNho.bmp"
+			$Result = _HandleImgWaitExist($hwnd,$Imageexpnho,1, 0, 0, -1, -1,80, 10);search exp nho
+			If not @error Then ; thay exp -> click
+			   ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
+			   Sleep(1000)
+			   Local $Imagesudungbtn = @ScriptDir & "\image\sudungbtn.bmp"
+			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,80, 10);search btn su dung
+			   If not @error Then ; thay su dung btn -> click
+				  ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click su dung btn
+				  Sleep(1000)
+				  ContinueLoop
+			   EndIf
+			EndIf
+			writelog("Da an het dan exp" & @CRLF) ; write console
+			ExitLoop
+		 WEnd
+		 _close($hwnd)
+		 Return
+	  Else
+		 _close($hwnd)
+		 _ADB_Command_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1523 821") ; click vo kiem
+		 Sleep(1000)
+	  EndIf
+
+   WEnd
+
+
+EndFunc
+Func _diCamTrain()
+   Local $flagCamTrain = IniRead($pathImage&"1.tmp", $general, $camtrain, ""); check flag an exp
+   If $flagCamTrain <> True Then Return
+   $rs = _openHoatDong()
+   If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+	  Return
+   EndIf
+   Local $Imagetreomayhetluot = @ScriptDir & "\image\treomayhetluot.bmp"
+   Local $p = _searchNV($hwnd, $Imagetreomayhetluot) ; search NV treo may het luot
+   If @error Then
+	  Return
+   Else
+	  ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
+	  Sleep(20000);Cho 20s
+   EndIf
+EndFunc
+Func _findIconMenu($Handle)
+   While 1 ;tim den khi thay menu
+	 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+	 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 0, 0, -1, -1,94, 2);search nut menu
+	  If @error Then ; ko thay menu
+		  writelog("Tim kiem menu " & @CRLF) ; write console
+		  _ADB_Command_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 450") ;click giua man hinh
+		 _close($Handle); close all window
+		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
+		 If Not @error Then
+			writelog("Dang Trong Pho Ban .. Thoat " & _NowTime() & @CRLF) ; write console
+			ControlClick($Title, "", "","", 1,$rsthoatpb[1][0], $rsthoatpb[1][1]) ; click thoat
+			Sleep(700)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 985 600") ;click Xac nhan
+			Sleep(6000)
+			$Result2 = _HandleImgWaitExist($Handle, $ImagePath,2, 0, 0, -1, -1,94, 2);search nut menu again trong 5s
+		 EndIf
+	  Else
+		 writelog("Tim thay menu " & _NowTime() & @CRLF) ; write console
+		 ExitLoop
+	  EndIf
+   WEnd
+EndFunc
 
 Func _startAndLogin()
      While 1
