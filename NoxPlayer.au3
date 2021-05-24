@@ -28,7 +28,7 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
 Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
-Global Const $expireDate = "06/25/2021" ; format MM/DD/YYYY
+Global Const $expireDate = "05/25/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
@@ -62,6 +62,7 @@ Global Const $tinhanh = "TinhAnh"
 Global Const $laythanhvat = "LayThanhVat"
 Global Const $bossguild12h = "bossguild12"
 Global Const $tuhoiguild8h = "Tuhoiguild8h"
+Global Const $devil = "Devil"
 ;config auto Run
 Global Const $run = "Run"
 Global Const $finish = "Finish"
@@ -208,6 +209,30 @@ Func Auto()
     Global $pos = WinGetPos($Title)
     Local $countNV = 0;
 	Local $countNVHenGio = 0;
+   ;~    #cs
+   ;~ 	 Dao mo
+   ;~ 	#ce
+    Local $sReaddaomo = IniRead($path&$Title&".tmp", $hoatdong, $daomo, False)
+    Local $statusdaovo = IniRead($pathstatus&$Title&".tmp", $status, $daomo, $notyet)
+	If $sReaddaomo == True And $statusdaovo <> $done Then
+	   $countNV = $countNV + 1
+	   If _NowCalc() > $sNewTime Then
+		  $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$doing) ; change status running
+		  $sNewTime = GotoDaoMo($Title,$emuport,$hwnd) ; di dao mo #daomo.au3
+		  If @error Then
+			 writelog("1. DA HET LUOT DAO MO...." & _NowTime() & @CRLF) ; write console
+			 IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$done) ; change status done
+			 $DaoMoDone = True
+		  Else
+			 IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$notyet) ; change status wait
+		  EndIf
+	   EndIf
+	Sleep(2000)
+	EndIf
 	;nv thuong ngay
 	#cs
 	1.Di Huyen Canh tren khong
@@ -225,7 +250,7 @@ Func Auto()
 	  IniWrite($pathstatus&$Title&".tmp", $status, $huyencanh,$doing) ; change status running
 	  GotoPBHuyenCanh($Title,$emuport,$hwnd) ;huyencanh.au3--Di huyen canh
 	  If @error Then
-		  writelog("1. DA HET LUOT HUYEN CANH...." & _NowTime() & @CRLF) ; write console
+		  writelog("2. DA HET LUOT HUYEN CANH...." & _NowTime() & @CRLF) ; write console
 		  IniWrite($pathstatus&$Title&".tmp", $status, $huyencanh,$done) ; change status done
 		  $huyencanhDone = True
 	  Else
@@ -250,7 +275,7 @@ Func Auto()
 		  IniWrite($pathstatus&$Title&".tmp", $status, $blood,$doing) ; change status running
 		  GotoPBBlood($Title,$emuport,$hwnd) ;blood #blood.au3
 		  If @error Then
-			 writelog("2. DA HET LUOT BLOOD...." & _NowTime() & @CRLF) ; write console
+			 writelog("3. DA HET LUOT BLOOD...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $blood,$done) ; change status
 			 $bloodDONE = True
 		  Else
@@ -258,33 +283,6 @@ Func Auto()
 		  EndIf
 		  Sleep(2000)
 	   EndIf
-;~ 	EndIf
-   ;~    #cs
-   ;~ 	3. Dao mo
-   ;~ 	#ce
-;~    If $DaoMoDone == False Then
-	  Local $sReaddaomo = IniRead($path&$Title&".tmp", $hoatdong, $daomo, False)
-	  Local $statusdaovo = IniRead($pathstatus&$Title&".tmp", $status, $daomo, $notyet)
-	   If $sReaddaomo == True And $statusdaovo <> $done Then
-		  $countNV = $countNV + 1
-		  If _NowCalc() > $sNewTime Then
-			 $rs = _openHoatDong()
-			 If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
-				Return
-			 EndIf
-			 IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$doing) ; change status running
-			 $sNewTime = GotoDaoMo($Title,$emuport,$hwnd) ; di dao mo #daomo.au3
-			 If @error Then
-				writelog("3. DA HET LUOT DAO MO...." & _NowTime() & @CRLF) ; write console
-				IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$done) ; change status done
-				$DaoMoDone = True
-			 Else
-			    IniWrite($pathstatus&$Title&".tmp", $status, $daomo,$notyet) ; change status wait
-			 EndIf
-		  EndIf
-	   Sleep(2000)
-       EndIf
-;~    EndIf
     #cs
 	4. cuop mo
 	#ce
@@ -479,7 +477,6 @@ Func Auto()
 	#cs
 	11. Boss guild 12h
 	#ce
-;~ 	If $Boss12hDone == False Then
 	  Local $scheckboxbossguild12h = IniRead($path&$Title&".tmp", $hoatdong, $bossguild12h, False)
 	  Local $statusbossguild12h = IniRead($pathstatus&$Title&".tmp", $status, $bossguild12h, $notyet)
 	  If $scheckboxbossguild12h == True And $statusbossguild12h <> $done Then
@@ -510,7 +507,6 @@ Func Auto()
 			 $Boss12hDone = True
 		  EndIf
 	   EndIf
-;~     EndIf
 
 	#cs
 	12. Tu Hoi Guild + Boss Guild 8h
@@ -547,17 +543,46 @@ Func Auto()
 		  EndIf
 	  EndIf
 ;~ 	EndIf
-
+    #cs
+	13. Devil Square
+	#ce
+	  Local $scheckboxDevil = IniRead($path&$Title&".tmp", $hoatdong, $devil, False)
+	  Local $statusDevil = IniRead($pathstatus&$Title&".tmp", $status, $devil, $notyet)
+	  If $scheckboxDevil == True And $statusDevil <> $done Then
+		  $countNVHenGio = $countNVHenGio + 1 ; van con nv de lam
+		  Local $Now = _NowTime(4);time hien tai
+		  Local $var1 = StringRegExpReplace($Now, "[:]", "")
+		  Local $timestart = StringRegExpReplace("20:30", "[:]", "")
+		  Local $timeend = StringRegExpReplace("23:30", "[:]", "")
+		  ;check het time boss guild chua
+		  If $var1 > $timeend Then
+			 writelog("Het Thoi Gian Vao Devil Square...." & _NowTime() & @CRLF) ; write console
+			 IniWrite($pathstatus&$Title&".tmp", $status, $devil,$done) ; change status done
+		  EndIf
+		  If $var1 > $timestart And $var1 < $timeend Then
+			 $rs = _openMenu()
+			 If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+				Return
+			 EndIf
+			 IniWrite($pathstatus&$Title&".tmp", $status, $devil,$doing) ; change status doing
+			 _GotoDevilSquare($Title,$emuport,$hwnd) ; Devil Square #blood.au3
+			 If @error Then
+				writelog("Het Thoi Gian Vao Devil Square...." & _NowTime() & @CRLF) ; write console
+				IniWrite($pathstatus&$Title&".tmp", $status, $devil,$done) ; change status done
+			 EndIf
+			 IniWrite($pathstatus&$Title&".tmp", $status, $devil,$done) ; change status done
+		  EndIf
+	   EndIf
 
 	Sleep(2000)
 	;Xu Li Het Auto
    If $countNV == 0 Then ; het nv de lam
 	  If $resetNV < 1 Then
 		 $resetNV = $resetNV + 1
-		 writelog("Reset auto lan "&$resetNV& @CRLF) ; write console
-		 _resetStatus()
 		 _anDanExp()
 		 _diCamTrain()
+		 _resetStatus()
+		 writelog("Reset auto lan "&$resetNV& @CRLF) ; write console
 		 Return ;next
 	  EndIf
    EndIf
@@ -949,15 +974,16 @@ EndFunc
 Func _diCamTrain()
    Local $flagCamTrain = IniRead($pathImage&"1.tmp", $general, $camtrain, ""); check flag an exp
    If $flagCamTrain <> True Then Return
-   $rs = _openHoatDong()
-   If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
-	  Return
-   EndIf
+   $rs = _openMenu()
+	   If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+		  Return 1
+	   EndIf
    Local $Imagetreomayhetluot = @ScriptDir & "\image\treomayhetluot.bmp"
    Local $p = _searchNV($hwnd, $Imagetreomayhetluot) ; search NV treo may het luot
    If @error Then
 	  Return
    Else
+	  writelog("Di treo may" & @CRLF) ; write console
 	  ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
 	  Sleep(20000);Cho 20s
    EndIf
@@ -1042,7 +1068,7 @@ Func _startAndLogin()
 		 If not @error Then ;thay icon chon nhan vat
 			writelog("Bat dau " & _NowTime() & @CRLF) ; write console
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 800") ;click to bat dau
-			Sleep(20000)
+			Sleep(35000)
 			Local $ImagePath2 = @ScriptDir & "\image\thietlaptreomay.bmp"
 			$Result = _HandleImgWaitExist($hwnd, $ImagePath2,10, 0, 0, -1, -1,70, 2);search thiet lap treo may
 			If Not @error Then ; ko thay thiet lap

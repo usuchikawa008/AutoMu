@@ -10,10 +10,12 @@
 #include <FontConstants.au3>
 #include <Adapter.au3>
 #include <GuiMenu.au3>
+#include <GuiStatusBar.au3>
 #include <WindowsConstants.au3>
 #include <TabConstants.au3>
 #include <GuiListView.au3>
 #include <GuiImageList.au3>
+#include <DateTime.au3>
 
 
 
@@ -21,6 +23,7 @@
 Global $idDelete, $idEdit ,$oDictionary
 $oDictionary = ObjCreate("Scripting.Dictionary")
 Global $currentAuto
+Global $dayofweek = _getDayofWeek()
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
@@ -53,6 +56,7 @@ Global Const $tinhanh = "TinhAnh"
 Global Const $laythanhvat = "LayThanhVat"
 Global Const $bossguild12h = "bossguild12"
 Global Const $tuhoiguild8h = "Tuhoiguild8h"
+Global Const $devil = "Devil"
 ;config hoat dong End
 ;config start Auto
 Global Const $run = "Run"
@@ -63,6 +67,15 @@ Global Const $statusNox = "StatusNox"
 Global Const $onl = "Onl"
 Global Const $off = "Off"
 Global Const $cmdStart = "cmdStart"
+;config day of week start
+Global Const $CN = "Sunday"
+Global Const $T2 = "Monday"
+Global Const $T3 = "Tuesday"
+Global Const $T4 = "Wednesday"
+Global Const $T5 = "Thursday"
+Global Const $T6 = "Friday"
+Global Const $T7 = "Saturday"
+;config day of week end
 _checkMacIP()
 _setHardMode(False)
 _setAnExp(True)
@@ -84,24 +97,26 @@ Func Gui()
     ; Create a GUI with various controls.
 	$TitleAuto = "Auto Mu Vượt Thời Đại"
     Local $hGUI = GUICreate($TitleAuto, 350, 755)
-	GUISetBkColor(0x00E0FFFF) ; will change background color\
+	GUISetBkColor(0x00E0FFFF) ; will change background color
+	Global $g_hStatus = _GUICtrlStatusBar_Create($hGUI)
 	;create list view
 	Global $hListEmulators = GUICtrlCreateListView("List of emulators |Name|Status", 10, 10, 330, 100,$WS_DLGFRAME) ;,$LVS_SORTDESCENDING)
 ;~ 	Global $hList = GUICtrlGetHandle($hListEmulators)
 	Global $ContextMenu = GUICtrlCreateContextMenu($hListEmulators)
 	Global $hCMenuTextDel = GUICtrlCreateMenuItem("Delele", $ContextMenu)
-	Global $sItemText,$indexItem
+	Global $sItemText,$indexItem,$sItemTextHoatDong,$indexItemHoatDong
     _GUICtrlListView_SetExtendedListViewStyle($hListEmulators, BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES))
 	GUICtrlSetFont($hListEmulators, 8, 1200, 0, $sFont)
-    Local $idButton_Close = GUICtrlCreateButton("Close", 266, 725, 75, 25)
-    Local $idButton_Clean = GUICtrlCreateButton("Clean Log", 180, 725, 75, 25)
-	Global $textarea = GUICtrlCreateEdit("", 10, 600, 330, 120) ; will not accept drag&drop files
+    Local $idButton_Close = GUICtrlCreateButton("Close", 266, 705, 75, 25)
+    Local $idButton_Clean = GUICtrlCreateButton("Clean Log", 180, 705, 75, 25)
+	Global $textarea = GUICtrlCreateEdit("", 10, 600, 330, 100) ; will not accept drag&drop files
 	Local $idTab = GUICtrlCreateTab(10, 115, 332, 420) ;tao tab
 	GUICtrlSetFont($idTab,11)
 	GUICtrlCreateTabItem("Hoạt động")
-	GUICtrlSetBkColor(-1, 0xCCFFCC)
+;~ 	Local $iTest = GUICtrlCreateCheckbox("Tự ăn đan EXP khi làm xong hết NV ", 20, 145, 200, 25)
 	Global $hListHoatDong = GUICtrlCreateListView("Nhiệm Vụ | Status | Emulator", 10, 145, 330, 400,$WS_DLGFRAME) ;,$LVS_SORTDESCENDING)
 	_GUICtrlListView_SetExtendedListViewStyle($hListHoatDong, BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES))
+	_GUICtrlListView_SetHoverTime($hListHoatDong, 1234)
 	Global $countDevices = 0;
 	Global $aCheck[10]    ; Array of CheckBoxes
    ; Retrieve a list of window handles.
@@ -130,6 +145,11 @@ Func Gui()
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $laythanhvat, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $bossguild12h, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $tuhoiguild8h, True)
+		   If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
+			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $devil, True)
+		   Else
+			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $devil, False)
+		   EndIf
 		   ; init status
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $blood, $notyet)
@@ -143,6 +163,7 @@ Func Gui()
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $laythanhvat, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bossguild12h, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $tuhoiguild8h, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $devil, $notyet)
 		   ; init Run
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $pid, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $finish, "")
@@ -190,6 +211,7 @@ Func Gui()
 	Global $idItemLayThanhVat = GUICtrlCreateListViewItem("Lấy Thánh Vật Thường ||"&$currentAuto&"", $hListHoatDong)
 	Global $idItemBossGuild12h = GUICtrlCreateListViewItem("Boss Guild 12h ||"&$currentAuto&"", $hListHoatDong)
 	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 8h ||"&$currentAuto&"", $hListHoatDong)
+	Global $idItemDevil = GUICtrlCreateListViewItem("Devil Square ||"&$currentAuto&"", $hListHoatDong)
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 0, $LVSCW_AUTOSIZE) ;auto size column hoat dong
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
@@ -238,7 +260,7 @@ Func Gui()
 			    EndIf
 			Case $idButton_ResetStatus
 				_resetStatus()
-			 Case $hCMenuTextDel
+			Case $hCMenuTextDel
 				DeleteItemEmulator()
 		    Case $idCheckBoxHardMod
 		        If _IsChecked($idCheckBoxHardMod) Then
@@ -321,8 +343,8 @@ Func ItemChecked_Proc_RunAuto($iIndex,$iItem, $sState)
 	  ConsoleWrite("Start PID = "&$iPID &@CRLF)
 	  $oDictionary.Add($currentAuto,$iPID)
 	  If $statusNoxx == $off Then
-		 Sleep(500)
-		 AdLibRegister("_updateStatusAuto", 3000);auto run this function every 3 s
+		 Sleep(1000)
+		 AdLibRegister("_updateStatusAuto", 4000);auto run this function every 4 s
 	  EndIf
    Else
 	  $sreadPID = IniRead($pathAuto&$currentAuto&".tmp", $run, $pid, "")
@@ -409,6 +431,24 @@ EndFunc
 			  Else
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $tuhoiguild8h, False)
 			  EndIf
+		   Case 12 ; Devil square
+			  If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
+			     If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, True)
+				 Else
+					IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, False)
+				 EndIf
+			  Else
+				 If $sState == True Then
+				   MsgBox(0,"","Hôm nay không có devil",2)
+				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, False)
+				   _updateAcTion()
+				 Else
+				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, False)
+				 EndIf
+			  EndIf
+
+
 		EndSwitch
 EndFunc
 Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
@@ -476,6 +516,8 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
             Switch $iCode
                 Case $NM_CLICK, $NM_DBLCLK, $NM_RCLICK, $NM_RDBLCLK
                     Local $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
+					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem")) ;store the item text in a global variable in case the get text option is clicked.
+			        $indexItemHoatDong = _GUICtrlListView_GetHotItem($hWndListView2) ;store the item index in a global variable in case the get text option is clicked.
                     Local $iIndex = DllStructGetData($tInfo, "Index")
 
                     If $iIndex <> -1 Then
@@ -485,12 +527,17 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 
                         Local $aIconRect = _GUICtrlListView_GetItemRect($hListHoatDong, $iIndex, $iPart)
 
-                        If $iX < $aIconRect[0] And $iX >= 5 Then
+                        If $iX < $aIconRect[0] And $iX >= 5 Then ;click vo checkbox
                             ItemChecked_Proc_TurnOnOffAction($iIndex,_GUICtrlListView_GetItemText($hListHoatDong, $iIndex), _
                                 _GUICtrlListView_GetItemChecked($hListHoatDong, $iIndex) = 0)
                             Return 0
-                        EndIf
-                    EndIf
+						 Else
+							checkConfigurator()
+						 EndIf
+					  EndIf
+			   Case $LVN_HOTTRACK ; Sent by a list-view control when the user moves the mouse over an item
+                    $tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
+                    ListView_HOTTRACK(DllStructGetData($tInfo, "SubItem"))
             EndSwitch
     EndSwitch
 
@@ -619,6 +666,16 @@ Func _updateAcTion()
 	 Else
 		_GUICtrlListView_SetItemChecked($hListHoatDong, 11,False)
 	 EndIf
+	 ;update devil square 8h30 line 12
+     Local $sReadDevil = IniRead($path&$currentAuto&".tmp", $hoatdong, $devil, False)
+	 Local $statusDevil = IniRead($pathstatus&$currentAuto&".tmp", $status, $devil, $notyet)
+	 GUICtrlSetData($idItemDevil, "|"&$statusDevil)
+	 GUICtrlSetColor($idItemDevil,_changeColor($statusDevil))
+	 If $sReadDevil == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 12)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 12,False)
+	 EndIf
 	 ;Auto resize column
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
@@ -639,6 +696,7 @@ Func _reloadEmu($switch)
 	 GUICtrlSetData($idItemLayThanhVat, "||"&$currentAuto)
 	 GUICtrlSetData($idItemBossGuild12h, "||"&$currentAuto)
 	 GUICtrlSetData($idItemTuHoiGuild12h, "||"&$currentAuto)
+	 GUICtrlSetData($idItemDevil, "||"&$currentAuto)
      _updateAcTion()
 
 EndFunc
@@ -662,6 +720,7 @@ Func _resetStatus()
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $laythanhvat, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossguild12h, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $tuhoiguild8h, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $devil, $notyet)
      _updateAcTion()
 
 EndFunc
@@ -678,6 +737,7 @@ Func _checkAndUncheckAll($sState)
 	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $laythanhvat, $sState)
 	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $bossguild12h, $sState)
 	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $tuhoiguild8h, $sState)
+	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, $sState)
      _updateAcTion()
 
 EndFunc
@@ -731,7 +791,7 @@ Func _updateStatusAuto() ; update status AUTO emulator
         $found = _ArraySearch($NoxRunning, $NoxListConfig[$i])
         If $found = -1 Then ; ko search thay la Nox Off
 		    Local $NoxOff = StringSplit($NoxListConfig[$i],".")[1]
-            ConsoleWrite("Nox Off :"&$NoxOff&@CRLF)
+;~             ConsoleWrite("Nox Off :"&$NoxOff&@CRLF)
 			IniWrite($pathAuto&$NoxListConfig[$i], $run, $statusNox, $off)
 			;Tat Auto
 			IniWrite($pathAuto&$NoxListConfig[$i], $run, $finish,True) ; update finish AUTO
@@ -743,7 +803,7 @@ Func _updateStatusAuto() ; update status AUTO emulator
 			EndIf
 		 Else
 			Local $NoxOnl = StringSplit($NoxListConfig[$i],".")[1]
-			ConsoleWrite("Nox On :"&$NoxOnl&@CRLF)
+;~ 			ConsoleWrite("Nox On :"&$NoxOnl&@CRLF)
 			IniWrite($pathAuto&$NoxListConfig[$i], $run, $statusNox, $onl)
 		 EndIf
 
@@ -798,6 +858,11 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $laythanhvat, True)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $bossguild12h, True)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $tuhoiguild8h, True)
+		If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
+		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $devil, True)
+		Else
+		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $devil, False)
+		EndIf
 		; init status
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $huyencanh, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $blood, $notyet)
@@ -811,6 +876,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $laythanhvat, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bossguild12h, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $tuhoiguild8h, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $devil, $notyet)
 		; init Run
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $pid, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $finish, "")
@@ -831,11 +897,22 @@ Func DeleteItemEmulator()
    Else
 	  _GUICtrlListView_DeleteItem($hListEmulators, $indexItem); delete item in list emulator
 	  FileDelete($path&$sItemText&".tmp");delete file in config
+	  FileDelete($pathstatus&$sItemText&".tmp");delete file in config
+	  FileDelete($pathAuto&$sItemText&".tmp");delete file in config
 	  if $indexItem == 0 Then ; neu xoa vi tri 0.. update lai current Auto
 		 $currentAuto = _GUICtrlListView_GetItemText($hListEmulators,0)
 		 _reloadEmu($currentAuto)
 	  EndIf
    EndIf
+EndFunc   ;==>Copy2Dsktp
+
+Func checkConfigurator()
+   ConsoleWrite($sItemTextHoatDong&@CRLF)
+   ConsoleWrite($indexItemHoatDong&@CRLF)
+   $hWndListView1 = GUICtrlGetHandle($hListHoatDong)
+;~    WinSetState($hWndListView1,"",@SW_HIDE)
+
+
 EndFunc   ;==>Copy2Dsktp
 Func _setCmdStart($Title) ; set cmd to start Nox
    If $Title == "NoxPlayer" Then
@@ -919,3 +996,7 @@ Else
     Return 0
 Endif
 EndFunc
+Func ListView_HOTTRACK($iSubItem)
+    Local $iHotItem = _GUICtrlListView_GetHotItem($hListHoatDong)
+    If $iHotItem <> -1 Then _GUICtrlStatusBar_SetText($g_hStatus, "Hot Item: " & $iHotItem & " SubItem: " & $iSubItem)
+EndFunc   ;==>ListView_HOTTRACK

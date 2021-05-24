@@ -58,26 +58,26 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 		Return
 	 EndIf
 	 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 325 130") ;chuyen sang tab hoat dong han gio
-		 $Imagebossguild = @ScriptDir & "\image\bossguild.bmp"
-		 $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,120, 2);search boss guild icon
-		 If @error Then ;het luot
-			Return SetError(3)
-		 Else
-			writelog("Vao Boss Guild 12h " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
-			Sleep(2000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
-			;click toi xac nhan
-			Sleep(6000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
-			For $i = 0 to 4 Step + 1
-			   Sleep(1000)
-			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
-			Next
+	  $Imagebossguild = @ScriptDir & "\image\bossguild.bmp"
+	  $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,120, 2);search boss guild icon
+	  If @error Then ;het luot
+		 Return SetError(3)
+	  Else
+		 writelog("Vao Boss Guild 12h " & _NowTime() & @CRLF) ; write console
+		 ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
+		 Sleep(2000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
+		 ;click toi xac nhan
+		 Sleep(6000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
+		 For $i = 0 to 4 Step + 1
 			Sleep(1000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
-			Sleep(1000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
+		 Next
+		 Sleep(1000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
+		 Sleep(1000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
 		 EndIf
 		 ;wait boss die
 		 Local $Now = _NowTime(4);time hien tai
