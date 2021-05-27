@@ -1,7 +1,13 @@
-#include <WinAPIRes.au3>
+#include <MsgBoxConstants.au3>
 
-Local $hPrev = _WinAPI_CopyCursor(_WinAPI_LoadCursor(0, 32512))
+; Find a pure red pixel in the range 0,0-20,300
+Local $aCoord = PixelSearch(0, 0, 20, 300, 0xFF0000)
+If Not @error Then
+    MsgBox($MB_SYSTEMMODAL, "", "X and Y are: " & $aCoord[0] & "," & $aCoord[1])
+EndIf
 
-_WinAPI_SetSystemCursor(_WinAPI_LoadCursorFromFile(@ScriptDir & '\Extras\Lens.cur'), 32512)
-Sleep(5000)
-_WinAPI_SetSystemCursor($hPrev, 32512)
+; Find a pure red pixel or a red pixel within 10 shades variations of pure red
+$aCoord = PixelSearch(0, 0, 20, 300, 0xFF0000, 10)
+If Not @error Then
+    MsgBox($MB_SYSTEMMODAL, "", "X and Y are: " & $aCoord[0] & "," & $aCoord[1])
+EndIf

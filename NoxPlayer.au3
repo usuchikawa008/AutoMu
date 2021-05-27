@@ -28,7 +28,7 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
 Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
-Global Const $expireDate = "05/25/2021" ; format MM/DD/YYYY
+Global Const $expireDate = "06/25/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
@@ -162,7 +162,7 @@ Global $LayThanhVatDone = false;
 Global $Boss12hDone = false;
 Global $TuhoiDone = false;
 Global $count = 0
-Global $maxloop  = 300
+Global $maxloop  = 1000
 Global $resetNV = 0 ; reset NV 4 lan truoc khi ket thuc
 $checkHARDMOD = IniRead($pathImage&"1.tmp", $general, $hardmode, False);kiem tra co o che do hard mode hay khong
 If $checkHARDMOD == True Then
@@ -184,8 +184,10 @@ WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
 While $count < $maxloop;loop auto 1000 lan
 _close($hwnd) ;close het cua so truoc khi bat dau auto
 $count = $count + 1 ; so lan loop
-writelog("Auto Vong "&$count&" bat dau" &@CRLF) ; write console
-Sleep(200)
+If Mod($count, 50) = 0 Then
+   writelog("Auto Vong "&$count&" bat dau" &@CRLF) ; write console
+EndIf
+Sleep(500)
  Auto()
  If @error Then
    ExitLoop
@@ -235,7 +237,7 @@ Func Auto()
 	EndIf
 	;nv thuong ngay
 	#cs
-	1.Di Huyen Canh tren khong
+	2.Di Huyen Canh tren khong
 	#ce
 	Sleep(1000)
 ;~ 	If $huyencanhDone == False Then
@@ -261,7 +263,7 @@ Func Auto()
 ;~ 	EndIf
 
    #cs
-	2.Di Blood castle
+	3.Di Blood castle
 	#ce
 ;~ 	If $bloodDONE == False Then
 	   Local $sReadblood = IniRead($path&$Title&".tmp", $hoatdong, $blood, False)
@@ -968,8 +970,6 @@ Func _anDanExp()
 	  EndIf
 
    WEnd
-
-
 EndFunc
 Func _diCamTrain()
    Local $flagCamTrain = IniRead($pathImage&"1.tmp", $general, $camtrain, ""); check flag an exp
@@ -1014,7 +1014,15 @@ Func _findIconMenu($Handle)
 EndFunc
 
 Func _startAndLogin()
-     While 1
+   Local $count = 0
+     While 1 ;buoc vo game
+		$count = $count + 1
+		If $count > 60 Then
+		   MsgBox(0,"","Lỗi không thể tự động đăng nhập. Vui lòng đăng nhập thủ công")
+		   IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
+		   Exit 0
+		EndIf
+
 		Local $Imageicon = @ScriptDir & "\image\iconMuVTD.bmp"
 	    Local $Result = _HandleImgSearch($hwnd, $Imageicon, 0, 0, -1, -1,100, 2);search icon MU
 		If not @error Then ; neu thay nv out
@@ -1026,7 +1034,7 @@ Func _startAndLogin()
 			ExitLoop
 	    Else
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-			Sleep(5000) ;cho 5s
+			Sleep(4000) ;cho 5s
 			Local $Imagewait = @ScriptDir & "\image\wait.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
@@ -1048,7 +1056,7 @@ Func _startAndLogin()
 			ExitLoop
 	    Else
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
-			Sleep(5000) ;cho 5s
+			Sleep(4000) ;cho 5s
 			Local $Imagewait = @ScriptDir & "\image\waitBig.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
@@ -1056,9 +1064,24 @@ Func _startAndLogin()
 			EndIf
 	    EndIf
 	 WEnd
-	 Local $ImageiconTK = @ScriptDir & "\image\icontaikhoan.bmp"
-     Local $ResultTK = _HandleImgWaitExist($hwnd, $ImageiconTK,180, 0, 0, -1, -1,70, 2);search icon Tai Khoan
-	 If not @error Then
+	 Local $count = 0
+	 While 1 ;buoc dang nhap
+		$count = $count + 1
+		If $count > 50 Then
+		   MsgBox(0,"","Lỗi không thể tự động đăng nhập. Vui lòng đăng nhập thủ công")
+		   IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
+		   Exit 0
+		EndIf
+		 Local $ImageiconTK = @ScriptDir & "\image\icontaikhoan.bmp"
+		 Local $ResultTK = _HandleImgWaitExist($hwnd, $ImageiconTK,2, 0, 0, -1, -1,70, 2);search icon Tai Khoan
+		 If not @error Then
+			Sleep(5000)
+			ExitLoop
+		 Else
+			_closeSimple($hwnd)
+			Sleep(5000)
+		 EndIf
+	  WEnd
 		 writelog("Dang Nhap " & _NowTime() & @CRLF) ; write console
 		 Sleep(4000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 669") ;click to dang nhap
@@ -1068,23 +1091,21 @@ Func _startAndLogin()
 		 If not @error Then ;thay icon chon nhan vat
 			writelog("Bat dau " & _NowTime() & @CRLF) ; write console
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 800") ;click to bat dau
-			Sleep(35000)
+			Sleep(50000); cho 50s
 			Local $ImagePath2 = @ScriptDir & "\image\thietlaptreomay.bmp"
-			$Result = _HandleImgWaitExist($hwnd, $ImagePath2,10, 0, 0, -1, -1,70, 2);search thiet lap treo may
+			$Result = _HandleImgWaitExist($hwnd, $ImagePath2,5, 0, 0, -1, -1,70, 2);search thiet lap treo may
 			If Not @error Then ; ko thay thiet lap
 			   Opt("WinTitleMatchMode", 3)
 			   ControlClick($Title, "", "","", 1,$Result[1][0]+275, $Result[1][1]) ; click xac nhan
 			EndIf
 			Local $ImagePath3 = @ScriptDir & "\image\close2.bmp"
-			$Result2 = _HandleImgWaitExist($hwnd, $ImagePath3,10, 0, 0, -1, -1,80, 2);search close button 2 trong 15s
+			$Result2 = _HandleImgWaitExist($hwnd, $ImagePath3,5, 0, 0, -1, -1,80, 2);search close button 2 trong 15s
 			If not @error Then ; ko thay close
 			   Opt("WinTitleMatchMode", 3)
 			   ControlClick($Title, "", "","", 1,$Result2[1][0], $Result2[1][1]) ; click close
 			EndIf
 		 Else
 		 EndIf
-      Else
-		 writelog("Ko thay icon dang nhap " & _NowTime() & @CRLF) ; write console
-	  EndIf
+
 
 EndFunc
