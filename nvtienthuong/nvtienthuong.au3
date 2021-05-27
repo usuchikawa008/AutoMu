@@ -140,7 +140,7 @@ Func _TreoMay($Handle,$p)
 			writelog("Check Lan " &$i & @CRLF) ; write console
 			ControlClick($Title, "", "","", 1,$Result[1][0]+660, $Result[1][1]+30) ; click menu
 			$Imagesoinoi = @ScriptDir & "\image\laysoinoi.bmp"
-			Local $Rs = _HandleImgWaitExist($Handle, $Imagesoinoi,2, 0, 0, -1, -1,85, 2);search nut Laysoi noi trongh 2s
+			Local $Rs = _HandleImgWaitExist($Handle, $Imagesoinoi,2, 0, 0, -1, -1,88, 2);search nut Laysoi noi trongh 2s
 		    If not @error Then ; neu thay  SOI NOI thi click
 			   writelog("Treo quai xong " & _NowTime() & @CRLF) ; write console
 			   Return

@@ -57,6 +57,9 @@ Global Const $laythanhvat = "LayThanhVat"
 Global Const $bossguild12h = "bossguild12"
 Global Const $tuhoiguild8h = "Tuhoiguild8h"
 Global Const $devil = "Devil"
+Global Const $baotang = "BaoTang"
+Global Const $phaodai = "PhaoDai"
+Global Const $hotroguild = "HoTroGuild"
 ;config hoat dong End
 ;config start Auto
 Global Const $run = "Run"
@@ -147,9 +150,17 @@ Func Gui()
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $tuhoiguild8h, True)
 		   If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
 			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $devil, True)
+			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $baotang, True)
 		   Else
 			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $devil, False)
+			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $baotang, False)
 		   EndIf
+		   If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
+			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $phaodai, True)
+		   Else
+			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $phaodai, False)
+		   EndIf
+		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $hotroguild, True)
 		   ; init status
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $blood, $notyet)
@@ -164,6 +175,9 @@ Func Gui()
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bossguild12h, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $tuhoiguild8h, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $devil, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $baotang, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $phaodai, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $hotroguild, $notyet)
 		   ; init Run
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $pid, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $finish, "")
@@ -212,6 +226,9 @@ Func Gui()
 	Global $idItemBossGuild12h = GUICtrlCreateListViewItem("Boss Guild 12h ||"&$currentAuto&"", $hListHoatDong)
 	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 8h ||"&$currentAuto&"", $hListHoatDong)
 	Global $idItemDevil = GUICtrlCreateListViewItem("Devil Square ||"&$currentAuto&"", $hListHoatDong)
+	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||"&$currentAuto&"", $hListHoatDong)
+	Global $idItemPhaoDai = GUICtrlCreateListViewItem("Pháo Đài Đỏ ||"&$currentAuto&"", $hListHoatDong)
+	Global $idItemHoTro = GUICtrlCreateListViewItem("Hỗ Trợ Guild ||"&$currentAuto&"", $hListHoatDong)
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 0, $LVSCW_AUTOSIZE) ;auto size column hoat dong
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
@@ -431,7 +448,7 @@ EndFunc
 			  Else
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $tuhoiguild8h, False)
 			  EndIf
-		   Case 12 ; Devil square
+		  Case 12 ; Devil square
 			  If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
 			     If $sState == True Then
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, True)
@@ -447,8 +464,45 @@ EndFunc
 				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, False)
 				 EndIf
 			  EndIf
+		  Case 13 ; Hộ Tống
+			  If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
+			     If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, True)
+				 Else
+					IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, False)
+				 EndIf
+			  Else
+				 If $sState == True Then
+				   MsgBox(0,"","Hôm nay không có Hộ Tống Bảo Tàng",2)
+				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, False)
+				   _updateAcTion()
+				 Else
+				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, False)
+				 EndIf
+			  EndIf
 
-
+		 Case 14 ; Pháo Đài
+			  If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
+			     If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, True)
+				 Else
+					IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, False)
+				 EndIf
+			  Else
+				 If $sState == True Then
+				   MsgBox(0,"","Hôm nay không có Pháo Đài Đỏ",2)
+				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, False)
+				   _updateAcTion()
+				 Else
+				   IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, False)
+				 EndIf
+			  EndIf
+		  Case 15 ; hỖ TRỢ guild
+			  If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $hotroguild, True)
+			  Else
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $hotroguild, False)
+			  EndIf
 		EndSwitch
 EndFunc
 Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
@@ -676,6 +730,37 @@ Func _updateAcTion()
 	 Else
 		_GUICtrlListView_SetItemChecked($hListHoatDong, 12,False)
 	 EndIf
+
+	 ;update Hộ Tống Bảo Tàng 11h > 12h and 9h > 10h line 13
+     Local $sReadBaoTang = IniRead($path&$currentAuto&".tmp", $hoatdong, $baotang, False)
+	 Local $statusBaoTang = IniRead($pathstatus&$currentAuto&".tmp", $status, $baotang, $notyet)
+	 GUICtrlSetData($idItemBaoTang, "|"&$statusBaoTang)
+	 GUICtrlSetColor($idItemBaoTang,_changeColor($statusBaoTang))
+	 If $sReadBaoTang == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 13)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 13,False)
+	 EndIf
+	 ;update Pháo đài đỏ 20h30 line 14
+     Local $sReadPhaoDai = IniRead($path&$currentAuto&".tmp", $hoatdong, $phaodai, False)
+	 Local $statusPhaoDai = IniRead($pathstatus&$currentAuto&".tmp", $status, $phaodai, $notyet)
+	 GUICtrlSetData($idItemPhaoDai, "|"&$statusPhaoDai)
+	 GUICtrlSetColor($idItemPhaoDai,_changeColor($statusPhaoDai))
+	 If $sReadPhaoDai == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 14)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 14,False)
+	 EndIf
+	 ;auto update ho tro guild line 15
+	 Local $sReadHoTro = IniRead($path&$currentAuto&".tmp", $hoatdong, $hotroguild, False)
+	 Local $statusHotro = IniRead($pathstatus&$currentAuto&".tmp", $status, $hotroguild, $notyet)
+	 GUICtrlSetData($idItemHoTro, "|"&$statusHotro)
+	 GUICtrlSetColor($idItemHoTro,_changeColor($statusHotro))
+	 If $sReadHoTro == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 15)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 15,False)
+	 EndIf
 	 ;Auto resize column
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
@@ -697,6 +782,9 @@ Func _reloadEmu($switch)
 	 GUICtrlSetData($idItemBossGuild12h, "||"&$currentAuto)
 	 GUICtrlSetData($idItemTuHoiGuild12h, "||"&$currentAuto)
 	 GUICtrlSetData($idItemDevil, "||"&$currentAuto)
+	 GUICtrlSetData($idItemBaoTang, "||"&$currentAuto)
+	 GUICtrlSetData($idItemPhaoDai, "||"&$currentAuto)
+	 GUICtrlSetData($idItemHoTro, "||"&$currentAuto)
      _updateAcTion()
 
 EndFunc
@@ -721,6 +809,9 @@ Func _resetStatus()
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossguild12h, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $tuhoiguild8h, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $devil, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $baotang, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $phaodai, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $hotroguild, $notyet)
      _updateAcTion()
 
 EndFunc
@@ -737,7 +828,28 @@ Func _checkAndUncheckAll($sState)
 	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $laythanhvat, $sState)
 	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $bossguild12h, $sState)
 	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $tuhoiguild8h, $sState)
-	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, $sState)
+	 IniWrite($path&$currentAuto&".tmp", $hoatdong, $hotroguild, $sState)
+	 If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
+		 IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, $sState)
+		 IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, $sState)
+	 Else
+		 If $sState == True Then
+			IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, False)
+			IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, False)
+		 Else
+			IniWrite($path&$currentAuto&".tmp", $hoatdong, $devil, $sState)
+			IniWrite($path&$currentAuto&".tmp", $hoatdong, $baotang, $sState)
+		 EndIf
+	  EndIf
+	  If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
+		 IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, $sState)
+	 Else
+		 If $sState == True Then
+			IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, False)
+		 Else
+			IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, $sState)
+		 EndIf
+	 EndIf
      _updateAcTion()
 
 EndFunc
@@ -860,9 +972,17 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $tuhoiguild8h, True)
 		If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
 		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $devil, True)
+		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $baotang, True)
 		Else
 		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $devil, False)
+		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $baotang, False)
 		EndIf
+		If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
+		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $phaodai, True)
+		Else
+		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $phaodai, False)
+		EndIf
+		IniWrite($path&$NoxOff&".tmp", $hoatdong, $hotroguild, True)
 		; init status
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $huyencanh, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $blood, $notyet)
@@ -877,6 +997,9 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bossguild12h, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $tuhoiguild8h, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $devil, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $baotang, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $phaodai, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $hotroguild, $notyet)
 		; init Run
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $pid, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $finish, "")
@@ -909,7 +1032,7 @@ EndFunc   ;==>Copy2Dsktp
 Func checkConfigurator()
    ConsoleWrite($sItemTextHoatDong&@CRLF)
    ConsoleWrite($indexItemHoatDong&@CRLF)
-   $hWndListView1 = GUICtrlGetHandle($hListHoatDong)
+;~    $hWndListView1 = GUICtrlGetHandle($hListHoatDong)
 ;~    WinSetState($hWndListView1,"",@SW_HIDE)
 
 
@@ -959,44 +1082,7 @@ Func _getProcess() ; pause script
    EndIf
 EndFunc
 
-
-
-Func _ProcessSuspend($process)
-$processid = ProcessExists($process)
-If $processid Then
-    $ai_Handle = DllCall("kernel32.dll", 'int', 'OpenProcess', 'int', 0x1f0fff, 'int', False, 'int', $processid)
-    $i_sucess = DllCall("ntdll.dll","int","NtSuspendProcess","int",$ai_Handle[0])
-    DllCall('kernel32.dll', 'ptr', 'CloseHandle', 'ptr', $ai_Handle)
-    If IsArray($i_sucess) Then
-        Return 1
-    Else
-        SetError(1)
-        Return 0
-    Endif
-Else
-    SetError(2)
-    Return 0
-Endif
-EndFunc
-
-Func _ProcessResume($process)
-$processid = ProcessExists($process)
-If $processid Then
-    $ai_Handle = DllCall("kernel32.dll", 'int', 'OpenProcess', 'int', 0x1f0fff, 'int', False, 'int', $processid)
-    $i_sucess = DllCall("ntdll.dll","int","NtResumeProcess","int",$ai_Handle[0])
-    DllCall('kernel32.dll', 'ptr', 'CloseHandle', 'ptr', $ai_Handle)
-    If IsArray($i_sucess) Then
-        Return 1
-    Else
-        SetError(1)
-        Return 0
-    Endif
-Else
-    SetError(2)
-    Return 0
-Endif
-EndFunc
 Func ListView_HOTTRACK($iSubItem)
     Local $iHotItem = _GUICtrlListView_GetHotItem($hListHoatDong)
-    If $iHotItem <> -1 Then _GUICtrlStatusBar_SetText($g_hStatus, "Hot Item: " & $iHotItem & " SubItem: " & $iSubItem)
+;~     If $iHotItem <> -1 Then _GUICtrlStatusBar_SetText($g_hStatus, "Hot Item: " & $iHotItem & " SubItem: " & $iSubItem)
 EndFunc   ;==>ListView_HOTTRACK

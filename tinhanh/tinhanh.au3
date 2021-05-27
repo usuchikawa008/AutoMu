@@ -8,7 +8,7 @@ Func _GotoNVTinhAnh($Title,$emuport,$Handle)
 	 EndIf
 		 Local $Imageconluottinhanh = @ScriptDir & "\image\conluottinhanh.bmp"
 		 Local $Imagehetluottinhanh = @ScriptDir & "\image\hetluottinhanh.bmp"
-		 $p = _searchNVAdvance($Handle,$Imagehetluottinhanh,$Imageconluottinhanh,95,115);search nv tien thuong
+		 $p = _searchNVAdvance($Handle,$Imagehetluottinhanh,$Imageconluottinhanh,95,120);search nv tien thuong
 		 If @error Then ; het luot
 			Return SetError(3)
 		 EndIf

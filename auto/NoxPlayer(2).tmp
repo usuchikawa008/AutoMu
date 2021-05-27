@@ -1,9 +1,6 @@
 [Run]
-PID = 15308
-Finish = 
-Name_In_Game = phongdo
-
-
-StatusNox =Onl
-cmdStart = Nox.exe -clone:Nox_2
-
+PID=
+Finish=
+Name_In_Game=
+StatusNox=Onl
+cmdStart=Nox.exe -clone:Nox_2

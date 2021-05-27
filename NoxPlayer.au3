@@ -932,28 +932,28 @@ Func _anDanExp()
 		 While 1
 			;search exp lon
 			Local $Imageexplon = @ScriptDir & "\image\expLon.bmp"
-			$Result = _HandleImgWaitExist($hwnd,$Imageexplon,1, 0, 0, -1, -1,80, 10);search exp lon
+			$Result = _HandleImgWaitExist($hwnd,$Imageexplon,1, 0, 0, -1, -1,90, 10);search exp lon
 			If not @error Then ; thay exp -> click
 			   ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp Lon
 			   Sleep(1000)
-			   Local $Imagesudungbtn = @ScriptDir & "\image\sudungbtn.bmp"
+			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
 			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,80, 10);search btn su dung
 			   If not @error Then ; thay su dung btn -> click
-				  ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click su dung btn
+				  ControlClick($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
 				  Sleep(1000)
 				  ContinueLoop
 			   EndIf
 			EndIf
 			;search exp nho
 			Local $Imageexpnho = @ScriptDir & "\image\expNho.bmp"
-			$Result = _HandleImgWaitExist($hwnd,$Imageexpnho,1, 0, 0, -1, -1,80, 10);search exp nho
+			$Result = _HandleImgWaitExist($hwnd,$Imageexpnho,1, 0, 0, -1, -1,90, 10);search exp nho
 			If not @error Then ; thay exp -> click
 			   ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
 			   Sleep(1000)
-			   Local $Imagesudungbtn = @ScriptDir & "\image\sudungbtn.bmp"
+			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
 			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,80, 10);search btn su dung
 			   If not @error Then ; thay su dung btn -> click
-				  ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click su dung btn
+				  ControlClick($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
 				  Sleep(1000)
 				  ContinueLoop
 			   EndIf
@@ -994,7 +994,7 @@ Func _findIconMenu($Handle)
 	 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 0, 0, -1, -1,94, 2);search nut menu
 	  If @error Then ; ko thay menu
 		  writelog("Tim kiem menu " & @CRLF) ; write console
-		  _ADB_Command_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 450") ;click giua man hinh
+		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 450") ;click giua man hinh
 		 _close($Handle); close all window
 		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
 		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
@@ -1089,6 +1089,9 @@ Func _startAndLogin()
 		 Local $Imagepath = @ScriptDir & "\image\iconchonNV.bmp"
 		 Local $ResultChonNV = _HandleImgWaitExist($hwnd, $Imagepath,20, 0, 0, -1, -1,70, 2);search icon back
 		 If not @error Then ;thay icon chon nhan vat
+			writelog("Chon nhan vat dau tien " & _NowTime() & @CRLF) ; write console
+			Sleep(3000)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 145 232") ;click to icon nhan vat dau tien
 			writelog("Bat dau " & _NowTime() & @CRLF) ; write console
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 800") ;click to bat dau
 			Sleep(50000); cho 50s
