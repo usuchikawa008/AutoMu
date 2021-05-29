@@ -63,6 +63,9 @@ Global Const $laythanhvat = "LayThanhVat"
 Global Const $bossguild12h = "bossguild12"
 Global Const $tuhoiguild8h = "Tuhoiguild8h"
 Global Const $devil = "Devil"
+Global Const $baotang = "BaoTang"
+Global Const $phaodai = "PhaoDai"
+Global Const $hotroguild = "HoTroGuild"
 ;config auto Run
 Global Const $run = "Run"
 Global Const $finish = "Finish"
@@ -576,6 +579,19 @@ Func Auto()
 		  EndIf
 	   EndIf
 
+	   #cs
+	16. Hotro Guild
+	#ce
+	   Local $scheckboxhotro = IniRead($path&$Title&".tmp", $hoatdong, $hotroguild, False)
+	   If $scheckboxhotro == True Then
+		  $countNVHenGio = $countNVHenGio + 1
+		  _findIconMenu($hwnd)
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $hotroguild,$doing) ; change status doing
+		  _GotoHoTroGuild($Title,$emuport,$hwnd) ; nv ho tro guild in tinhanh.au3
+		  IniWrite($pathstatus&$Title&".tmp", $status, $hotroguild,$notyet) ; change status wait
+		  Sleep(2000)
+	   EndIf
 	Sleep(2000)
 	;Xu Li Het Auto
    If $countNV == 0 Then ; het nv de lam

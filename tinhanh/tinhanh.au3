@@ -176,3 +176,110 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  Sleep(2000)
 EndFunc   ;==>GotoPB
 
+
+Func _GotoHoTroGuild($Title,$emuport,$Handle)
+    Local $flagbosstg = False
+	Local $flagbossctc = False
+	If BitAND(WinGetState($Title), 16) Then
+		MsgBox(0,"Message",WinGetState($Title))
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	 EndIf
+	  Sleep(1000)
+	  $Imageyeucauhotro = @ScriptDir & "\image\yeucauhotro.bmp"
+	  Local $p = _HandleImgWaitExist($Handle,$Imageyeucauhotro,2, 0, 0, -1, -1,100, 2);search icon ho tro guild
+	  If not @error Then ; thay yeu cau ho tro
+		 ControlClick($Title, "", "","", 1,$p[1][0]+20, $p[1][1]+2) ; click toi yeu cau ho tro
+	  Else
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 366 683");click to ho tro
+	  EndIf
+	  Sleep(3000)
+	  Local $count = 0
+	  While $count < 2
+		 writelog("Ho Tro Guild"& @CRLF) ; write console
+		$count = $count + 1
+		Local $Imagebosstgtext = @ScriptDir & "\image\bosstgtext.bmp"
+	    Local $p = _HandleImgWaitExist($Handle,$Imagebosstgtext,1, 0, 0, -1, -1,100, 5);search boss tg text
+		If not @error Then ; thay boss the gioi
+		    writelog("Ho Tro Boss The Gioi"& @CRLF) ; write console
+			ControlClick($Title, "", "","", 1,$p[1][0]+300, $p[1][1]+20) ; click ho tro
+			Sleep(1000)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
+			Sleep(6000)
+			Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+			Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
+			If not @error Then ; da vo pho ban
+			   $flagbosstg = True
+			   ExitLoop
+			EndIf
+		 EndIf
+
+	    Local $Imagebosstgtext = @ScriptDir & "\image\bossctctext.bmp"
+	    Local $p = _HandleImgWaitExist($Handle,$Imagebosstgtext,1, 0, 0, -1, -1,100, 2);search boss ctc text
+		If not @error Then ; thay boss ctc
+		    writelog("Ho Tro Boss Chien Truong"& @CRLF) ; write console
+			ControlClick($Title, "", "","", 1,$p[1][0]+300, $p[1][1]+20) ; click ho tro
+			Sleep(1000)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
+			Sleep(6000)
+			Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+			Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
+			If not @error Then ; da vo pho ban
+			   $flagbossctc = True
+			   ExitLoop
+			EndIf
+		 EndIf
+		 Sleep(1000)
+		 Local $Imagebosstoihotro = @ScriptDir & "\image\toihotro.bmp"
+	     Local $p = _HandleImgWaitExist($Handle,$Imagebosstoihotro,1, 0, 0, -1, -1,80, 2);search btn toi ho tro
+		 If not @error And $p[0][0] > 3 Then ; thay hon 3 btn toi ho tro
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 400 200"); di chuyen cuon len den trang cuoi
+	  Else
+		 Return
+	  EndIf
+   WEnd
+
+
+
+	  If $flagbosstg == True Then
+		 _Covu()
+		 While 1
+			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,80, 2);search toi trong 15s
+			If not @error Then ; thay toi ho tro\
+			   ControlClick($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
+			   Sleep(5000)
+			Else ;ket thuc bos
+			   ExitLoop
+			EndIf
+		 WEnd
+	  EndIf
+	  If $flagbossctc == True Then
+		 While 1
+			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,80, 2);search toi
+			If not @error Then ; thay toi ho tro\
+			   ControlClick($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
+			   Sleep(5000)
+			Else ;ket thuc bos
+			   ExitLoop
+			EndIf
+		 WEnd
+	 EndIf
+
+
+
+EndFunc   ;==>GotoPB
+
+Func _Covu()
+	  Sleep(1000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
+	  For $i = 0 to 4 Step + 1
+		 Sleep(1000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
+	  Next
+	  Sleep(1000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
+	  Sleep(1000)
+EndFunc   ;==>GotoPB
