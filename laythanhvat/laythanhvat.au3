@@ -117,14 +117,15 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 	   If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
 	   EndIf
 
-;~ 	   $var1 = StringRegExpReplace($Now, "[:]", "")
-;~ 	   Local $timestart = StringRegExpReplace("21:00", "[:]", "")
-;~ 	   Local $timeend = StringRegExpReplace("22:00", "[:]", "")
-;~ 	   If $var1 > $timestart And $var1 < $timeend Then
+	   $var1 = StringRegExpReplace($Now, "[:]", "")
+	   Local $timestart = StringRegExpReplace("21:00", "[:]", "")
+	   Local $timeend = StringRegExpReplace("22:00", "[:]", "")
+	   If $var1 > $timestart And $var1 < $timeend Then
 
-;~ 	   Else
-;~ 		 Return
-;~ 	   EndIf
+	   Else
+		 writelog("Khong trong thoi gian Ho Tong" & _NowTime() & @CRLF) ; write console
+		 Return SetError(3)
+	   EndIf
 	   Local $ImageHoTong = @ScriptDir & "\image\conluothotong.bmp"
 	   Local $ImagehetluotHoTong = @ScriptDir & "\image\hetluothotong.bmp"
 	   $p = _searchNVAdvance($Handle,$ImagehetluotHoTong,$ImageHoTong,90,90,3);search nv ho tong
