@@ -27,13 +27,13 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 		   return
 	    Else
 		   $Imagehetve = @ScriptDir & "\image\hetveblood.bmp"
-	       $rshetve = _HandleImgSearch($Handle, $Imagehetve, 0, 0, -1, -1,85, 2);search so luot pb blood
+	       $rshetve = _HandleImgSearch($Handle, $Imagehetve, 500, 440, 50, 50,120, 2);search so luot pb blood
 		   If not @error Then
 			   writelog("Het ve blood...." & _NowTime() & @CRLF) ; write console
 			   ;xu li het ve
 			   Local $flagghepVe = IniRead($pathImage&"1.tmp", $general, $ghepveblood, ""); check flag ghep ve
 			   If $flagghepVe == True Then
-					ControlClick($Title, "", "","", 1,$rshetve[1][0], $rshetve[1][1]) ; click vao het ve
+					ControlClick($Title, "", "","", 1,$rshetve[1][0]+500, $rshetve[1][1]+440) ; click vao het ve
 					Sleep(1000)
 					_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
 					Sleep(1000)

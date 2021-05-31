@@ -37,6 +37,7 @@ Global Const $anExp = "AnDonExp"
 Global Const $camtrain = "CamTrain"
 Global Const $ghepveblood = "GhepVeBlood"
 Global Const $autoAnThit = "AutoAnThit"
+Global Const $autoTruyenCong = "TruyenCong"
 Global Const $boquaQuestS = "$BoQuaQuestS"
 ;config hoat dong start
 Global Const $status = "Status"
@@ -85,6 +86,7 @@ _setAnExp(True)
 _setCamTrainKhiHetNV(True)
 _setAutoGhepVeBlood(True)
 _setAutoAnThit(True)
+_setAutoTruyenCong(True)
 _setBoQuaQuestS(True)
 $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
 Global $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
@@ -242,7 +244,9 @@ Func Gui()
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxAnThitTuHoi = GUICtrlCreateCheckbox("Tự ăn thịt trong tụ hội guild ", 20, 220, 150, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
-	Local $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Bỏ qua nv guild cấp S ", 20, 245, 150, 25)
+	Local $idCheckBoxTruyenCong = GUICtrlCreateCheckbox("Tự truyền công trong tụ hội guild ", 20, 245, 200, 25)
+	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
+	Local $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Bỏ qua nv guild cấp S ", 20, 270, 150, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
     GUISetState(@SW_SHOW)
     GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
@@ -252,7 +256,7 @@ Func Gui()
 	AdLibRegister("_updateAcTion", 6000);auto run this function every 5 s
 	AdLibRegister("_updateEmulatorAuto", 5146);auto run this function every 5 s
     AdLibRegister("_updateStatusAuto", 3123);auto run this function every 3 s
-	AdLibRegister("_refeshLogAuto", 300000);auto run this function every 300s
+;~ 	AdLibRegister("_refeshLogAuto", 300000);auto run this function every 300s
 	_updateAcTion()
 	_updateEmulatorAuto()
 
@@ -309,6 +313,12 @@ Func Gui()
                 Else
 				   _setAutoAnThit(False)
 			    EndIf
+			Case $idCheckBoxTruyenCong
+		        If _IsChecked($idCheckBoxTruyenCong) Then
+				   _setAutoTruyenCong(True)
+                Else
+				   _setAutoTruyenCong(False)
+			    EndIf
 			Case $idCheckBoxNVGuildRankS
 		        If _IsChecked($idCheckBoxNVGuildRankS) Then
 				   _setBoQuaQuestS(True)
@@ -336,7 +346,7 @@ Func _IsChecked($idControlID)
 EndFunc   ;==>_IsChecked
 
 Func ItemChecked_Proc_RunAuto($iIndex,$iItem, $sState)
-    ConsoleWrite("<" & $iItem & "> is checked = " & $sState & "Index = "& $iIndex &@CRLF)
+;~     ConsoleWrite("<" & $iItem & "> is checked = " & $sState & "Index = "& $iIndex &@CRLF)
 	If $sState == True Then
 	  Local $statusNoxx = IniRead($pathAuto&$iItem&".tmp", $run, $statusNox, "")
 	  If $statusNoxx == $off Then
@@ -868,6 +878,9 @@ Func _setAutoGhepVeBlood($sState)
   EndFunc
 Func _setAutoAnThit($sState)
      IniWrite($pathImage&"1.tmp", $general, $autoAnThit, $sState)
+  EndFunc
+Func _setAutoTruyenCong($sState)
+     IniWrite($pathImage&"1.tmp", $general, $autoTruyenCong, $sState)
   EndFunc
 Func _setBoQuaQuestS($sState)
      IniWrite($pathImage&"1.tmp", $general, $boquaQuestS, $sState)

@@ -1,9 +1,9 @@
 [Run]
-PID =5032
+PID = 12340
 Finish = 
-Name_In_Game =
+Name_In_Game = SmartBoy
 
 
 StatusNox =Onl
-cmdStart =Nox.exe
+cmdStart = Nox.exe
 

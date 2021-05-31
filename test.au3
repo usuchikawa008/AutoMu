@@ -1,13 +1,24 @@
 #include <MsgBoxConstants.au3>
+#include <SendMessage.au3>
 
-; Find a pure red pixel in the range 0,0-20,300
-Local $aCoord = PixelSearch(0, 0, 20, 300, 0xFF0000)
-If Not @error Then
-    MsgBox($MB_SYSTEMMODAL, "", "X and Y are: " & $aCoord[0] & "," & $aCoord[1])
-EndIf
+Example()
 
-; Find a pure red pixel or a red pixel within 10 shades variations of pure red
-$aCoord = PixelSearch(0, 0, 20, 300, 0xFF0000, 10)
-If Not @error Then
-    MsgBox($MB_SYSTEMMODAL, "", "X and Y are: " & $aCoord[0] & "," & $aCoord[1])
-EndIf
+Func Example()
+    Local Const $iOff = 2, $iOn = -1
+
+    Opt("WinTitleMatchMode", 4)
+    Local $hWnd = WinGetHandle('classname=Progman')
+    _ToggleMonitor($hWnd, $iOff)
+    Sleep(3000)
+    _ToggleMonitor($hWnd, $iOn)
+EndFunc   ;==>Example
+
+Func _ToggleMonitor($hWnd, $iOnOff)
+    Local Const $WM_SYSCOMMAND = 274
+    Local Const $SC_MONITORPOWER = 61808
+    _SendMessage($hWnd, $WM_SYSCOMMAND, $SC_MONITORPOWER, $iOnOff)
+    If @error Then
+        MsgBox($MB_SYSTEMMODAL, "_ToggleMonitor", "_SendMessage Error: " & @error)
+        Exit
+    EndIf
+EndFunc   ;==>_ToggleMonitor
