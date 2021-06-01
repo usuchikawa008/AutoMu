@@ -124,8 +124,8 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 	   If $var1 > $timestart And $var1 < $timeend Then
 
 	   Else
-		 writelog("Khong trong thoi gian Ho Tong" & _NowTime() & @CRLF) ; write console
-		 Return SetError(3)
+		 writelog("Khong trong thoi gian Ho Tong 21 -> 22h" & _NowTime() & @CRLF) ; write console
+		 Return
 	   EndIf
 	   Local $ImageHoTong = @ScriptDir & "\image\conluothotong.bmp"
 	   Local $ImagehetluotHoTong = @ScriptDir & "\image\hetluothotong.bmp"

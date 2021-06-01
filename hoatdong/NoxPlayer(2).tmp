@@ -1,10 +1,10 @@
 [Hoat Dong]
 HuyenCanh=True
 Blood=True
-BossCaNhan=True
+BossCaNhan=False
 TienThuong=True
 DaoMo=True
-CuopMo=True
+CuopMo=False
 TreoMay=True
 NVGuild=True
 TinhAnh=True

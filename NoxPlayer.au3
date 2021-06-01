@@ -102,6 +102,7 @@ Func writelog($textlog)
   Local $hFileOpen = FileOpen($pathLog&$Title&".log", $FO_APPEND)
   If $hFileOpen = -1 Then
 	 MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
+	 Exit 0
   Else
      FileWriteLine($hFileOpen, $Title & ": " & $textlog)
   EndIf
@@ -194,13 +195,13 @@ WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
 While $count < $maxloop;loop auto 1000 lan
    _close($hwnd) ;close het cua so truoc khi bat dau auto
    $count = $count + 1 ; so lan loop
-   If Mod($count, 50) = 0 Then ;boi so cua 50 thi show log
+   If Mod($count, 50) == 0 Then ;boi so cua 50 thi show log
 	  writelog("Auto Vong "&$count&" bat dau" &@CRLF) ; write console
    EndIf
    Sleep(500)
    $Auto = Auto()
    If $Auto == "Exit" Then
-	ExitLoop
+	  ExitLoop
    EndIf
 WEnd
 writelog("Het NV ---Stop auto...."&$Title&" tại Loop "&$count & _NowTime() & @CRLF) ; write console
