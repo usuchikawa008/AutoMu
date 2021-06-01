@@ -331,8 +331,8 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
 				  writelog("Ho Tro Cuop Mo"& @CRLF) ; write console
 				  Sleep(10000) ;cho 10s vo battle
-				  $ImagePath = @ScriptDir & "\image\menu.bmp"
-				  $Result = _HandleImgWaitExist($Handle, $ImagePath,30, 660,30, 60, 50,85, 2);search nut menu
+				  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+				  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,30, 660,30, 60, 50,85, 2);search nut menu
 				  Return
 			   Else ; ko tu support chinh minh -> next
 				  ContinueLoop
@@ -349,9 +349,6 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 		 Return
 	  EndIf
    WEnd
-
-
-
 	  If $flagbosstg == True Then
 		 _Covu()
 		 While 1

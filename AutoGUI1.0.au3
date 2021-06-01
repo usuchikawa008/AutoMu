@@ -29,6 +29,7 @@ Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
 Global Const $pathAuto = @ScriptDir&"\auto\"
 Global Const $pathImage = @ScriptDir&"\image\"
+Global Const $pathLog = @ScriptDir&"\log\"
 Global Const $general = "General"
 Global Const $hardmode = "HardMode"
 Global Const $mac = "MAC"
@@ -137,6 +138,7 @@ Func Gui()
 		   _FileCreate($path&$aList[$i][0]&".tmp")
 		   _FileCreate($pathAuto&$aList[$i][0]&".tmp")
 		   _FileCreate($pathstatus&$aList[$i][0]&".tmp")
+		   _FileCreate($pathLog&$aList[$i][0]&".log")
 		   ; init checkbox
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $huyencanh, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $blood, True)
@@ -256,7 +258,7 @@ Func Gui()
 	AdLibRegister("_updateAcTion", 6000);auto run this function every 5 s
 	AdLibRegister("_updateEmulatorAuto", 5146);auto run this function every 5 s
     AdLibRegister("_updateStatusAuto", 3123);auto run this function every 3 s
-;~ 	AdLibRegister("_refeshLogAuto", 300000);auto run this function every 300s
+	AdLibRegister("_refeshLogAuto", 3000);auto run this function every 3s
 	_updateAcTion()
 	_updateEmulatorAuto()
 
@@ -267,7 +269,8 @@ Func Gui()
 			    _turnOffAuto()
                 ExitLoop
 			Case $idButton_Clean
-				GUICtrlSetData($textarea, "");clear log
+				_FileCreate($pathLog&$currentAuto&".log")
+				_refeshLogAuto()
 ;~ 			Case $aCheck[1] to $aCheck[$countDevices]  ; Put any other cases above this
 ;~                 ; Try to find a checkbox handle that matches the message
 ;~                 Local $vCheckIndex = FindCheckBox($aCheck, $iGuiMsg)
@@ -348,6 +351,9 @@ EndFunc   ;==>_IsChecked
 Func ItemChecked_Proc_RunAuto($iIndex,$iItem, $sState)
 ;~     ConsoleWrite("<" & $iItem & "> is checked = " & $sState & "Index = "& $iIndex &@CRLF)
 	If $sState == True Then
+	   ;xoa log
+	   _FileCreate($pathLog&$currentAuto&".log")
+	   ;neu Nox dang off -> tang them time wait
 	  Local $statusNoxx = IniRead($pathAuto&$iItem&".tmp", $run, $statusNox, "")
 	  If $statusNoxx == $off Then
 		 AdlibUnRegister("_updateStatusAuto")
@@ -796,6 +802,7 @@ Func _reloadEmu($switch)
 	 GUICtrlSetData($idItemPhaoDai, "||"&$currentAuto)
 	 GUICtrlSetData($idItemHoTro, "||"&$currentAuto)
      _updateAcTion()
+	 _refeshLogAuto()
 
 EndFunc
 Func _changeColor($status)
@@ -936,7 +943,7 @@ Func _updateStatusAuto() ; update status AUTO emulator
 EndFunc
 
 Func _refeshLogAuto() ; Clear LOG AUTO emulator
-   GUICtrlSetData($textarea, "");clear log
+   GUICtrlSetData($textarea, FileRead($pathLog&$currentAuto&".log"));clear log
 EndFunc
 Func _turnOffAuto() ; Turn off all auto
      For $i = 0 to _GUICtrlListView_GetItemCount($hListEmulators)-1 ;total list size item
@@ -970,6 +977,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		 $NoxOff = StringSplit($NoxList[$i],".")[1]
 		 $countDevices = $countDevices + 1
 		 $aCheck[$countDevices] = GUICtrlCreateListViewItem($NoxOff, $hListEmulators) ;add emulators
+		 _FileCreate($pathLog&$NoxOff&".log")
 		 ; init checkbox
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $huyencanh, True)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $blood, True)

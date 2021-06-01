@@ -28,7 +28,7 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
 Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
-Global Const $expireDate = "06/03/2021" ; format MM/DD/YYYY
+Global Const $expireDate = "06/25/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
@@ -99,6 +99,8 @@ Else
 EndIf
 Func writelog($textlog)
   Opt("WinTitleMatchMode", 3)
+
+;~   ControlSend($hwAuto, "", "Edit1",$Title & ": " & $textlog) ; log UI
   Local $hFileOpen = FileOpen($pathLog&$Title&".log", $FO_APPEND)
   If $hFileOpen = -1 Then
 	 MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
@@ -192,16 +194,16 @@ EndIf
 Opt("WinTitleMatchMode", 3)
 WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
 While $count < $maxloop;loop auto 1000 lan
-   _close($hwnd) ;close het cua so truoc khi bat dau auto
-   $count = $count + 1 ; so lan loop
-   If Mod($count, 50) = 0 Then ;boi so cua 50 thi show log
-	  writelog("Auto Vong "&$count&" bat dau" &@CRLF) ; write console
-   EndIf
-   Sleep(500)
-   $Auto = Auto()
-   If $Auto == "Exit" Then
-	ExitLoop
-   EndIf
+_close($hwnd) ;close het cua so truoc khi bat dau auto
+$count = $count + 1 ; so lan loop
+If Mod($count, 50) = 0 Then ;boi so cua 50 thi show log
+   writelog("Auto Vong "&$count&" bat dau" &@CRLF) ; write console
+EndIf
+Sleep(500)
+ Auto()
+ If @error Then
+   ExitLoop
+ EndIf
 WEnd
 writelog("Het NV ---Stop auto...."&$Title&" tại Loop "&$count & _NowTime() & @CRLF) ; write console
 IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
@@ -630,7 +632,7 @@ Func Auto()
    EndIf
    If $countNV == 0 And $countNVHenGio == 0 Then ; het nv ngay va nv hen gio thi stop auto
 	  writelog("Het NV "& @CRLF) ; write console
-	  Return "Exit"
+	  SetError(3)
    EndIf
 EndFunc   ;==>Auto
 Func CheckInPbOrNot($Title,$Handle)

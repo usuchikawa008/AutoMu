@@ -34,6 +34,7 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 	  If $p == 2 Then ; ko tim thay hinh nao het
 		 Return
 	  EndIf
+	  writelog("Vô Lấy Thánh Vật" & _NowTime() & @CRLF) ; write console
 	  Opt("WinTitleMatchMode", 3)
 	  ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
 	  Sleep(1000)

@@ -119,7 +119,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 		 writelog("Cho 5 phut ket thuc Devil"& @CRLF) ; write console
 		 Sleep(310000); cho 5p
 	   $ImagePath = @ScriptDir & "\image\menu.bmp"
-	   $Result = _HandleImgWaitExist($Handle, $ImagePath,100, 660,30, 60, 50,85, 2);search nut menu
+	   $Result = _HandleImgWaitExist($Handle, $ImagePath,100, 660,30, 60, 50,94, 2);search nut menu
 	   Sleep(2000)
 EndFunc   ;==>GotoPB
 
