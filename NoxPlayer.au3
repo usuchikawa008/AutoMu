@@ -19,9 +19,9 @@ Func _Exit()
  EndFunc   ;==>_Exit
  ;config start
 If $CmdLine[0] == 0 Then
-   Global Const $Title =  StringSplit(@ScriptName,'.')[1] ;get script name : example Noxplayer
+   Global $Title =  StringSplit(@ScriptName,'.')[1] ;get script name : example Noxplayer
 Else
-   Global Const $Title =  $CmdLine[1]
+   Global $Title =  $CmdLine[1]
 EndIf
 ;~ Global $Title =  "NoxPlayer"
 ;~ Global $Title =  "NoxPlayer(1)"
@@ -172,7 +172,7 @@ Global $NVTinhAnh = false;
 Global $LayThanhVatDone = false;
 Global $Boss12hDone = false;
 Global $TuhoiDone = false;
-Global $count = 0
+Global $countLoop = 0
 Global $maxloop  = 1000
 Global $resetNV = 0 ; reset NV 4 lan truoc khi ket thuc
 $checkHARDMOD = IniRead($pathImage&"1.tmp", $general, $hardmode, False);kiem tra co o che do hard mode hay khong
@@ -192,19 +192,21 @@ If $statusNoxx == $off Then
 EndIf
 Opt("WinTitleMatchMode", 3)
 WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
-While $count < $maxloop;loop auto 1000 lan
+While $countLoop < $maxloop;loop auto 1000 lan
    _close($hwnd) ;close het cua so truoc khi bat dau auto
-   $count = $count + 1 ; so lan loop
-   If Mod($count, 50) == 0 Then ;boi so cua 50 thi show log
-	  writelog("Auto Vong "&$count&" bat dau" &@CRLF) ; write console
+   $countLoop = $countLoop + 1 ; so lan loop
+   If Mod($countLoop, 50) == 0 Then ;boi so cua 50 thi show log
+	  writelog("Auto Vong "&$countLoop&" bat dau" &@CRLF) ; write console
    EndIf
    Sleep(500)
    $Auto = Auto()
    If $Auto == "Exit" Then
 	  ExitLoop
+   Else
+	  ContinueLoop
    EndIf
 WEnd
-writelog("Het NV ---Stop auto...."&$Title&" tại Loop "&$count & _NowTime() & @CRLF) ; write console
+writelog("Het NV ---Stop auto...."&$Title&" tại Loop "&$countLoop& " On " & _NowTime() & @CRLF) ; write console
 IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
 Sleep(1000)
 Exit 0
@@ -474,9 +476,9 @@ Func Auto()
 		  If @error Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$done) ; change status done
 			 writelog("10. Hoan Thanh Lay Thanh Vat..." & _NowTime() & @CRLF) ; write console
-		   Else
+		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$notyet) ; change status wait
-		   EndIf
+		  EndIf
 		  Sleep(2000)
 	   EndIf
 ;~ 	EndIf
@@ -605,6 +607,38 @@ Func Auto()
 		  Sleep(2000)
 	   EndIf
 	   #cs
+	14. Phao Dai Do
+	#ce
+	  $dayofweek = _getDayofWeek()
+	  If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
+	  Local $scheckboxphaodai = IniRead($path&$Title&".tmp", $hoatdong, $phaodai, False)
+	  Local $statusphaodai = IniRead($pathstatus&$Title&".tmp", $status, $phaodai, $notyet)
+	  If $scheckboxphaodai == True And $statusphaodai <> $done Then
+		 $countNVHenGio = $countNVHenGio + 1
+		  Local $Now = _NowTime(4);time hien tai
+		  Local $var1 = StringRegExpReplace($Now, "[:]", "")
+		  Local $timestart = StringRegExpReplace("20:30", "[:]", "")
+		  Local $timeend = StringRegExpReplace("20:35", "[:]", "")
+		  ;check het time boss guild chua
+		  If $var1 > $timeend Then
+			 writelog("Het Thoi Gian Phao Dai...." & _NowTime() & @CRLF) ; write console
+			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
+			 Return
+		  EndIf
+		  If $var1 > $timestart And $var1 < $timeend Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$doing) ; change status doing
+			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #tinhanh.au3
+			 If @error Then
+				writelog("Het Thoi Gian Phao Dai...." & _NowTime() & @CRLF) ; write console
+				IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
+				Return 1
+			 EndIf
+			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
+			 Return 1
+		  EndIf
+	   EndIf
+	EndIf
+	   #cs
 	16. Hotro Guild
 	#ce
 	   Local $scheckboxhotro = IniRead($path&$Title&".tmp", $hoatdong, $hotroguild, False)
@@ -613,7 +647,7 @@ Func Auto()
 		  _findIconMenu($hwnd)
 		  Sleep(500)
 		  IniWrite($pathstatus&$Title&".tmp", $status, $hotroguild,$doing) ; change status doing
-		  _GotoHoTroGuild($Title,$emuport,$hwnd) ; nv ho tro guild in tinhanh.au3
+		  Local $rsHotro = _GotoHoTroGuild($Title,$emuport,$hwnd) ; nv ho tro guild in tinhanh.au3
 		  IniWrite($pathstatus&$Title&".tmp", $status, $hotroguild,$notyet) ; change status wait
 		  Sleep(2000)
 	   EndIf
@@ -624,9 +658,9 @@ Func Auto()
 		 $resetNV = $resetNV + 1
 		 _anDanExp()
 		 _diCamTrain()
-		 _resetStatus()
-		 writelog("Reset auto lan "&$resetNV& @CRLF) ; write console
-		 Return ;next
+;~ 		 _resetStatus()
+;~ 		 writelog("Reset auto lan "&$resetNV& @CRLF) ; write console
+;~ 		 Return ;next
 	  EndIf
    EndIf
    If $countNV == 0 And $countNVHenGio == 0 Then ; het nv ngay va nv hen gio thi stop auto
@@ -815,7 +849,6 @@ Func _checktuhoiguild()
 	   If $var1 > $timeend Then
 		  writelog("Het Thoi Gian Vao Tu Hoi Guild...." & _NowTime() & @CRLF) ; write console
 		  IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-		  $TuhoiDone == True
 		  Return 1
 	   EndIf
 	   If $var1 > $timestart And $var1 < $timeend Then
@@ -824,11 +857,9 @@ Func _checktuhoiguild()
 		  If @error Then
 			 writelog("Het Thoi Gian Vao Tu Hoi Guild...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-			 $TuhoiDone == True
 			 Return 1
 		  EndIf
 		  IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-		  $TuhoiDone == True
 		  Return 1
 	   EndIf
 	   If $var1 > $timewait And $var1 < $timeend Then
@@ -840,11 +871,9 @@ Func _checktuhoiguild()
 		  If @error Then
 			 writelog("Het Thoi Gian Vao Tu Hoi Guild...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-			 $TuhoiDone == True
 			 Return 1
 		  EndIf
 		  IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h,$done) ; change status done
-		  $TuhoiDone == True
 		  Return 1
 	   EndIf
    EndIf
@@ -1057,7 +1086,7 @@ Func _anDanExp()
 		 Return
 	  Else
 		 _close($hwnd)
-		 _ADB_Command_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1523 821") ; click vo kiem
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1523 821") ; click vo kiem de chuyen menu
 		 Sleep(1000)
 	  EndIf
 
@@ -1104,7 +1133,10 @@ Func _findIconMenu($Handle)
 	  EndIf
    WEnd
 EndFunc
-
+Func _ControlClickExactly($Title,$text,$ctrID,$type,$click,$x,$y)
+   Opt("WinTitleMatchMode", 3)
+   ControlClick($Title, $text, $ctrID,$type, $click,$x, $y) ; click dung title
+EndFunc
 Func _startAndLogin()
    Local $count = 0
      While 1 ;buoc vo game
@@ -1119,14 +1151,16 @@ Func _startAndLogin()
 	    Local $Result = _HandleImgSearch($hwnd, $Imageicon, 0, 0, -1, -1,100, 2);search icon MU
 		If not @error Then ; neu thay nv out
 		    writelog("Game san sang " & _NowTime() & @CRLF) ; write console
-			Sleep(2000)
+			Sleep(6000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 			Sleep(1000);
+
 			Local $Imagewait = @ScriptDir & "\image\wait.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
 			   ControlClick($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
 			EndIf
+
 			Sleep(2000)
 			ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon game
 			ExitLoop
@@ -1144,9 +1178,14 @@ Func _startAndLogin()
 	    Local $Result = _HandleImgSearch($hwnd, $Imageiconbig, 0, 0, -1, -1,100, 2);search icon MU big
 		If not @error Then ; neu thay nv out
 		    writelog("Game san sang " & _NowTime() & @CRLF) ; write console
-			Sleep(3000)
+			Sleep(6000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 			Sleep(1000);
+			Local $Imagewait = @ScriptDir & "\image\waitBig.bmp"
+			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
+			If not @error Then
+			   ControlClick($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
+			EndIf
 			ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon game
 			Sleep(3000)
 			Opt("WinTitleMatchMode", 3)

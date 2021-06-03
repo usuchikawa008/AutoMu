@@ -16,6 +16,11 @@
 #include <GuiListView.au3>
 #include <GuiImageList.au3>
 #include <DateTime.au3>
+#include <ColorConstants.au3>
+#include <Constants.au3>
+#include <WinAPI.au3>
+#include <ButtonConstants.au3>
+
 
 
 
@@ -102,9 +107,11 @@ Func Gui()
     Local Const $sFont = "Comic Sans Ms"
     ; Create a GUI with various controls.
 	$TitleAuto = "Auto Mu Vượt Thời Đại"
-    Local $hGUI = GUICreate($TitleAuto, 350, 755)
-	GUISetBkColor(0x00E0FFFF) ; will change background color
-	Global $g_hStatus = _GUICtrlStatusBar_Create($hGUI)
+    Local $hGUI = GUICreate($TitleAuto, 350, 735)
+	GUISetBkColor(0xf2f2f2) ; will change background color
+;~ 	Global $g_hStatus = _GUICtrlStatusBar_Create($hGUI)
+    Global $JblNotify = GUICtrlCreateLabel("",5,710,200,30)
+	GUICtrlSetFont($JblNotify, 9, 800, 0,"",$DEFAULT_QUALITY)
 	;create list view
 	Global $hListEmulators = GUICtrlCreateListView("List of emulators |Name|Status", 10, 10, 330, 100,$WS_DLGFRAME) ;,$LVS_SORTDESCENDING)
 ;~ 	Global $hList = GUICtrlGetHandle($hListEmulators)
@@ -112,15 +119,20 @@ Func Gui()
 	Global $hCMenuTextDel = GUICtrlCreateMenuItem("Delele", $ContextMenu)
 	Global $sItemText,$indexItem,$sItemTextHoatDong,$indexItemHoatDong
     _GUICtrlListView_SetExtendedListViewStyle($hListEmulators, BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES))
-	GUICtrlSetFont($hListEmulators, 8, 1200, 0, $sFont)
-    Local $idButton_Close = GUICtrlCreateButton("Close", 266, 705, 75, 25)
-    Local $idButton_Clean = GUICtrlCreateButton("Clean Log", 180, 705, 75, 25)
+	GUICtrlSetFont($hListEmulators, 8, 800, 0, $sFont)
+    Local $idButton_Close = GUICtrlCreateButton("Close", 271, 705, 70, 25)
+    Local $idButton_Clean = GUICtrlCreateButton("Clean Log", 192, 705, 70, 25)
 	Global $textarea = GUICtrlCreateEdit("", 10, 600, 330, 100) ; will not accept drag&drop files
-	Local $idTab = GUICtrlCreateTab(10, 115, 332, 420) ;tao tab
+	Local $idTab = GUICtrlCreateTab(10, 115, 332, 430) ;tao tab
 	GUICtrlSetFont($idTab,11)
 	GUICtrlCreateTabItem("Hoạt động")
-;~ 	Local $iTest = GUICtrlCreateCheckbox("Tự ăn đan EXP khi làm xong hết NV ", 20, 145, 200, 25)
-	Global $hListHoatDong = GUICtrlCreateListView("Nhiệm Vụ | Status | Emulator", 10, 145, 330, 400,$WS_DLGFRAME) ;,$LVS_SORTDESCENDING)
+	Global $hListHoatDong = GUICtrlCreateListView("Nhiệm Vụ | Status | Setting  |", 10, 145, 330, 400,$WS_DLGFRAME) ;,$LVS_SORTDESCENDING)
+	Global $hWndListHoatDong = GUICtrlGetHandle($hListHoatDong)
+	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, 80)
+;~ 	GUICtrlSetState($hListHoatDong,@SW_HIDE)
+    Global $ContextMenuHoatDong = GUICtrlCreateContextMenu($hListHoatDong)
+	Global $hCMenuTextWait = GUICtrlCreateMenuItem("Wait", $ContextMenuHoatDong)
+	Global $hCMenuTextDone = GUICtrlCreateMenuItem("Done", $ContextMenuHoatDong)
 	_GUICtrlListView_SetExtendedListViewStyle($hListHoatDong, BitOR($LVS_EX_FULLROWSELECT, $LVS_EX_CHECKBOXES))
 	_GUICtrlListView_SetHoverTime($hListHoatDong, 1234)
 	Global $countDevices = 0;
@@ -212,31 +224,34 @@ Func Gui()
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 
 	Local $idCheckBoxHardMod = GUICtrlCreateCheckbox("HARD MODE", 10, 570, 100, 25)
-	GUICtrlSetTip( -1, "Check : Auto sẽ không bao giờ dừng lại cho tới khi làm hết tất cả NV"&@CR&"Uncheck : Auto chỉ quét 4 lần")
+	GUICtrlSetTip( -1, "Check : Auto sẽ không bao giờ dừng lại cho tới khi làm hết tất cả NV"&@CR&"Uncheck : Auto chỉ quét 1 lần")
 	   ; Display the GUI.
 	   ;;add list hoat dong
 	$currentAuto = _GUICtrlListView_GetItemText($hListEmulators,0)
 
-    Global $idItemHuyenCanh = GUICtrlCreateListViewItem("Huyễn Cảnh Trên Không||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemBlood = GUICtrlCreateListViewItem("Blood Castle||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemBossCaNhan = GUICtrlCreateListViewItem("Boss Cá Nhân||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemTienThuong = GUICtrlCreateListViewItem("Tiền Thưởng||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemDaoMo = GUICtrlCreateListViewItem("Đào Mỏ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemCuopMo = GUICtrlCreateListViewItem("Cướp Mỏ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemTreoMay = GUICtrlCreateListViewItem("Treo Máy||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemNVGuild = GUICtrlCreateListViewItem("Nhiệm Vụ Guild||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemTinhAnh = GUICtrlCreateListViewItem("Săn Tinh Anh||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemLayThanhVat = GUICtrlCreateListViewItem("Lấy Thánh Vật Thường ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemBossGuild12h = GUICtrlCreateListViewItem("Boss Guild 12h ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 8h ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemDevil = GUICtrlCreateListViewItem("Devil Square ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemPhaoDai = GUICtrlCreateListViewItem("Pháo Đài Đỏ ||"&$currentAuto&"", $hListHoatDong)
-	Global $idItemHoTro = GUICtrlCreateListViewItem("Hỗ Trợ Guild ||"&$currentAuto&"", $hListHoatDong)
+    Global $idItemHuyenCanh = GUICtrlCreateListViewItem("Huyễn Cảnh Trên Không||", $hListHoatDong)
+	Global $idItemBlood = GUICtrlCreateListViewItem("Blood Castle||", $hListHoatDong)
+	Global $idItemBossCaNhan = GUICtrlCreateListViewItem("Boss Cá Nhân||", $hListHoatDong)
+	Global $idItemTienThuong = GUICtrlCreateListViewItem("Tiền Thưởng||", $hListHoatDong)
+	Global $idItemDaoMo = GUICtrlCreateListViewItem("Đào Mỏ||", $hListHoatDong)
+	Global $idItemCuopMo = GUICtrlCreateListViewItem("Cướp Mỏ||", $hListHoatDong)
+	Global $idItemTreoMay = GUICtrlCreateListViewItem("Treo Máy||", $hListHoatDong)
+	Global $idItemNVGuild = GUICtrlCreateListViewItem("Nhiệm Vụ Guild||Config", $hListHoatDong)
+	Global $idItemTinhAnh = GUICtrlCreateListViewItem("Săn Tinh Anh||Config", $hListHoatDong)
+	Global $idItemLayThanhVat = GUICtrlCreateListViewItem("Lấy Thánh Vật Thường ||", $hListHoatDong)
+	Global $idItemBossGuild12h = GUICtrlCreateListViewItem("Boss Guild 12h ||", $hListHoatDong)
+	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 8h ||", $hListHoatDong)
+	Global $idItemDevil = GUICtrlCreateListViewItem("Devil Square ||", $hListHoatDong)
+	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||Config", $hListHoatDong)
+	Global $idItemPhaoDai = GUICtrlCreateListViewItem("Pháo Đài Đỏ ||", $hListHoatDong)
+	Global $idItemHoTro = GUICtrlCreateListViewItem("Hỗ Trợ Guild ||Config", $hListHoatDong)
+;~ 	_GUICtrlStatusBar_SetText($g_hStatus, "Current Emulator: " & $currentAuto); set default
+	GUICtrlSetData($JblNotify,"Current Emulator: " & $currentAuto)
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 0, $LVSCW_AUTOSIZE) ;auto size column hoat dong
-	_GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
-	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
+	_GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE) ;auto size column status
+;~ 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
 	_GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
+
 	GUICtrlCreateTabItem("Tiện ích")
 	Local $idCheckBoxAnExp = GUICtrlCreateCheckbox("Tự ăn đan EXP khi làm xong hết NV ", 20, 145, 200, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
@@ -250,7 +265,16 @@ Func Gui()
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Bỏ qua nv guild cấp S ", 20, 270, 150, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
-    GUISetState(@SW_SHOW)
+
+    #region Panel1
+    Global $DefaultChildGui = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
+    Local $idBtn_Close = GUICtrlCreateButton("Close", 10, 300, 70, 25)
+    $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_STYLE)
+    $iExStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_EXSTYLE)
+    GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $DefaultChildGui)
+	#endregion Panel1
+    GUISetState(@SW_SHOW, $hGUI)
+	GUISetState(@SW_HIDE, $DefaultChildGui)
     GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 ;~ 	GUICtrlSetState(-1, $GUI_SHOW) ; Use this!
 	; Loop until the user exits.
@@ -263,72 +287,87 @@ Func Gui()
 	_updateEmulatorAuto()
 
     While True
-        $iGuiMsg = GUIGetMsg()
-        Switch $iGuiMsg
-		Case $GUI_EVENT_CLOSE ,$idButton_Close
-			    _turnOffAuto()
-                ExitLoop
-			Case $idButton_Clean
-				_FileCreate($pathLog&$currentAuto&".log")
-				_refeshLogAuto()
-;~ 			Case $aCheck[1] to $aCheck[$countDevices]  ; Put any other cases above this
-;~                 ; Try to find a checkbox handle that matches the message
-;~                 Local $vCheckIndex = FindCheckBox($aCheck, $iGuiMsg)
-;~                 ; If there was a match
-;~ 			   MsgBox(0, "listview item", _GUICtrlListView_GetItemTextString($hListEmulators, $vCheckIndex-1) & "    " & @CRLF & "Line Checked = " & $vCheckIndex, 2)
-			Case $idCheckBoxCheckAll
-			    If _IsChecked($idCheckBoxCheckAll) Then
-				   _checkAndUncheckAll(True);check
-                Else
-				   _checkAndUncheckAll(False);uncheck
-			    EndIf
-			Case $idButton_ResetStatus
-				_resetStatus()
-			Case $hCMenuTextDel
-				DeleteItemEmulator()
-		    Case $idCheckBoxHardMod
-		        If _IsChecked($idCheckBoxHardMod) Then
-				   _setHardMode(True)
-                Else
-				   _setHardMode(False)
-			    EndIf
-			Case $idCheckBoxAnExp
-		        If _IsChecked($idCheckBoxAnExp) Then
-				   _setAnExp(True)
-                Else
-				   _setAnExp(False)
-			    EndIf
-			Case $idCheckBoxCamTrain
-		        If _IsChecked($idCheckBoxCamTrain) Then
-				   _setCamTrainKhiHetNV(True)
-                Else
-				   _setCamTrainKhiHetNV(False)
-			    EndIf
-			Case $idCheckBoxGhepVeBlood
-		        If _IsChecked($idCheckBoxGhepVeBlood) Then
-				   _setAutoGhepVeBlood(True)
-                Else
-				   _setAutoGhepVeBlood(False)
-			    EndIf
-			Case $idCheckBoxAnThitTuHoi
-		        If _IsChecked($idCheckBoxAnThitTuHoi) Then
-				   _setAutoAnThit(True)
-                Else
-				   _setAutoAnThit(False)
-			    EndIf
-			Case $idCheckBoxTruyenCong
-		        If _IsChecked($idCheckBoxTruyenCong) Then
-				   _setAutoTruyenCong(True)
-                Else
-				   _setAutoTruyenCong(False)
-			    EndIf
-			Case $idCheckBoxNVGuildRankS
-		        If _IsChecked($idCheckBoxNVGuildRankS) Then
-				   _setBoQuaQuestS(True)
-                Else
-				   _setBoQuaQuestS(False)
-			    EndIf
-       EndSwitch
+		$iGuiMsg = GUIGetMsg(1)
+		Switch $iGuiMsg[1]
+	     Case $hGUI
+			Switch $iGuiMsg[0]
+			   Case $GUI_EVENT_CLOSE ,$idButton_Close
+				   _turnOffAuto()
+				   ExitLoop
+			   Case $idButton_Clean
+				   _FileCreate($pathLog&$currentAuto&".log")
+				   _refeshLogAuto()
+   ;~ 			Case $aCheck[1] to $aCheck[$countDevices]  ; Put any other cases above this
+   ;~                 ; Try to find a checkbox handle that matches the message
+   ;~                 Local $vCheckIndex = FindCheckBox($aCheck, $iGuiMsg)
+   ;~                 ; If there was a match
+   ;~ 			   MsgBox(0, "listview item", _GUICtrlListView_GetItemTextString($hListEmulators, $vCheckIndex-1) & "    " & @CRLF & "Line Checked = " & $vCheckIndex, 2)
+			   Case $idCheckBoxCheckAll
+				   If _IsChecked($idCheckBoxCheckAll) Then
+					  _checkAndUncheckAll(True);check
+				   Else
+					  _checkAndUncheckAll(False);uncheck
+				   EndIf
+			   Case $idButton_ResetStatus
+				   _resetStatus()
+			   Case $hCMenuTextDel
+				   deleteItemEmulator()
+			   Case $hCMenuTextWait
+				   changeStatus($notyet)
+			   Case $hCMenuTextDone
+				   changeStatus($done)
+			   Case $idCheckBoxHardMod
+				   If _IsChecked($idCheckBoxHardMod) Then
+					  _setHardMode(True)
+				   Else
+					  _setHardMode(False)
+				   EndIf
+			   Case $idCheckBoxAnExp
+				   If _IsChecked($idCheckBoxAnExp) Then
+					  _setAnExp(True)
+				   Else
+					  _setAnExp(False)
+				   EndIf
+			   Case $idCheckBoxCamTrain
+				   If _IsChecked($idCheckBoxCamTrain) Then
+					  _setCamTrainKhiHetNV(True)
+				   Else
+					  _setCamTrainKhiHetNV(False)
+				   EndIf
+			   Case $idCheckBoxGhepVeBlood
+				   If _IsChecked($idCheckBoxGhepVeBlood) Then
+					  _setAutoGhepVeBlood(True)
+				   Else
+					  _setAutoGhepVeBlood(False)
+				   EndIf
+			   Case $idCheckBoxAnThitTuHoi
+				   If _IsChecked($idCheckBoxAnThitTuHoi) Then
+					  _setAutoAnThit(True)
+				   Else
+					  _setAutoAnThit(False)
+				   EndIf
+			   Case $idCheckBoxTruyenCong
+				   If _IsChecked($idCheckBoxTruyenCong) Then
+					  _setAutoTruyenCong(True)
+				   Else
+					  _setAutoTruyenCong(False)
+				   EndIf
+			   Case $idCheckBoxNVGuildRankS
+				   If _IsChecked($idCheckBoxNVGuildRankS) Then
+					  _setBoQuaQuestS(True)
+				   Else
+					  _setBoQuaQuestS(False)
+				   EndIf
+			EndSwitch
+		 Case $DefaultChildGui
+			Switch $iGuiMsg[0]
+			   Case $idBtn_Close
+				   ConsoleWrite("2222222222")
+				   WinSetState($hWndListHoatDong,"",@SW_SHOW)
+				   GUISetState(@SW_HIDE, $DefaultChildGui)
+
+			EndSwitch
+		 EndSwitch
     WEnd
 
     ; Delete the previous GUI and all controls.
@@ -584,7 +623,7 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 		    EndSwitch
 		 Case $hWndListView2 ; list hoat dong
             Switch $iCode
-                Case $NM_CLICK, $NM_DBLCLK, $NM_RCLICK, $NM_RDBLCLK
+                Case $NM_CLICK, $NM_DBLCLK
                     Local $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
 					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem")) ;store the item text in a global variable in case the get text option is clicked.
 			        $indexItemHoatDong = _GUICtrlListView_GetHotItem($hWndListView2) ;store the item index in a global variable in case the get text option is clicked.
@@ -605,9 +644,13 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 							checkConfigurator()
 						 EndIf
 					  EndIf
-			   Case $LVN_HOTTRACK ; Sent by a list-view control when the user moves the mouse over an item
-                    $tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
-                    ListView_HOTTRACK(DllStructGetData($tInfo, "SubItem"))
+			   Case $NM_RCLICK ;If it was a right click...to list hoat dong
+					Local $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam) ;get the information about the item clicked.
+					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem")) ;store the item text in a global variable in case the get text option is clicked.
+					$indexItemHoatDong = _GUICtrlListView_GetHotItem($hWndListView2) ;store the item index in a global variable in case the get text option is clicked.
+;~ 			   Case $LVN_HOTTRACK ; Sent by a list-view control when the user moves the mouse over an item
+;~                     $tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
+;~                     ListView_HOTTRACK(DllStructGetData($tInfo, "SubItem"))
             EndSwitch
     EndSwitch
 
@@ -778,31 +821,34 @@ Func _updateAcTion()
 		_GUICtrlListView_SetItemChecked($hListHoatDong, 15,False)
 	 EndIf
 	 ;Auto resize column
-	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
+;~ 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	 _GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 ;~ 	 _ProcessResume(_getProcess());resume
   EndFunc
 Func _reloadEmu($switch)
      $currentAuto =  $switch
-     GUICtrlSetData($idItemHuyenCanh, "||"&$currentAuto)
-	 GUICtrlSetData($idItemBlood, "||"&$currentAuto)
-	 GUICtrlSetData($idItemBossCaNhan, "||"&$currentAuto)
-	 GUICtrlSetData($idItemTienThuong, "||"&$currentAuto)
-	 GUICtrlSetData($idItemDaoMo, "||"&$currentAuto)
-	 GUICtrlSetData($idItemCuopMo, "||"&$currentAuto)
-	 GUICtrlSetData($idItemTreoMay, "||"&$currentAuto)
-	 GUICtrlSetData($idItemNVGuild, "||"&$currentAuto)
-	 GUICtrlSetData($idItemTinhAnh, "||"&$currentAuto)
-	 GUICtrlSetData($idItemLayThanhVat, "||"&$currentAuto)
-	 GUICtrlSetData($idItemBossGuild12h, "||"&$currentAuto)
-	 GUICtrlSetData($idItemTuHoiGuild12h, "||"&$currentAuto)
-	 GUICtrlSetData($idItemDevil, "||"&$currentAuto)
-	 GUICtrlSetData($idItemBaoTang, "||"&$currentAuto)
-	 GUICtrlSetData($idItemPhaoDai, "||"&$currentAuto)
-	 GUICtrlSetData($idItemHoTro, "||"&$currentAuto)
+;~      GUICtrlSetData($idItemHuyenCanh, "||")
+;~ 	 GUICtrlSetData($idItemBlood, "||")
+;~ 	 GUICtrlSetData($idItemBossCaNhan, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemTienThuong, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemDaoMo, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemCuopMo, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemTreoMay, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemNVGuild, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemTinhAnh, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemLayThanhVat, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemBossGuild12h, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemTuHoiGuild12h, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemDevil, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemBaoTang, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemPhaoDai, "||"&$currentAuto)
+;~ 	 GUICtrlSetData($idItemHoTro, "||"&$currentAuto)
      _updateAcTion()
 	 _refeshLogAuto()
+	 ;update staus bar
+;~ 	 _GUICtrlStatusBar_SetText($g_hStatus, "Current Emulator: " & $currentAuto)
+	 GUICtrlSetData($JblNotify,"Current Emulator: " & $currentAuto)
 
 EndFunc
 Func _changeColor($status)
@@ -1032,9 +1078,9 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
  EndFunc
 
 
-Func DeleteItemEmulator()
-;~    ConsoleWrite($sItemText&@CRLF)
-;~    ConsoleWrite($indexItem&@CRLF)
+Func deleteItemEmulator()
+   ConsoleWrite($sItemText&@CRLF)
+   ConsoleWrite($indexItem&@CRLF)
    $statsChecked = _GUICtrlListView_GetItemChecked($hListEmulators, $indexItem)
    if $statsChecked == True Then
 	  MsgBox($MB_SYSTEMMODAL, "Information", "Không Thể Xóa Auto Đang Chạy")
@@ -1048,13 +1094,54 @@ Func DeleteItemEmulator()
 		 _reloadEmu($currentAuto)
 	  EndIf
    EndIf
-EndFunc   ;==>Copy2Dsktp
+EndFunc   ;==>
+Func changeStatus($statusHoatDong)
+	  Switch $indexItemHoatDong
+		  Case 0 ;huyen canh tren khong
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $huyencanh, $statusHoatDong)
+		  Case 1 ; blood
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $blood, $statusHoatDong)
+		  Case 2 ; boss ca nhan
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $bosscanhan, $statusHoatDong)
+		  Case 3 ; tien thuong
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $tienthuong, $statusHoatDong)
+		  Case 4 ; daomo
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $daomo, $statusHoatDong)
+		  Case 5 ; cuop mo
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $cuopmo, $statusHoatDong)
+		  Case 6 ; treo may
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $treomay, $statusHoatDong)
+		  Case 7 ; nv guild
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $nvguild, $statusHoatDong)
+		  Case 8 ; san tinh anh
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $tinhanh, $statusHoatDong)
+		  Case 9 ; lay thanh vat
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $laythanhvat, $statusHoatDong)
+		  Case 10 ; boss guild 12h
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossguild12h, $statusHoatDong)
+		  Case 11 ; Tu hoi + boss guild 8h
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $tuhoiguild8h, $statusHoatDong)
+		  Case 12 ; Devil square
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $devil, $statusHoatDong)
+		  Case 13 ; Hộ Tống
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $baotang, $statusHoatDong)
 
+		 Case 14 ; Pháo Đài
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $phaodai, $statusHoatDong)
+		  Case 15 ; hỖ TRỢ guild
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $hotroguild, $statusHoatDong)
+	  EndSwitch
+	  _updateAcTion()
+EndFunc   ;==>
 Func checkConfigurator()
    ConsoleWrite($sItemTextHoatDong&@CRLF)
    ConsoleWrite($indexItemHoatDong&@CRLF)
-;~    $hWndListView1 = GUICtrlGetHandle($hListHoatDong)
-;~    WinSetState($hWndListView1,"",@SW_HIDE)
+   if ($sItemTextHoatDong == "Config") Then
+		 WinSetState($hWndListHoatDong,"",@SW_HIDE)
+		 GUISetState(@SW_SHOW, $DefaultChildGui)
+   EndIf
+
+
 
 
 EndFunc   ;==>Copy2Dsktp

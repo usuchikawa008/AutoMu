@@ -1,44 +1,91 @@
-#include <File.au3>
-#include <MsgBoxConstants.au3>
-#include <WinAPIFiles.au3>
+#include <WindowsConstants.au3>
+#include <GUIConstantsEx.au3>
+#include "GUIPanel_UDF.au3"
 
-Example()
+Opt("GUIOnEventMode", 1)
 
-Func Example()
-    ; Create a constant variable in Local scope of the filepath that will be read/written to.
-    Local Const $sFilePath = _WinAPI_GetTempFileName(@TempDir)
+Global $sLogo4imgPath = @ProgramFilesDir & "\AutoIt3\Examples\GUI\logo4.gif"
+Global $iPanel1step = 0, $iPanel3step = 0
 
-    ; Create data to be written to the file.
-    Local $sData = "Line 1: This is an example of using _FileWriteToLine()" & @CRLF & _
-            "Line 2: This is an example of using _FileWriteToLine()" & @CRLF & _
-            "Line 3: This is an example of using _FileWriteToLine()" & @CRLF & _
-            "Line 4: This is an example of using _FileWriteToLine()" & @CRLF & _
-            "Line 5: This is an example of using _FileWriteToLine()" & @CRLF
+#region GUI
+$GUI = GUICreate("GUIPanel UDF - Example", 400, 350)
+GUISetOnEvent($GUI_EVENT_CLOSE, "_Exit")
 
-    ; Create a temporary file to read data from.
-    If Not FileWrite($sFilePath, $sData) Then
-        MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
-        Return False
-    EndIf
+GUICtrlCreateLabel("Label on the GUI", 300, 320)
 
-    ; Write to line 3 with overwriting set to true.
-    _FileWriteToLine($sFilePath, 3, "Line 3: THIS HAS BEEN REPLACED", True)
+#region Panel1
+$hPanel1 = _GUICtrlPanel_Create($GUI, "Coords", 10, 40, 200, 50)
+_GUICtrlPanel_SetBackground($hPanel1, 0x87FF0000)
 
-    ; Read the contents of the file using the filepath.
-    Local $sFileRead = FileRead($sFilePath)
+GUICtrlCreateLabel("Label on the Panel1", 5, 5, 95, 13)
 
-    ; Display the contents of the file.
-    MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $sFileRead)
+$btnPanel1 = GUICtrlCreateButton("Swap with Panel4", 10, 20, 100, 22)
+GUICtrlSetOnEvent($btnPanel1, "_Panel1_BtnEvent")
+#endregion Panel1
 
-    ; Write to line 3 with overwriting set to false.
-    _FileWriteToLine($sFilePath, 3, "Line 3: THIS HAS BEEN INSERTED", False)
+#region Panel2
+$hPanel2 = _GUICtrlPanel_Create($GUI, "BottomLeft", 0, 0, 200, 100, $WS_BORDER, @SW_SHOWNA, 0x00FF00)
 
-    ; Read the contents of the file using the filepath.
-    $sFileRead = FileRead($sFilePath)
+GUICtrlCreateLabel("Label on the Panel2", 5, 5, 95, 13)
 
-    ; Display the contents of the file.
-    MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $sFileRead)
+#region Panel2Sub
+$hPanel2Sub = _GUICtrlPanel_Create($hPanel2, "CenterRight", 0, 0, 120, 30, $WS_BORDER, @SW_SHOWNA)
 
-    ; Delete the temporary file.
-    FileDelete($sFilePath)
-EndFunc   ;==>Example
+Global $aGUIPanelExample_Panel2SubPos = _GUICtrlPanel_GetPos($hPanel2Sub)
+GUICtrlCreateLabel("Pos (X, Y) : " & $aGUIPanelExample_Panel2SubPos[0] & ", " & $aGUIPanelExample_Panel2SubPos[1], 5, 8, 100, 13)
+#endregion
+#endregion Panel2
+
+#region Panel3
+$hPanel3 = _GUICtrlPanel_Create($GUI, "Centered", 0, 0, 169, 68, $WS_BORDER, @SW_SHOWNA, $sLogo4imgPath)
+
+$btnPanel3 = GUICtrlCreateButton("Move me", 10, 10, 70, 22)
+GUICtrlSetOnEvent($btnPanel3, "_Panel3_BtnEvent")
+
+GUICtrlCreateCheckbox("no event", 70, 55, 68, 13)
+GUICtrlSetBkColor(-1, 0xFFFFFF)
+#endregion Panel3
+
+#region Panel4
+$hPanel4 = _GUICtrlPanel_Create($GUI, "TopRight", 0, 0, 100, 50, $WS_BORDER)
+
+GUICtrlCreateCombo("Panel4", 10, 10, 80)
+#endregion Panel4
+
+GUISetState(@SW_SHOW, $GUI)
+#endregion GUI
+
+While 1
+    Sleep(1000)
+WEnd
+
+Func _Panel3_BtnEvent()
+    Switch $iPanel3step
+        Case 0
+            _GUICtrlPanel_SetPos($hPanel3, "CenterRight")
+            GUICtrlSetData($btnPanel3, "Hide me")
+        Case 1
+            _GUICtrlPanel_SetState($hPanel3, @SW_HIDE)
+    EndSwitch
+
+    $iPanel3step += 1
+EndFunc   ;==>_Panel3_BtnEvent
+
+Func _Panel1_BtnEvent()
+    Switch $iPanel1step
+        Case 0
+            _GUICtrlPanel_SetPos($hPanel1, "TopRight")
+            _GUICtrlPanel_SetPos($hPanel4, "Coords", 10, 40)
+
+            GUICtrlSetData($btnPanel1, "Disable me")
+        Case 1
+            _GUICtrlPanel_SetState($hPanel1, @SW_DISABLE)
+            GUICtrlSetData($btnPanel1, "Disabled")
+    EndSwitch
+
+    $iPanel1step += 1
+EndFunc   ;==>_Panel1_BtnEvent
+
+Func _Exit()
+    Exit
+EndFunc   ;==>_Exit

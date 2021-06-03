@@ -113,7 +113,7 @@ Func _GotoTrainQuai($Title,$emuport,$Handle,$pos)
 	 Sleep(1000)
 		 $Imagetreomayconluot = @ScriptDir & "\image\treomay.bmp"
 		 $Imagetreomayhetluot = @ScriptDir & "\image\treomayhetluot.bmp"
-		 $p = _searchNVAdvance($Handle, $Imagetreomayhetluot,$Imagetreomayconluot,90,115) ; search NV treo may
+		 $p = _searchNVAdvance($Handle, $Imagetreomayhetluot,$Imagetreomayconluot,95,115) ; search NV treo may
 		 If @error Then
 			Return SetError(3)
 		 EndIf
