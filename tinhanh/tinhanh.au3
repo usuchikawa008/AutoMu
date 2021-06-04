@@ -110,16 +110,13 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 	  writelog("Cho "&$remaintime &" phut ket thuc boss guild"& @CRLF) ; write console
 	  Sleep($remaintime*60000)
 	  Local $Imagebossguildfinish = @ScriptDir & "\image\toidaugia.bmp"
-	  Local $pfinnish = _HandleImgWaitExist($Handle,$Imagebossguildfinish,100, 0, 0, -1, -1,90, 2);search toi ngay dau gia icon = finish boss guild
+	  Local $pfinnish = _HandleImgWaitExist($Handle,$Imagebossguildfinish,60, 0, 0, -1, -1,90, 2);search toi ngay dau gia icon = finish boss guild
 	  If not @error Then
 		 Sleep(1500)
 		 writelog("Ket thuc boss guild " & _NowTime() & @CRLF) ; write console
 	  EndIf
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 	  Sleep(2000)
-
-
-
 	EndFunc   ;==>GotoPB
 
 
@@ -279,15 +276,16 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 366 683");click to ho tro
 	  EndIf
 	  Sleep(3000)
+	  writelog("Ho Tro Guild"& @CRLF) ; write console
 	  Local $count = 0
 	  While $count < 2
-		 writelog("Ho Tro Guild"& @CRLF) ; write console
 		 $count = $count + 1
 		 Local $Imagebosstoihotro = @ScriptDir & "\image\toihotrobtn.bmp"
 	     Local $p = _HandleImgSearch($Handle,$Imagebosstoihotro, 0, 0, -1, -1,89, 4);search btn toi ho tro
 		 If not @error Then ; thay hon 3 b
 			if $p[0][0] > 3 Then
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 400 200"); di chuyen cuon len den trang cuoi
+			   Sleep(1500)
 		    EndIf
 		 Else ; ko thay ho tro nao
 			ExitLoop

@@ -28,7 +28,7 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
 Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
-Global Const $expireDate = "06/03/2021" ; format MM/DD/YYYY
+Global Const $expireDate = "06/06/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathstatus = @ScriptDir&"\status\"
@@ -761,22 +761,22 @@ EndFunc   ;==>Example
 
 Func _openHoatDong()
 	   Sleep(1000)
-	   $rs = _openMenu()
+	   Local $rs = _openMenu()
 	   If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
 		  Return 1
 	   EndIf
 	   Sleep(1000)
-	   $rsboss = _checkbossguild()
+	   Local $rsboss = _checkbossguild()
 	   If $rsboss == 1 Then ;  boss guild = 1 thi next loop
 		  Return 1
 	   EndIf
 
-	   $rstuhoi = _checktuhoiguild()
+	   Local $rstuhoi = _checktuhoiguild()
 	   If $rstuhoi == 1 Then ;  tu hoi guild = 1 thi next loop
 		  Return 1
 	   EndIf
 
-	   $rsphaodai = _checkPhaoDaiDo()
+	   Local $rsphaodai = _checkPhaoDaiDo()
 	   If $rsphaodai == 1 Then ;  phao dai do  = 1 thi next loop
 		  Return 1
 	   EndIf
@@ -881,7 +881,7 @@ Func _checktuhoiguild()
 
 EndFunc   ;==>Example
 Func _checkPhaoDaiDo()
-	  $dayofweek = _getDayofWeek()
+	  Local $dayofweek = _getDayofWeek()
 	  If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
 	  Local $scheckboxphaodai = IniRead($path&$Title&".tmp", $hoatdong, $phaodai, False)
 	  Local $statusphaodai = IniRead($pathstatus&$Title&".tmp", $status, $phaodai, $notyet)
@@ -927,8 +927,8 @@ Func _checkPhaoDaiDo()
 
 EndFunc   ;==>Example
 Func _openMenu()
-	   $ImagePath = @ScriptDir & "\image\nhatkihd.bmp"
-	   $Result = _HandleImgSearch($hwnd, $ImagePath, 0, 0, -1, -1,50, 2);search nhat ki hd
+	   Local $ImagePath = @ScriptDir & "\image\nhatkihd.bmp"
+	   Local $Result = _HandleImgSearch($hwnd, $ImagePath, 0, 0, -1, -1,50, 2);search nhat ki hd
 	   If not @error Then ;menu da mo san
 		  _CheckNhanSoiNoi($Title,$hwnd); search Lay soi noi neu available
 		  If not @error Then

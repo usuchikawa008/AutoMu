@@ -93,7 +93,6 @@ _setCamTrainKhiHetNV(True)
 _setAutoGhepVeBlood(True)
 _setAutoAnThit(True)
 _setAutoTruyenCong(True)
-_setBoQuaQuestS(True)
 $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
 Global $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
 Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
@@ -125,7 +124,7 @@ Func Gui()
 	Global $textarea = GUICtrlCreateEdit("", 10, 600, 330, 100) ; will not accept drag&drop files
 	Local $idTab = GUICtrlCreateTab(10, 115, 332, 430) ;tao tab
 	GUICtrlSetFont($idTab,11)
-	GUICtrlCreateTabItem("Hoạt động")
+	Global $tabItemHoatDong = GUICtrlCreateTabItem("Hoạt động")
 	Global $hListHoatDong = GUICtrlCreateListView("Nhiệm Vụ | Status | Setting  |", 10, 145, 330, 400,$WS_DLGFRAME) ;,$LVS_SORTDESCENDING)
 	Global $hWndListHoatDong = GUICtrlGetHandle($hListHoatDong)
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 2, 80)
@@ -263,12 +262,40 @@ Func Gui()
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxTruyenCong = GUICtrlCreateCheckbox("Tự truyền công trong tụ hội guild ", 20, 245, 200, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
-	Local $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Bỏ qua nv guild cấp S ", 20, 270, 150, 25)
-	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
-
     #region Panel1
     Global $DefaultChildGui = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
-    Local $idBtn_Close = GUICtrlCreateButton("Close", 10, 300, 70, 25)
+	;group NV Guild
+	GUICtrlCreateGroup("Nhiệm Vụ Guild", 2, 5, 320, 65)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Làm nhiệm vụ cấp S", 10, 20, 150, 25)
+	Global $idInputTimeWaitNVRankS = GUICtrlCreateInput("",30,48,25,15,$ES_NUMBER)
+	Global $idLableText = GUICtrlCreateLabel("Đợi",10,50,20,15)
+	Global $idLableText2 = GUICtrlCreateLabel("giây sau đó bỏ qua NV này",60,50,140,15)
+	GUICtrlSetLimit(-1, 3) ; to limit the entry to 3 chars
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group NV Tinh Anh
+	GUICtrlCreateGroup("Săn Tinh Anh", 2, 75, 320, 45)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxSanTinhAnh = GUICtrlCreateCheckbox("Săn tinh anh ở tầng thấp hơn 1 bậc", 10, 90, 200, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+    ;group Hộ Tống Bảo Tàng
+	GUICtrlCreateGroup("Hộ Tống Bảo Tàng", 2, 125, 320, 45)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBox11h = GUICtrlCreateCheckbox("11h -> 12h", 10, 140, 70, 25)
+	Global $idCheckBox21h = GUICtrlCreateCheckbox("21h -> 22h", 110, 140, 70, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group Hỗ Trợ Guild
+	GUICtrlCreateGroup("Hỗ Trợ Guild", 2, 175, 320, 95)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxSPBossTG = GUICtrlCreateCheckbox("Boss TG", 10, 190, 80, 25)
+	Global $idCheckBoxSPBossCuopLaiMo = GUICtrlCreateCheckbox("Cướp lại mỏ", 110, 190, 100, 25)
+	Global $idCheckBoxSPBossCTC = GUICtrlCreateCheckbox("Boss CTC", 210, 190, 100, 25)
+	Global $idCheckBoxSPNvS = GUICtrlCreateCheckbox("Hỗ trợ nv guild cấp S", 10, 215, 200, 25)
+    Global $idInputSPWait = GUICtrlCreateInput("",30,243,25,15,$ES_NUMBER)
+	Global $idLableSPText = GUICtrlCreateLabel("Đợi",10,245,20,15)
+	Global $idLableSPText2 = GUICtrlCreateLabel("giây sau đó bỏ qua hỗ trợ NV này",60,245,140,15)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+    Local $idBtn_Save = GUICtrlCreateButton("Save", 250, 365, 70, 25)
     $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_STYLE)
     $iExStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_EXSTYLE)
     GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $DefaultChildGui)
@@ -352,20 +379,13 @@ Func Gui()
 				   Else
 					  _setAutoTruyenCong(False)
 				   EndIf
-			   Case $idCheckBoxNVGuildRankS
-				   If _IsChecked($idCheckBoxNVGuildRankS) Then
-					  _setBoQuaQuestS(True)
-				   Else
-					  _setBoQuaQuestS(False)
-				   EndIf
 			EndSwitch
 		 Case $DefaultChildGui
 			Switch $iGuiMsg[0]
-			   Case $idBtn_Close
-				   ConsoleWrite("2222222222")
+			   Case $idBtn_Save
 				   WinSetState($hWndListHoatDong,"",@SW_SHOW)
 				   GUISetState(@SW_HIDE, $DefaultChildGui)
-
+				   GUICtrlSetState($tabItemHoatDong, $GUI_SHOW) ; Use this!
 			EndSwitch
 		 EndSwitch
     WEnd
@@ -935,10 +955,6 @@ Func _setAutoAnThit($sState)
 Func _setAutoTruyenCong($sState)
      IniWrite($pathImage&"1.tmp", $general, $autoTruyenCong, $sState)
   EndFunc
-Func _setBoQuaQuestS($sState)
-     IniWrite($pathImage&"1.tmp", $general, $boquaQuestS, $sState)
-  EndFunc
-
 
 Func _updateEmulatorAuto() ; refresh status AUTO emulator
      For $i = 0 to _GUICtrlListView_GetItemCount($hListEmulators)-1 ;total list size item

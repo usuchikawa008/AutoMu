@@ -81,7 +81,7 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 	  Sleep(80000);cho 80s
 	  writelog("Cho ket thuc pb blood...." & _NowTime() & @CRLF) ; write console
 	  $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,85, 2);search nut menu
+	  $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,91, 2);search nut menu
 EndFunc   ;==>GotoPB
 
 
