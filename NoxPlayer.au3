@@ -31,6 +31,7 @@ Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de s
 Global Const $expireDate = "06/06/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
+Global Const $pathconfig = @ScriptDir&"\config\"
 Global Const $pathstatus = @ScriptDir&"\status\"
 Global Const $pathAuto = @ScriptDir&"\auto\"
 Global Const $pathImage = @ScriptDir&"\image\"
@@ -45,7 +46,6 @@ Global Const $camtrain = "CamTrain"
 Global Const $ghepveblood = "GhepVeBlood"
 Global Const $autoAnThit = "AutoAnThit"
 Global Const $autoTruyenCong = "TruyenCong"
-Global Const $boquaQuestS = "$BoQuaQuestS"
 ;config hoat dong start
 Global Const $status = "Status"
 Global Const $notyet = "Wait"
@@ -86,7 +86,22 @@ Global Const $T6 = "Friday"
 Global Const $T7 = "Saturday"
 ;config day of week end
 
-
+;config path start
+Global Const $config = "Configuration"
+Global Const $nvguildRankS = "NvGuildRankS"
+Global Const $timewaitNvS = "WaitNvS"
+Global Const $weaktinhanh = "WeakTinhAnh"
+Global Const $baotang11h = "BaoTang11h"
+Global Const $baotang21h = "BaoTang21h"
+Global Const $spbossTG = "SpBossTG"
+Global Const $spbossctc = "SpBossCTC"
+Global Const $spcuopmo = "SpCuopMo"
+Global Const $sp_nvguildRankS = "SpNvGuildRankS"
+Global Const $sp_timewaitNvS = "SpWaitNvS"
+Global Const $cuop_mo_de = "MoDe"
+Global Const $cuop_mo_thuong = "MoThuong"
+Global Const $cuop_mo_kho = "MoKho"
+;config path end
 ;~ Global $Nox_Path = "D:\Program Files\Nox\bin"
 
 Global $checkOCR = IniRead($pathImage&"1.tmp", $general, $OCRFlag, False);kiem tra co open OCR hay ko
@@ -192,6 +207,7 @@ If $statusNoxx == $off Then
 EndIf
 Opt("WinTitleMatchMode", 3)
 WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
+;~ _outParty()
 While $countLoop < $maxloop;loop auto 1000 lan
    _close($hwnd) ;close het cua so truoc khi bat dau auto
    $countLoop = $countLoop + 1 ; so lan loop
@@ -273,7 +289,6 @@ Func Auto()
 	  Sleep(1500)
 	  EndIf
 ;~ 	EndIf
-
    #cs
 	3.Di Blood castle
 	#ce
@@ -410,6 +425,7 @@ Func Auto()
 	   Local $scheckboxnvguild = IniRead($path&$Title&".tmp", $hoatdong, $nvguild, False)
 	   Local $statusnvguild = IniRead($pathstatus&$Title&".tmp", $status, $nvguild, $notyet)
 	   If $scheckboxnvguild == True And $statusnvguild <> $done Then
+;~ 		  _outParty()
 		  $countNV = $countNV + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -587,9 +603,11 @@ Func Auto()
 	#cs
 	14. Hộ Tống Bảo Tàng
 	#ce
-	   Local $scheckboxBaoTang = IniRead($path&$Title&".tmp", $hoatdong, $baotang, False)
-	   Local $statusBaoTang = IniRead($pathstatus&$Title&".tmp", $status, $baotang, $notyet)
-	   If $scheckboxBaoTang == True And $statusBaoTang <> $done Then
+	  $dayofweek = _getDayofWeek()
+	  If $dayofweek == $T2 OR $dayofweek == $T4 OR $dayofweek == $T6 Then
+	     Local $scheckboxBaoTang = IniRead($path&$Title&".tmp", $hoatdong, $baotang, False)
+	     Local $statusBaoTang = IniRead($pathstatus&$Title&".tmp", $status, $baotang, $notyet)
+	     If $scheckboxBaoTang == True And $statusBaoTang <> $done Then
 		  $countNVHenGio = $countNVHenGio + 1
 		  $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
@@ -605,11 +623,13 @@ Func Auto()
 			  IniWrite($pathstatus&$Title&".tmp", $status, $baotang,$notyet) ; change status wait
 		   EndIf
 		  Sleep(2000)
-	   EndIf
+	     EndIf
+	  EndIf
+
 	   #cs
 	14. Phao Dai Do
 	#ce
-	  $dayofweek = _getDayofWeek()
+	  Local $dayofweek = _getDayofWeek()
 	  If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
 	  Local $scheckboxphaodai = IniRead($path&$Title&".tmp", $hoatdong, $phaodai, False)
 	  Local $statusphaodai = IniRead($pathstatus&$Title&".tmp", $status, $phaodai, $notyet)
@@ -974,15 +994,15 @@ Func _searchNV($Handle, $imagepath, $tor = 115 , $sizeSan = 6)
 	  Return SetError(3) ; ko tim thay return error
    EndFunc   ;==> Search NV
 
-Func _searchNVAdvance($Handle, $imageHet, $imageCon,$torHet = 115, $torCon = 115 , $sizeSan = 6)
+Func _searchNVAdvance($Handle, $imageHet, $imageCon,$torHet = 115, $torCon = 115 , $sizeSan = 6, $timeWaitHet = 1,$timeWaitCon = 1)
 	  Local $i = 0
 	  While $i < $sizeSan
 		 $i = $i + 1
-		 $Result = _HandleImgWaitExist($Handle, $imageHet,1, 0, 0, -1, -1,$torHet, 2);search image het luot
+		 $Result = _HandleImgWaitExist($Handle, $imageHet,$timeWaitHet, 0, 0, -1, -1,$torHet, 2);search image het luot
 		 If not @error Then ; neu thay image het NV -> out
 			 Return SetError(3)
 		 Else
-			 $Result = _HandleImgWaitExist($Handle, $imageCon,1, 0, 0, -1, -1,$torCon, 2);search image con luot
+			 $Result = _HandleImgWaitExist($Handle, $imageCon,$timeWaitCon, 0, 0, -1, -1,$torCon, 2);search image con luot
 			 If not @error Then
 				Return $Result
 			 EndIf
@@ -1113,7 +1133,7 @@ Func _findIconMenu($Handle)
    While 1 ;tim den khi thay menu
 	 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
 	 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 0, 0, -1, -1,94, 2);search nut menu
-	  If @error Then ; ko thay menu
+     If @error Then ; ko thay menu
 		  writelog("Tim kiem menu " & @CRLF) ; write console
 		  _close($Handle); close all window
 		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 450") ;click giua man hinh
@@ -1132,6 +1152,39 @@ Func _findIconMenu($Handle)
 		 ExitLoop
 	  EndIf
    WEnd
+EndFunc
+
+Func _outParty()
+   _findIconMenu($hwnd)
+   writelog("Thoat Party " & _NowTime() & @CRLF) ; write console
+   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1572 465") ;click la co lan 1
+   Sleep(1000)
+   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1572 465") ;click la co lan 2
+   Sleep(1000)
+   Local $Imageroikhoidoi = @ScriptDir & "\image\roikhoidoibtn.bmp"
+   Local $rsroikhoidoi = _HandleImgWaitExist($hwnd, $Imageroikhoidoi,1, 0, 0, -1, -1,80, 2);search btn roi khoi doi
+   If Not @error Then
+	  _ControlClickExactly($Title, "", "","", 1,$rsroikhoidoi[1][0], $rsroikhoidoi[1][1]) ; click thoat
+	  Sleep(1000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 600") ;click xac nhan
+	  Sleep(1000)
+	  _closeSimple($hwnd)
+	  Return
+   EndIf
+   Local $Imageroikhoi = @ScriptDir & "\image\roikhoibtn.bmp"
+   Local $rsroikhoi = _HandleImgWaitExist($hwnd, $Imageroikhoi,1, 0, 0, -1, -1,80, 2);search btn roi khoi doi
+   If Not @error Then
+	  _ControlClickExactly($Title, "", "","", 1,$rsroikhoi[1][0], $rsroikhoi[1][1]) ; click thoat
+	  Sleep(1000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 600") ;click xac nhan
+	  Sleep(1000)
+	  _closeSimple($hwnd)
+	  Return
+   EndIf
+   _findIconMenu($hwnd)
+
+
+
 EndFunc
 Func _ControlClickExactly($Title,$text,$ctrID,$type,$click,$x,$y)
    Opt("WinTitleMatchMode", 3)

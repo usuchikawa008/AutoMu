@@ -31,6 +31,7 @@ Global $currentAuto
 Global $dayofweek = _getDayofWeek()
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
+Global Const $pathconfig = @ScriptDir&"\config\"
 Global Const $pathstatus = @ScriptDir&"\status\"
 Global Const $pathAuto = @ScriptDir&"\auto\"
 Global Const $pathImage = @ScriptDir&"\image\"
@@ -44,7 +45,6 @@ Global Const $camtrain = "CamTrain"
 Global Const $ghepveblood = "GhepVeBlood"
 Global Const $autoAnThit = "AutoAnThit"
 Global Const $autoTruyenCong = "TruyenCong"
-Global Const $boquaQuestS = "$BoQuaQuestS"
 ;config hoat dong start
 Global Const $status = "Status"
 Global Const $notyet = "Wait"
@@ -67,6 +67,8 @@ Global Const $devil = "Devil"
 Global Const $baotang = "BaoTang"
 Global Const $phaodai = "PhaoDai"
 Global Const $hotroguild = "HoTroGuild"
+Global Const $bossthegioi = "BossTheGioi"
+Global Const $bosschientruong = "BossChienTruong"
 ;config hoat dong End
 ;config start Auto
 Global Const $run = "Run"
@@ -86,6 +88,24 @@ Global Const $T5 = "Thursday"
 Global Const $T6 = "Friday"
 Global Const $T7 = "Saturday"
 ;config day of week end
+
+
+;config path start
+Global Const $config = "Configuration"
+Global Const $nvguildRankS = "NvGuildRankS"
+Global Const $timewaitNvS = "WaitNvS"
+Global Const $weaktinhanh = "WeakTinhAnh"
+Global Const $baotang11h = "BaoTang11h"
+Global Const $baotang21h = "BaoTang21h"
+Global Const $spbossTG = "SpBossTG"
+Global Const $spbossctc = "SpBossCTC"
+Global Const $spcuopmo = "SpCuopMo"
+Global Const $sp_nvguildRankS = "SpNvGuildRankS"
+Global Const $sp_timewaitNvS = "SpWaitNvS"
+Global Const $cuop_mo_de = "MoDe"
+Global Const $cuop_mo_thuong = "MoThuong"
+Global Const $cuop_mo_kho = "MoKho"
+;config path end
 _checkMacIP()
 _setHardMode(False)
 _setAnExp(True)
@@ -150,6 +170,7 @@ Func Gui()
 		   _FileCreate($pathAuto&$aList[$i][0]&".tmp")
 		   _FileCreate($pathstatus&$aList[$i][0]&".tmp")
 		   _FileCreate($pathLog&$aList[$i][0]&".log")
+		   _FileCreate($pathconfig&$aList[$i][0]&".config")
 		   ; init checkbox
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $huyencanh, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $blood, True)
@@ -193,12 +214,28 @@ Func Gui()
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $baotang, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $phaodai, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $hotroguild, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bossthegioi, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bosschientruong, $notyet)
 		   ; init Run
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $pid, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $finish, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $nameingame, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $statusNox, $onl)
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $cmdStart, _setCmdStart($aList[$i][0]))
+		   ; init Config
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguildRankS, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $timewaitNvS, 60);60s
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $weaktinhanh, False)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang11h, False)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang21h, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossTG, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossctc, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spcuopmo, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_nvguildRankS, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_timewaitNvS, 60);60s
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_de, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_thuong, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_kho, False)
 	    EndIf
 	 Next
 	 ;search tat ca gia lap da tung chay o foler config
@@ -233,7 +270,7 @@ Func Gui()
 	Global $idItemBossCaNhan = GUICtrlCreateListViewItem("Boss Cá Nhân||", $hListHoatDong)
 	Global $idItemTienThuong = GUICtrlCreateListViewItem("Tiền Thưởng||", $hListHoatDong)
 	Global $idItemDaoMo = GUICtrlCreateListViewItem("Đào Mỏ||", $hListHoatDong)
-	Global $idItemCuopMo = GUICtrlCreateListViewItem("Cướp Mỏ||", $hListHoatDong)
+	Global $idItemCuopMo = GUICtrlCreateListViewItem("Cướp Mỏ||Config", $hListHoatDong)
 	Global $idItemTreoMay = GUICtrlCreateListViewItem("Treo Máy||", $hListHoatDong)
 	Global $idItemNVGuild = GUICtrlCreateListViewItem("Nhiệm Vụ Guild||Config", $hListHoatDong)
 	Global $idItemTinhAnh = GUICtrlCreateListViewItem("Săn Tinh Anh||Config", $hListHoatDong)
@@ -288,14 +325,24 @@ Func Gui()
 	GUICtrlCreateGroup("Hỗ Trợ Guild", 2, 175, 320, 95)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
     Global $idCheckBoxSPBossTG = GUICtrlCreateCheckbox("Boss TG", 10, 190, 80, 25)
-	Global $idCheckBoxSPBossCuopLaiMo = GUICtrlCreateCheckbox("Cướp lại mỏ", 110, 190, 100, 25)
-	Global $idCheckBoxSPBossCTC = GUICtrlCreateCheckbox("Boss CTC", 210, 190, 100, 25)
+	Global $idCheckBoxSPBossCTC = GUICtrlCreateCheckbox("Boss CTC", 110, 190, 100, 25)
+	Global $idCheckBoxSPBossCuopLaiMo = GUICtrlCreateCheckbox("Cướp lại mỏ", 210, 190, 100, 25)
 	Global $idCheckBoxSPNvS = GUICtrlCreateCheckbox("Hỗ trợ nv guild cấp S", 10, 215, 200, 25)
     Global $idInputSPWait = GUICtrlCreateInput("",30,243,25,15,$ES_NUMBER)
 	Global $idLableSPText = GUICtrlCreateLabel("Đợi",10,245,20,15)
 	Global $idLableSPText2 = GUICtrlCreateLabel("giây sau đó bỏ qua hỗ trợ NV này",60,245,140,15)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group Cướp mỏ
+	GUICtrlCreateGroup("Cướp Mỏ", 2, 275, 320, 45)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxMoDe = GUICtrlCreateCheckbox("Mỏ Dễ", 10, 290, 80, 25)
+	Global $idCheckBoxMoThuong = GUICtrlCreateCheckbox("Mỏ thường", 110, 290, 100, 25)
+	Global $idCheckBoxMoKho = GUICtrlCreateCheckbox("Mỏ khó", 210, 290, 100, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;Button Save
     Local $idBtn_Save = GUICtrlCreateButton("Save", 250, 365, 70, 25)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+	GUICtrlSetBkColor(-1, 0xf2f2f2)
     $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_STYLE)
     $iExStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_EXSTYLE)
     GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $DefaultChildGui)
@@ -380,9 +427,10 @@ Func Gui()
 					  _setAutoTruyenCong(False)
 				   EndIf
 			EndSwitch
-		 Case $DefaultChildGui
+		 Case $DefaultChildGui ;button Save config
 			Switch $iGuiMsg[0]
 			   Case $idBtn_Save
+				   writeconfig()
 				   WinSetState($hWndListHoatDong,"",@SW_SHOW)
 				   GUISetState(@SW_HIDE, $DefaultChildGui)
 				   GUICtrlSetState($tabItemHoatDong, $GUI_SHOW) ; Use this!
@@ -866,6 +914,7 @@ Func _reloadEmu($switch)
 ;~ 	 GUICtrlSetData($idItemHoTro, "||"&$currentAuto)
      _updateAcTion()
 	 _refeshLogAuto()
+	 readconfig()
 	 ;update staus bar
 ;~ 	 _GUICtrlStatusBar_SetText($g_hStatus, "Current Emulator: " & $currentAuto)
 	 GUICtrlSetData($JblNotify,"Current Emulator: " & $currentAuto)
@@ -1040,6 +1089,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		 $countDevices = $countDevices + 1
 		 $aCheck[$countDevices] = GUICtrlCreateListViewItem($NoxOff, $hListEmulators) ;add emulators
 		 _FileCreate($pathLog&$NoxOff&".log")
+		 _FileCreate($pathconfig&$NoxOff&".config")
 		 ; init checkbox
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $huyencanh, True)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $blood, True)
@@ -1089,6 +1139,20 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $nameingame, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $statusNox, $off)
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $cmdStart, _setCmdStart($NoxOff))
+	    ; init Config
+		IniWrite($pathconfig&$NoxOff&".config", $config, $nvguildRankS, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $timewaitNvS, 60);60s
+		IniWrite($pathconfig&$NoxOff&".config", $config, $weaktinhanh, False)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $baotang11h, False)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $baotang21h, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $spbossTG, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $spbossctc, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $spcuopmo, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $sp_nvguildRankS, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $sp_timewaitNvS, 60);60s
+		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_de, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_thuong, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_kho, False)
 	 EndIf
    Next
  EndFunc
@@ -1154,13 +1218,152 @@ Func checkConfigurator()
    ConsoleWrite($indexItemHoatDong&@CRLF)
    if ($sItemTextHoatDong == "Config") Then
 		 WinSetState($hWndListHoatDong,"",@SW_HIDE)
+		 readconfig()
 		 GUISetState(@SW_SHOW, $DefaultChildGui)
    EndIf
-
-
-
-
 EndFunc   ;==>Copy2Dsktp
+
+Func readconfig()
+     ;NV GUILD
+     Local $checkbox_config_NvGuildS = IniRead($pathconfig&$currentAuto&".config", $config, $nvguildRankS, False)
+	 If $checkbox_config_NvGuildS == True Then
+		GUICtrlSetState($idCheckBoxNVGuildRankS,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxNVGuildRankS,$GUI_UNCHECKED)
+	 EndIf
+     Local $checkbox_config_time_wait = IniRead($pathconfig&$currentAuto&".config", $config, $timewaitNvS, 60)
+	 GUICtrlSetData($idInputTimeWaitNVRankS,$checkbox_config_time_wait)
+	 ;NV San Tinh Anh
+	 Local $checkbox_config_weaktinhanh = IniRead($pathconfig&$currentAuto&".config", $config, $weaktinhanh, False)
+	 If $checkbox_config_weaktinhanh == True Then
+		GUICtrlSetState($idCheckBoxSanTinhAnh,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxSanTinhAnh,$GUI_UNCHECKED)
+	 EndIf
+	 ;Ho Tong Bao Tang config
+	 Local $checkbox_config_baotang11h = IniRead($pathconfig&$currentAuto&".config", $config, $baotang11h, False)
+	 If $checkbox_config_baotang11h == True Then
+		GUICtrlSetState($idCheckBox11h,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBox11h,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_baotang21h = IniRead($pathconfig&$currentAuto&".config", $config, $baotang21h, False)
+	 If $checkbox_config_baotang21h == True Then
+		GUICtrlSetState($idCheckBox21h,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBox21h,$GUI_UNCHECKED)
+	 EndIf
+	 ;Ho Tro Boss Guild
+	 Local $checkbox_config_sp_bosstg = IniRead($pathconfig&$currentAuto&".config", $config, $spbossTG, False)
+	 If $checkbox_config_sp_bosstg == True Then
+		GUICtrlSetState($idCheckBoxSPBossTG,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxSPBossTG,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_sp_bossctc = IniRead($pathconfig&$currentAuto&".config", $config, $spbossctc, False)
+	 If $checkbox_config_sp_bossctc == True Then
+		GUICtrlSetState($idCheckBoxSPBossCTC,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxSPBossCTC,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_sp_cuopmo = IniRead($pathconfig&$currentAuto&".config", $config, $spcuopmo, False)
+	 If $checkbox_config_sp_cuopmo == True Then
+		GUICtrlSetState($idCheckBoxSPBossCuopLaiMo,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxSPBossCuopLaiMo,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_sp_NvS = IniRead($pathconfig&$currentAuto&".config", $config, $sp_nvguildRankS, False)
+	 If $checkbox_config_sp_NvS == True Then
+		GUICtrlSetState($idCheckBoxSPNvS,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxSPNvS,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_sp_time_wait = IniRead($pathconfig&$currentAuto&".config", $config, $sp_timewaitNvS, 60)
+	 GUICtrlSetData($idInputSPWait,$checkbox_config_sp_time_wait)
+     ;Cuop Mo config
+     Local $checkbox_config_cuopmo_de = IniRead($pathconfig&$currentAuto&".config", $config, $cuop_mo_de, False)
+	 If $checkbox_config_cuopmo_de == True Then
+		GUICtrlSetState($idCheckBoxMoDe,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxMoDe,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_cuopmo_thuong = IniRead($pathconfig&$currentAuto&".config", $config, $cuop_mo_thuong, False)
+	 If $checkbox_config_cuopmo_thuong == True Then
+		GUICtrlSetState($idCheckBoxMoThuong,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxMoThuong,$GUI_UNCHECKED)
+	 EndIf
+	 Local $checkbox_config_cuopmo_kho = IniRead($pathconfig&$currentAuto&".config", $config, $cuop_mo_kho, False)
+	 If $checkbox_config_cuopmo_kho == True Then
+		GUICtrlSetState($idCheckBoxMoKho,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxMoKho,$GUI_UNCHECKED)
+	 EndIf
+EndFunc   ;=> readconfig
+Func writeconfig()
+     ;NV GUILD
+	 If GUICtrlRead($idCheckBoxNVGuildRankS) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $nvguildRankS, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $nvguildRankS, False)
+	 EndIf
+	 IniWrite($pathconfig&$currentAuto&".config", $config, $timewaitNvS, GUICtrlRead($idInputTimeWaitNVRankS)) ; luu time wait
+	 ;NV San Tinh Anh
+	 If GUICtrlRead($idCheckBoxSanTinhAnh) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $weaktinhanh, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $weaktinhanh, False)
+	 EndIf
+	 ;Ho Tong Bao Tang config
+	 If GUICtrlRead($idCheckBox11h) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $baotang11h, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $baotang11h, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBox21h) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $baotang21h, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $baotang21h, False)
+	 EndIf
+	 ;Ho Tro Boss Guild
+	 If GUICtrlRead($idCheckBoxSPBossTG) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spbossTG, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spbossTG, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBoxSPBossCTC) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spbossctc, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spbossctc, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBoxSPBossCuopLaiMo) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spcuopmo, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spcuopmo, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBoxSPNvS) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $sp_nvguildRankS, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $sp_nvguildRankS, False)
+	 EndIf
+	 IniWrite($pathconfig&$currentAuto&".config", $config, $sp_timewaitNvS, GUICtrlRead($idInputSPWait)) ; luu time wait sp
+     ;Cuop Mo config
+	 If GUICtrlRead($idCheckBoxMoDe) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_de, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_de, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBoxMoThuong) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_thuong, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_thuong, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBoxMoKho) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_kho, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_kho, False)
+	 EndIf
+EndFunc   ;=> writeconfig
 Func _setCmdStart($Title) ; set cmd to start Nox
    If $Title == "NoxPlayer" Then
 	  Return "Nox.exe"

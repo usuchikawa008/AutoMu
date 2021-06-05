@@ -95,7 +95,7 @@ EndFunc   ;==>GotoPB
 
 
 Func GotoCuopMo($Title,$emuport,$Handle) ;;function cuop mo
-      Local $cuopmoflag = False
+    Local $cuopmoflag = False
     If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
 		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
@@ -105,8 +105,8 @@ Func GotoCuopMo($Title,$emuport,$Handle) ;;function cuop mo
 	_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1480 459");click to menu dao mo
 	Sleep(1000)
 	;check het luot cuop hay chua
-	$Imagehetluot = @ScriptDir & "\image\hetluotcuop.bmp"
-    $p = _HandleImgSearch($Handle,$Imagehetluot, 0, 0, -1, -1,100, 10);search con luot hay ko
+	Local $Imagehetluot = @ScriptDir & "\image\hetluotcuop.bmp"
+    Local $p = _HandleImgSearch($Handle,$Imagehetluot, 0, 0, -1, -1,100, 10);search con luot hay ko
     If not @error Then;het luot
 	   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1485 211");back to menu hoat dong
 	   Return SetError(3)
@@ -115,20 +115,37 @@ Func GotoCuopMo($Title,$emuport,$Handle) ;;function cuop mo
 	Sleep(1000)
 
 	  ;cuop mo thuong
-      $Imagecuopmothuong = @ScriptDir & "\image\cuopmothuong.bmp"
-	  $pthuong = _HandleImgSearch($Handle,$Imagecuopmothuong, 0, 0, -1, -1,70, 10);search mo thuong
-	  If not @error Then
-		 $cuopmoflag = True
-		 writelog("Tim Thay mo thuong...chuan bi cuop " & _NowTime() & @CRLF) ; write console
-		 ControlClick($Title, "", "","", 1,$pthuong[1][0], $pthuong[1][1]) ; click to thuong
+	  Local $flagcuop_mo_kho = IniRead($pathconfig&$Title&".config", $config, $cuop_mo_kho, False)
+	  If $flagcuop_mo_kho == True Then
+		 Local $Imagecuopmokho = @ScriptDir & "\image\cuopmokho.bmp"
+		 Local $pkho = _HandleImgSearch($Handle,$Imagecuopmokho, 0, 0, -1, -1,70, 10);search mo thuong
+		 If not @error Then
+			$cuopmoflag = True
+			writelog("Tim Thay mo kho...chuan bi cuop " & _NowTime() & @CRLF) ; write console
+			ControlClick($Title, "", "","", 1,$pkho[1][0], $pkho[1][1]) ; click to thuong
+		 EndIf
+	  EndIf
+	  ;cuop mo thuong
+	  Local $flagcuop_mo_thuong = IniRead($pathconfig&$Title&".config", $config, $cuop_mo_thuong, False)
+	  If $flagcuop_mo_thuong == True Then
+		 Local $Imagecuopmothuong = @ScriptDir & "\image\cuopmothuong.bmp"
+		 Local $pthuong = _HandleImgSearch($Handle,$Imagecuopmothuong, 0, 0, -1, -1,70, 10);search mo thuong
+		 If not @error Then
+			$cuopmoflag = True
+			writelog("Tim Thay mo thuong...chuan bi cuop " & _NowTime() & @CRLF) ; write console
+			ControlClick($Title, "", "","", 1,$pthuong[1][0], $pthuong[1][1]) ; click to thuong
+		 EndIf
 	  EndIf
 	  ;code cuop mo de
-	  $Imagecuopmode = @ScriptDir & "\image\cuopmode.bmp"
-	  $p = _HandleImgSearch($Handle,$Imagecuopmode, 0, 0, -1, -1,70, 10);search mo de
-	  If not @error Then
-		 $cuopmoflag = True
-		 writelog("Tim Thay mo de...chuan bi cuop " & _NowTime() & @CRLF) ; write console
-		 ControlClick($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click to dễ
+	  Local $flagcuop_mo_de = IniRead($pathconfig&$Title&".config", $config, $cuop_mo_de, False)
+	  If $flagcuop_mo_de == True Then
+		 Local $Imagecuopmode = @ScriptDir & "\image\cuopmode.bmp"
+		 $pde = _HandleImgSearch($Handle,$Imagecuopmode, 0, 0, -1, -1,70, 10);search mo de
+		 If not @error Then
+			$cuopmoflag = True
+			writelog("Tim Thay mo de...chuan bi cuop " & _NowTime() & @CRLF) ; write console
+			ControlClick($Title, "", "","", 1,$pde[1][0], $pde[1][1]) ; click to dễ
+		 EndIf
 	  EndIf
 	  If $cuopmoflag == True Then
 		  Sleep(1000)

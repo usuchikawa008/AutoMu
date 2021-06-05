@@ -106,30 +106,43 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 
 
 Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
+	  Local $flagHoTong = False
 	  If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
 		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
 		WinActivate($Title)
 		WinActivate($myLastWin)
+	 EndIf
+	  Local $Now = _NowTime(4);time hien tai
+	  Local $flag_baotang_11h = IniRead($pathconfig&$Title&".config", $config, $baotang11h, False)
+	  If $flag_baotang_11h == True Then
+		 Local $var1 = StringRegExpReplace($Now, "[:]", "")
+		 Local $timestart = StringRegExpReplace("11:00", "[:]", "")
+		 Local $timeend = StringRegExpReplace("12:00", "[:]", "")
+		 If $var1 > $timestart And $var1 < $timeend Then
+			$flagHoTong = True
+		 Else
+			writelog("Khong trong thoi gian Ho Tong 11h -> 12h" & _NowTime() & @CRLF) ; write console
+		 EndIf
 	  EndIf
-	   Local $Now = _NowTime(4);time hien tai
-	   Local $Hotongbaotang = False
-	   Local $dayofweek = _getDayofWeek()
-	   If $dayofweek == $T3 OR $dayofweek == $T5 OR $dayofweek == $T7 Then
-	   EndIf
-
-	   Local $var1 = StringRegExpReplace($Now, "[:]", "")
-	   Local $timestart = StringRegExpReplace("21:00", "[:]", "")
-	   Local $timeend = StringRegExpReplace("22:00", "[:]", "")
-	   If $var1 > $timestart And $var1 < $timeend Then
-
-	   Else
-		 writelog("Khong trong thoi gian Ho Tong 21 -> 22h" & _NowTime() & @CRLF) ; write console
+	  Local $flag_baotang_21h = IniRead($pathconfig&$Title&".config", $config, $baotang21h, False)
+	  If $flag_baotang_21h == True Then
+		 Local $var1 = StringRegExpReplace($Now, "[:]", "")
+		 Local $timestart = StringRegExpReplace("21:00", "[:]", "")
+		 Local $timeend = StringRegExpReplace("22:00", "[:]", "")
+		 If $var1 > $timestart And $var1 < $timeend Then
+			$flagHoTong = True
+		 Else
+			writelog("Khong trong thoi gian Ho Tong 21h -> 22h" & _NowTime() & @CRLF) ; write console
+		 EndIf
+	  EndIf
+	  If $flagHoTong <> True Then
+		 writelog("Khong the ho tong luc nay" & _NowTime() & @CRLF) ; write console
 		 Return
-	   EndIf
-	   Local $ImageHoTong = @ScriptDir & "\image\conluothotong.bmp"
-	   Local $ImagehetluotHoTong = @ScriptDir & "\image\hetluothotong.bmp"
-	   Local $p = _searchNVAdvance($Handle,$ImagehetluotHoTong,$ImageHoTong,90,90,3);search nv ho tong
+	  EndIf
+	  Local $ImageHoTong = @ScriptDir & "\image\conluothotong.bmp"
+	  Local $ImagehetluotHoTong = @ScriptDir & "\image\hetluothotong.bmp"
+	  Local $p = _searchNVAdvance($Handle,$ImagehetluotHoTong,$ImageHoTong,90,90,3);search nv ho tong
 	  If @error Then ; het luot
 		 Return SetError(3)
 	  EndIf
@@ -147,7 +160,7 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click toi image
 		 Sleep(2000)
 		 Local $Image1tren3 = @ScriptDir & "\image\theluc1tren3.bmp"
-		 Local $rs = _HandleImgWaitExist($Handle, $Image1tren3,1, 0, 0, -1, -1,80, 2);search image 1/3 the luc
+		 Local $rs = _HandleImgWaitExist($Handle, $Image1tren3,1, 400, 430, 100, 50,90, 2);search image 1/3 the luc
 		 ;chon loai ho tong
 		 If Not @error Then ; xu li ho tong 1 the luc
 			writelog("Di Bao Tang Bac" & _NowTime() & @CRLF) ; write console

@@ -7,40 +7,40 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 	 EndIf
 	 Sleep(1000)
 	 ; check xem blood het luot hay chua
-    $ImagePathHetLuot = @ScriptDir & "\image\bloodhetluot.bmp"
-	$result = _HandleImgWaitExist($Handle, $ImagePathHetLuot,1, 0, 0, -1, -1,105, 10);search blood het luot
+    Local $ImagePathHetLuot = @ScriptDir & "\image\bloodhetluot.bmp"
+	Local $result = _HandleImgWaitExist($Handle, $ImagePathHetLuot,1, 0, 0, -1, -1,105, 10);search blood het luot
 	 If not @error Then
 		Return SetError(3)
 	 EndIf
-    $ImagePath = @ScriptDir & "\image\bloodconluot.bmp"
-	$p = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,120, 10);search so luot pb blood
+    Local $ImagePath = @ScriptDir & "\image\bloodconluot.bmp"
+	Local $p = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,120, 10);search so luot pb blood
 	If @error Then
 	   writelog("Blood chua san sang ...." & _NowTime() & @CRLF) ; write console
 	   Return
 	 EndIf
-	 ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi pb
+	 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi pb
 	 ;cho menu blood xuat hien start
 	 Sleep(1000)
-	 $Imagetoikhieuchien = @ScriptDir & "\image\toikhieuchienblood.bmp"
-	 $p = _HandleImgWaitExist($Handle, $Imagetoikhieuchien,30, 0, 0, -1, -1,80, 10); search trong vong 30s
+	 Local $Imagetoikhieuchien = @ScriptDir & "\image\toikhieuchienblood.bmp"
+	 Local $p = _HandleImgWaitExist($Handle, $Imagetoikhieuchien,30, 0, 0, -1, -1,80, 10); search trong vong 30s
         If @error Then
 		   return
 	    Else
-		   $Imagehetve = @ScriptDir & "\image\hetveblood.bmp"
-	       $rshetve = _HandleImgSearch($Handle, $Imagehetve, 500, 440, 50, 50,120, 2);search so luot pb blood
+		   Local $Imagehetve = @ScriptDir & "\image\hetveblood.bmp"
+	       Local $rshetve = _HandleImgSearch($Handle, $Imagehetve, 500, 440, 50, 50,120, 2);search so luot pb blood
 		   If not @error Then
 			   writelog("Het ve blood...." & _NowTime() & @CRLF) ; write console
 			   ;xu li het ve
 			   Local $flagghepVe = IniRead($pathImage&"1.tmp", $general, $ghepveblood, ""); check flag ghep ve
 			   If $flagghepVe == True Then
-					ControlClick($Title, "", "","", 1,$rshetve[1][0]+500, $rshetve[1][1]+440) ; click vao het ve
+					_ControlClickExactly($Title, "", "","", 1,$rshetve[1][0]+500, $rshetve[1][1]+440) ; click vao het ve
 					Sleep(1000)
 					_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
 					Sleep(1000)
-					$Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
-					$rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,80, 2);search icon gep ve
+					Local $Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
+					Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,80, 2);search icon gep ve
 					If not @error Then
-						 ControlClick($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+270) ; click vao ghep ve
+						 _ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+270) ; click vao ghep ve
 					Else
 						 writelog("Loi..ko the ghep ve luc nay...." & _NowTime() & @CRLF) ; write console
 						 Return
@@ -61,11 +61,11 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 		   writelog("Chuan bi vao blood...." & _NowTime() & @CRLF) ; write console
 		   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click Khieu chien
 		   ;Confirm
-		   $Imagekientrivao = @ScriptDir & "\image\kientrivaoblood.bmp"
-		   $p1 = _HandleImgWaitExist($Handle, $Imagekientrivao,2, 0, 0, -1, -1,80, 2); search kien tri vao
+		   Local $Imagekientrivao = @ScriptDir & "\image\kientrivaoblood.bmp"
+		   Local $p1 = _HandleImgWaitExist($Handle, $Imagekientrivao,2, 0, 0, -1, -1,80, 2); search kien tri vao
 		   If not @error Then
 			  writelog("kien tri vao...." & _NowTime() & @CRLF) ; write console
-			  ControlClick($Title, "", "","", 1,$p1[1][0], $p1[1][1]) ; click kien tri vao
+			  _ControlClickExactly($Title, "", "","", 1,$p1[1][0], $p1[1][1]) ; click kien tri vao
 		   EndIf
 		EndIf
 	 ;cho menu blood xuat hien end
@@ -80,8 +80,8 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 	  writelog("Xac nhan da vo pho ban blood wait 80s " & @CRLF) ; write console
 	  Sleep(80000);cho 80s
 	  writelog("Cho ket thuc pb blood...." & _NowTime() & @CRLF) ; write console
-	  $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,91, 2);search nut menu
+	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,91, 2);search nut menu
 EndFunc   ;==>GotoPB
 
 
@@ -101,7 +101,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 		 Return SetError(3)
 	  Else
 		 writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
-		 ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
+		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
 		 Sleep(2000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
 		 ;click toi xac nhan
