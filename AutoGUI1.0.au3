@@ -105,6 +105,16 @@ Global Const $sp_timewaitNvS = "SpWaitNvS"
 Global Const $cuop_mo_de = "MoDe"
 Global Const $cuop_mo_thuong = "MoThuong"
 Global Const $cuop_mo_kho = "MoKho"
+Global Const $bossTG_top1= "BossTGTop1"
+Global Const $bossTG_top2 = "BossTGTop2"
+Global Const $bossTG_top3 = "BossTGTop3"
+Global Const $bosCTC_boss1 = "BossCTCBoss1"
+Global Const $bosCTC_boss2 = "BossCTCBoss2"
+Global Const $bosCTC_boss3 = "BossCTCBoss3"
+Global Const $bosCTC_boss4 = "BossCTCBoss4"
+Global Const $bosCTC_boss5 = "BossCTCBoss5"
+Global Const $bosCTC_boss6 = "BossCTCBoss6"
+
 ;config path end
 _checkMacIP()
 _setHardMode(False)
@@ -197,6 +207,8 @@ Func Gui()
 			  IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $phaodai, False)
 		   EndIf
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $hotroguild, True)
+		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $bossthegioi, False)
+		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $bosschientruong, False)
 		   ; init status
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $blood, $notyet)
@@ -236,6 +248,16 @@ Func Gui()
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_de, True)
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_thuong, True)
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_kho, False)
+			;init config boss
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top1, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top2, False)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top3, False)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss1, False)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss2, False)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss3, False)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss4, True)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss5, True)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss6, True)
 	    EndIf
 	 Next
 	 ;search tat ca gia lap da tung chay o foler config
@@ -281,6 +303,8 @@ Func Gui()
 	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||Config", $hListHoatDong)
 	Global $idItemPhaoDai = GUICtrlCreateListViewItem("Pháo Đài Đỏ ||", $hListHoatDong)
 	Global $idItemHoTro = GUICtrlCreateListViewItem("Hỗ Trợ Guild ||Config", $hListHoatDong)
+	Global $idItemBossTG = GUICtrlCreateListViewItem("Boss Thế Giới ||Config", $hListHoatDong)
+	Global $idItemBossCTC = GUICtrlCreateListViewItem("Boss Chiến Trường ||Config", $hListHoatDong)
 ;~ 	_GUICtrlStatusBar_SetText($g_hStatus, "Current Emulator: " & $currentAuto); set default
 	GUICtrlSetData($JblNotify,"Current Emulator: " & $currentAuto)
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 0, $LVSCW_AUTOSIZE) ;auto size column hoat dong
@@ -299,8 +323,8 @@ Func Gui()
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxTruyenCong = GUICtrlCreateCheckbox("Tự truyền công trong tụ hội guild ", 20, 245, 200, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
-    #region Panel1
-    Global $DefaultChildGui = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
+    #region Panel1 config
+    Global $ChildGuiConfig = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
 	;group NV Guild
 	GUICtrlCreateGroup("Nhiệm Vụ Guild", 2, 5, 320, 65)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
@@ -343,12 +367,41 @@ Func Gui()
     Local $idBtn_Save = GUICtrlCreateButton("Save", 250, 365, 70, 25)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
 	GUICtrlSetBkColor(-1, 0xf2f2f2)
-    $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_STYLE)
-    $iExStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($DefaultChildGui), $GWL_EXSTYLE)
-    GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $DefaultChildGui)
-	#endregion Panel1
+    $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($ChildGuiConfig), $GWL_STYLE)
+    $iExStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($ChildGuiConfig), $GWL_EXSTYLE)
+    GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $ChildGuiConfig)
+	#endregion Panel1 config
+	#region Panel1 config boss
+    Global $ChildGuiConfig_Boss = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
+	;group Boss The Gioi
+	GUICtrlCreateGroup("Boss Thế Giới", 2, 5, 320, 65)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idChonBossTop= GUICtrlCreateLabel("Chọn boss top ", 10, 20, 150, 25)
+	Global $idRadio1 = GUICtrlCreateRadio("Top 1", 10, 40, 60, 20)
+    Global $idRadio2= GUICtrlCreateRadio("Top 2", 110, 40, 60, 20)
+    Global $idRadio3= GUICtrlCreateRadio("Top 3", 210, 40, 60, 20)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group Boss CTC
+	GUICtrlCreateGroup("Boss Chiến Trường", 2, 75, 320, 70)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxCon1 = GUICtrlCreateCheckbox("Boss 1 (yếu nhất)", 10, 90, 100, 25)
+    Global $idCheckBoxCon2 = GUICtrlCreateCheckbox("Boss 2", 110, 90, 50, 25)
+    Global $idCheckBoxCon3 = GUICtrlCreateCheckbox("Boss 3", 210, 90, 50, 25)
+    Global $idCheckBoxCon4 = GUICtrlCreateCheckbox("Boss 4", 10, 110, 50, 25)
+    Global $idCheckBoxCon5 = GUICtrlCreateCheckbox("Boss 5", 110, 110, 50, 25)
+    Global $idCheckBoxCon6 = GUICtrlCreateCheckbox("Boss 6 (mạnh nhất)", 210, 110, 110, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+    ;Button Save boss config
+    Local $idBtn_Save_Config = GUICtrlCreateButton("Save", 250, 365, 70, 25)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+	GUICtrlSetBkColor(-1, 0xf2f2f2)
+    $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($ChildGuiConfig_Boss), $GWL_STYLE)
+    $iExStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($ChildGuiConfig_Boss), $GWL_EXSTYLE)
+    GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $ChildGuiConfig_Boss)
+	#endregion Panel1 config boss
     GUISetState(@SW_SHOW, $hGUI)
-	GUISetState(@SW_HIDE, $DefaultChildGui)
+	GUISetState(@SW_HIDE, $ChildGuiConfig)
+    GUISetState(@SW_HIDE, $ChildGuiConfig_Boss)
     GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 ;~ 	GUICtrlSetState(-1, $GUI_SHOW) ; Use this!
 	; Loop until the user exits.
@@ -427,12 +480,22 @@ Func Gui()
 					  _setAutoTruyenCong(False)
 				   EndIf
 			EndSwitch
-		 Case $DefaultChildGui ;button Save config
+		 Case $ChildGuiConfig ;button Save config
 			Switch $iGuiMsg[0]
 			   Case $idBtn_Save
 				   writeconfig()
 				   WinSetState($hWndListHoatDong,"",@SW_SHOW)
-				   GUISetState(@SW_HIDE, $DefaultChildGui)
+				   GUISetState(@SW_HIDE, $ChildGuiConfig)
+				   GUISetState(@SW_HIDE, $ChildGuiConfig_Boss)
+				   GUICtrlSetState($tabItemHoatDong, $GUI_SHOW) ; Use this!
+			EndSwitch
+		 Case $ChildGuiConfig_Boss ;button Save config boss
+			Switch $iGuiMsg[0]
+			   Case $idBtn_Save_Config
+				   writeconfig()
+				   WinSetState($hWndListHoatDong,"",@SW_SHOW)
+				   GUISetState(@SW_HIDE, $ChildGuiConfig)
+				   GUISetState(@SW_HIDE, $ChildGuiConfig_Boss)
 				   GUICtrlSetState($tabItemHoatDong, $GUI_SHOW) ; Use this!
 			EndSwitch
 		 EndSwitch
@@ -625,6 +688,18 @@ EndFunc
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $hotroguild, True)
 			  Else
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $hotroguild, False)
+			  EndIf
+		  Case 16 ; Boss TG
+			  If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $bossthegioi, True)
+			  Else
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $bossthegioi, False)
+			  EndIf
+		  Case 17 ; Boss CTC
+			  If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $bosschientruong, True)
+			  Else
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $bosschientruong, False)
 			  EndIf
 		EndSwitch
 EndFunc
@@ -888,30 +963,33 @@ Func _updateAcTion()
 	 Else
 		_GUICtrlListView_SetItemChecked($hListHoatDong, 15,False)
 	 EndIf
+	 ;auto update boss tg line 16
+	 Local $sReadBossTG = IniRead($path&$currentAuto&".tmp", $hoatdong, $bossthegioi, False)
+	 Local $statusBossTG = IniRead($pathstatus&$currentAuto&".tmp", $status, $bossthegioi, $notyet)
+	 GUICtrlSetData($idItemBossTG, "|"&$statusBossTG)
+	 GUICtrlSetColor($idItemBossTG,_changeColor($statusBossTG))
+	 If $sReadBossTG == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 16)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 16,False)
+	 EndIf
+	 ;auto update boss ctc line 17
+	 Local $sReadBossCTC = IniRead($path&$currentAuto&".tmp", $hoatdong, $bosschientruong, False)
+	 Local $statusBossCTC = IniRead($pathstatus&$currentAuto&".tmp", $status, $bosschientruong, $notyet)
+	 GUICtrlSetData($idItemBossCTC, "|"&$statusBossCTC)
+	 GUICtrlSetColor($idItemBossCTC,_changeColor($statusBossCTC))
+	 If $sReadBossCTC == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 17)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 17,False)
+	 EndIf
 	 ;Auto resize column
-;~ 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 2, $LVSCW_AUTOSIZE) ;auto size column emulator
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	 _GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 ;~ 	 _ProcessResume(_getProcess());resume
   EndFunc
 Func _reloadEmu($switch)
      $currentAuto =  $switch
-;~      GUICtrlSetData($idItemHuyenCanh, "||")
-;~ 	 GUICtrlSetData($idItemBlood, "||")
-;~ 	 GUICtrlSetData($idItemBossCaNhan, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemTienThuong, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemDaoMo, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemCuopMo, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemTreoMay, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemNVGuild, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemTinhAnh, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemLayThanhVat, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemBossGuild12h, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemTuHoiGuild12h, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemDevil, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemBaoTang, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemPhaoDai, "||"&$currentAuto)
-;~ 	 GUICtrlSetData($idItemHoTro, "||"&$currentAuto)
      _updateAcTion()
 	 _refeshLogAuto()
 	 readconfig()
@@ -922,9 +1000,7 @@ Func _reloadEmu($switch)
 EndFunc
 Func _changeColor($status)
 	 IF $status == $done then Return 0xFF0000
-
 	 If $status == $doing Then Return 0x0000FF
-
      Return 0
 EndFunc
 Func _resetStatus()
@@ -944,6 +1020,8 @@ Func _resetStatus()
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $baotang, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $phaodai, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $hotroguild, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossthegioi, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bosschientruong, $notyet)
      _updateAcTion()
 
 EndFunc
@@ -981,7 +1059,9 @@ Func _checkAndUncheckAll($sState)
 		 Else
 			IniWrite($path&$currentAuto&".tmp", $hoatdong, $phaodai, $sState)
 		 EndIf
-	 EndIf
+	  EndIf
+	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $bossthegioi, $sState)
+	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $bosschientruong, $sState)
      _updateAcTion()
 
 EndFunc
@@ -1116,6 +1196,8 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		   IniWrite($path&$NoxOff&".tmp", $hoatdong, $phaodai, False)
 		EndIf
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $hotroguild, True)
+		IniWrite($path&$NoxOff&".tmp", $hoatdong, $bossthegioi, False)
+		IniWrite($path&$NoxOff&".tmp", $hoatdong, $bosschientruong, False)
 		; init status
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $huyencanh, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $blood, $notyet)
@@ -1133,6 +1215,8 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $baotang, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $phaodai, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $hotroguild, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bossthegioi, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bosschientruong, $notyet)
 		; init Run
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $pid, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $finish, "")
@@ -1153,6 +1237,17 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_de, True)
 		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_thuong, True)
 		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_kho, False)
+		 ;init config boss
+
+		IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top1, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top2, False)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top3, False)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss1, False)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss2, False)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss3, False)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss4, True)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss5, True)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss6, True)
 	 EndIf
    Next
  EndFunc
@@ -1206,20 +1301,29 @@ Func changeStatus($statusHoatDong)
 		  Case 13 ; Hộ Tống
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $baotang, $statusHoatDong)
 
-		 Case 14 ; Pháo Đài
+		  Case 14 ; Pháo Đài
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $phaodai, $statusHoatDong)
 		  Case 15 ; hỖ TRỢ guild
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $hotroguild, $statusHoatDong)
+		  Case 16 ; hỖ TRỢ guild
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossthegioi, $statusHoatDong)
+		  Case 17 ; hỖ TRỢ guild
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $bosschientruong, $statusHoatDong)
 	  EndSwitch
 	  _updateAcTion()
 EndFunc   ;==>
 Func checkConfigurator()
    ConsoleWrite($sItemTextHoatDong&@CRLF)
    ConsoleWrite($indexItemHoatDong&@CRLF)
-   if ($sItemTextHoatDong == "Config") Then
-		 WinSetState($hWndListHoatDong,"",@SW_HIDE)
-		 readconfig()
-		 GUISetState(@SW_SHOW, $DefaultChildGui)
+   if $sItemTextHoatDong == "Config" Then
+	  WinSetState($hWndListHoatDong,"",@SW_HIDE)
+	  readconfig()
+	  If $indexItemHoatDong == 16 Or $indexItemHoatDong == 17 then ;config boss
+		 GUISetState(@SW_SHOW, $ChildGuiConfig_Boss)
+	  else
+		 GUISetState(@SW_SHOW, $ChildGuiConfig)
+	  endif
+
    EndIf
 EndFunc   ;==>Copy2Dsktp
 
@@ -1299,6 +1403,62 @@ Func readconfig()
 	 Else
 		GUICtrlSetState($idCheckBoxMoKho,$GUI_UNCHECKED)
 	 EndIf
+     ;Boss TG config
+     Local $checkbox_config_bosstop1 = IniRead($pathconfig&$currentAuto&".config", $config, $bossTG_top1, False)
+     If $checkbox_config_bosstop1 == True Then
+		GUICtrlSetState($idRadio1,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idRadio1,$GUI_UNCHECKED)
+	 EndIf
+	  Local $checkbox_config_bosstop2 = IniRead($pathconfig&$currentAuto&".config", $config, $bossTG_top2, False)
+     If $checkbox_config_bosstop2 == True Then
+		GUICtrlSetState($idRadio2,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idRadio2,$GUI_UNCHECKED)
+	 EndIf
+     Local $checkbox_config_bosstop3 = IniRead($pathconfig&$currentAuto&".config", $config, $bossTG_top3, False)
+     If $checkbox_config_bosstop3 == True Then
+		GUICtrlSetState($idRadio3,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idRadio3,$GUI_UNCHECKED)
+	 EndIf
+	  ;Boss CTC config
+	  Local $checkbox_config_bossCTC_boss1 = IniRead($pathconfig&$currentAuto&".config", $config, $bosCTC_boss1, False) ;con 1
+     If $checkbox_config_bossCTC_boss1 == True Then
+		GUICtrlSetState($idCheckBoxCon1,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxCon1,$GUI_UNCHECKED)
+	 EndIf
+	  Local $checkbox_config_bossCTC_boss2 = IniRead($pathconfig&$currentAuto&".config", $config, $bosCTC_boss2, False); con 2
+     If $checkbox_config_bossCTC_boss2 == True Then
+		GUICtrlSetState($idCheckBoxCon2,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxCon2,$GUI_UNCHECKED)
+	 EndIf
+     Local $checkbox_config_bossCTC_boss3 = IniRead($pathconfig&$currentAuto&".config", $config, $bosCTC_boss3, False) ; con 3
+     If $checkbox_config_bossCTC_boss3 == True Then
+		GUICtrlSetState($idCheckBoxCon3,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxCon3,$GUI_UNCHECKED)
+	 EndIf
+	  Local $checkbox_config_bossCTC_boss4 = IniRead($pathconfig&$currentAuto&".config", $config, $bosCTC_boss4, False) ; con 4
+     If $checkbox_config_bossCTC_boss4 == True Then
+		GUICtrlSetState($idCheckBoxCon4,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxCon4,$GUI_UNCHECKED)
+	 EndIf
+     Local $checkbox_config_bossCTC_boss5 = IniRead($pathconfig&$currentAuto&".config", $config, $bosCTC_boss5, False) ; con 5
+     If $checkbox_config_bossCTC_boss5 == True Then
+		GUICtrlSetState($idCheckBoxCon5,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxCon5,$GUI_UNCHECKED)
+	 EndIf
+	  Local $checkbox_config_bossCTC_boss6 = IniRead($pathconfig&$currentAuto&".config", $config, $bosCTC_boss6, False) ; con 6
+     If $checkbox_config_bossCTC_boss6 == True Then
+		GUICtrlSetState($idCheckBoxCon6,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxCon6,$GUI_UNCHECKED)
+	 EndIf
 EndFunc   ;=> readconfig
 Func writeconfig()
      ;NV GUILD
@@ -1362,6 +1522,53 @@ Func writeconfig()
 		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_kho, True)
 	 Else
 		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_kho, False)
+	 EndIf
+	  ;Boss TG write config
+     If GUICtrlRead($idRadio1) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top1, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top1, False)
+	 EndIf
+	  If GUICtrlRead($idRadio2) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top2, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top2, False)
+	 EndIf
+     If GUICtrlRead($idRadio3) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top3, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top3, False)
+	 EndIf
+    ;Boss CTC write config
+	  If GUICtrlRead($idCheckBoxCon1) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss1, True) ;con 1
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss1, False)
+	 EndIf
+	  If GUICtrlRead($idCheckBoxCon2) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss2, True) ;con 2
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss2, False)
+	 EndIf
+	  If GUICtrlRead($idCheckBoxCon3) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss3, True) ;con 3
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss3, False)
+	 EndIf
+	  If GUICtrlRead($idCheckBoxCon4) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss4, True) ;con 4
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss4, False)
+	 EndIf
+	  If GUICtrlRead($idCheckBoxCon5) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss5, True) ;con 5
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss5, False)
+	 EndIf
+	  If GUICtrlRead($idCheckBoxCon6) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss6, True) ;con 6
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss6, False)
 	 EndIf
 EndFunc   ;=> writeconfig
 Func _setCmdStart($Title) ; set cmd to start Nox

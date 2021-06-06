@@ -1,9 +1,9 @@
 [Run]
-PID = 14768
-Finish = 
-Name_In_Game = SUNTAXI
+PID = 12024
+Finish =True
+Name_In_Game = SmartBoy
 
 
-StatusNox =Onl
+StatusNox =Off
 cmdStart = Nox.exe
 

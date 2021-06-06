@@ -28,7 +28,7 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
 Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
-Global Const $expireDate = "06/06/2021" ; format MM/DD/YYYY
+Global Const $expireDate = "06/10/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
 Global Const $pathconfig = @ScriptDir&"\config\"
@@ -68,6 +68,8 @@ Global Const $devil = "Devil"
 Global Const $baotang = "BaoTang"
 Global Const $phaodai = "PhaoDai"
 Global Const $hotroguild = "HoTroGuild"
+Global Const $bossthegioi = "BossTheGioi"
+Global Const $bosschientruong = "BossChienTruong"
 ;config auto Run
 Global Const $run = "Run"
 Global Const $finish = "Finish"
@@ -101,6 +103,15 @@ Global Const $sp_timewaitNvS = "SpWaitNvS"
 Global Const $cuop_mo_de = "MoDe"
 Global Const $cuop_mo_thuong = "MoThuong"
 Global Const $cuop_mo_kho = "MoKho"
+Global Const $bossTG_top1= "BossTGTop1"
+Global Const $bossTG_top2 = "BossTGTop2"
+Global Const $bossTG_top3 = "BossTGTop3"
+Global Const $bosCTC_boss1 = "BossCTCBoss1"
+Global Const $bosCTC_boss2 = "BossCTCBoss2"
+Global Const $bosCTC_boss3 = "BossCTCBoss3"
+Global Const $bosCTC_boss4 = "BossCTCBoss4"
+Global Const $bosCTC_boss5 = "BossCTCBoss5"
+Global Const $bosCTC_boss6 = "BossCTCBoss6"
 ;config path end
 ;~ Global $Nox_Path = "D:\Program Files\Nox\bin"
 
@@ -477,7 +488,6 @@ Func Auto()
 	#cs
 	10. Lay Thanh Vat
 	#ce
-;~ 	If $LayThanhVatDone == False Then
 	   Local $scheckboxlaythanhvat = IniRead($path&$Title&".tmp", $hoatdong, $laythanhvat, False)
 	   Local $statuslaythanhvat = IniRead($pathstatus&$Title&".tmp", $status, $laythanhvat, $notyet)
 	   If $scheckboxlaythanhvat == True And $statuslaythanhvat <> $done Then
@@ -497,7 +507,6 @@ Func Auto()
 		  EndIf
 		  Sleep(2000)
 	   EndIf
-;~ 	EndIf
 
 
 
@@ -639,7 +648,7 @@ Func Auto()
 		  Local $var1 = StringRegExpReplace($Now, "[:]", "")
 		  Local $timestart = StringRegExpReplace("20:30", "[:]", "")
 		  Local $timeend = StringRegExpReplace("20:35", "[:]", "")
-		  ;check het time boss guild chua
+		  ;check het time phao dai chua
 		  If $var1 > $timeend Then
 			 writelog("Het Thoi Gian Phao Dai...." & _NowTime() & @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
@@ -647,7 +656,7 @@ Func Auto()
 		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$doing) ; change status doing
-			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #tinhanh.au3
+			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #blood.au3
 			 If @error Then
 				writelog("Het Thoi Gian Phao Dai...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
@@ -659,7 +668,7 @@ Func Auto()
 	   EndIf
 	EndIf
 	   #cs
-	16. Hotro Guild
+	15. Hotro Guild
 	#ce
 	   Local $scheckboxhotro = IniRead($path&$Title&".tmp", $hoatdong, $hotroguild, False)
 	   If $scheckboxhotro == True Then
@@ -669,6 +678,50 @@ Func Auto()
 		  IniWrite($pathstatus&$Title&".tmp", $status, $hotroguild,$doing) ; change status doing
 		  Local $rsHotro = _GotoHoTroGuild($Title,$emuport,$hwnd) ; nv ho tro guild in tinhanh.au3
 		  IniWrite($pathstatus&$Title&".tmp", $status, $hotroguild,$notyet) ; change status wait
+		  Sleep(2000)
+	   EndIf
+#cs
+	16. Boss The Gioi
+	#ce
+	   Local $scheckboxBossTG = IniRead($path&$Title&".tmp", $hoatdong, $bossthegioi, False)
+	   Local $statusBossTG = IniRead($pathstatus&$Title&".tmp", $status, $bossthegioi, $notyet)
+	   If $scheckboxBossTG == True And $statusBossTG <> $done Then
+		  $countNV = $countNV + 1
+		  $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $bossthegioi,$doing) ; change status doing
+		  _GotoBossTheGioi($Title,$emuport,$hwnd) ; nv boss the gioi #tinhanh.au3
+		  If @error Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $bossthegioi,$done) ; change status done
+			 writelog("16. Hoan Thanh Boss The Gioi..." & _NowTime() & @CRLF) ; write console
+		  Else
+			  IniWrite($pathstatus&$Title&".tmp", $status, $bossthegioi,$notyet) ; change status wait
+		  EndIf
+		  Sleep(2000)
+	   EndIf
+	   #cs
+	17. Boss Chien Truong
+	#ce
+	   Local $scheckboxBossCTC = IniRead($path&$Title&".tmp", $hoatdong, $bosschientruong, False)
+	   Local $statusBossCTC = IniRead($pathstatus&$Title&".tmp", $status, $bosschientruong, $notyet)
+	   If $scheckboxBossCTC == True And $statusBossCTC <> $done Then
+		  $countNV = $countNV + 1
+		  $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $bosschientruong,$doing) ; change status doing
+		  _GotoBossCTC($Title,$emuport,$hwnd) ; nv boss CTC #tinhanh.au3
+		  If @error Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $bosschientruong,$done) ; change status done
+			 writelog("17. Hoan Thanh Boss Chien Truong..." & _NowTime() & @CRLF) ; write console
+		  Else
+			  IniWrite($pathstatus&$Title&".tmp", $status, $bosschientruong,$notyet) ; change status wait
+		  EndIf
 		  Sleep(2000)
 	   EndIf
 	Sleep(2000)
@@ -714,7 +767,6 @@ Func CheckInPbOrNot($Title,$Handle)
 	  Else
 		 writelog("Tim thay menu " & _NowTime() & @CRLF) ; write console
 		 Opt("WinTitleMatchMode", 3)
-;~ 		 writelog($Result[1][0] &" " & $Result[1][1] & @CRLF) ; write console
 		 ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click menu
 		 ExitLoop
 	  EndIf
@@ -919,7 +971,7 @@ Func _checkPhaoDaiDo()
 		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$doing) ; change status doing
-			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #tinhanh.au3
+			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #blood.au3
 			 If @error Then
 				writelog("Het Thoi Gian Phao Dai...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
@@ -933,7 +985,7 @@ Func _checkPhaoDaiDo()
 			 writelog("Cho "&$wait &" phut vo phao dai"& @CRLF) ; write console
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$doing) ; change status doing
 			 Sleep($wait*60000)
-			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Boss guild #tinhanh.au3
+			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #blood.au3
 			 If @error Then
 				writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done

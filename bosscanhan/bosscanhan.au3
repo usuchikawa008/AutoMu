@@ -45,7 +45,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 		 writelog("Lựa chọn lại boss " & _NowTime() & @CRLF) ; write console
 		 While 1
 			Local $Imagelockboss = @ScriptDir & "\image\lockbosscanhan.bmp"
-			Local $ResultFilter = _HandleImgWaitExist($Handle,$Imagelockboss,1, 75,75, 100, 500,60, 10);search nv cu hay moi
+			Local $ResultFilter = _HandleImgWaitExist($Handle,$Imagelockboss,1, 75,75, 100, 500,60, 10);search lock boss
 			If not @error Then ; filter boss
 			   if $ResultFilter[0][0] > 2 Then
 				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 170 550 170 700 800"); di chuyen cuon len 1 chut
