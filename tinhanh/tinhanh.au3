@@ -144,7 +144,7 @@ Func _GotoBossTheGioi($Title,$emuport,$Handle)
 					 writelog("Vo PB Boss The Gioi" & _NowTime() & @CRLF) ; write console
 					 Sleep(2000)
 					 _Covu()
-					 AdLibRegister("_cauGiupGuild", 13000);auto run this function every 13 s trigger cau giup guild
+					 AdLibRegister("_cauGiupGuild", 10000);auto run this function every 13 s trigger cau giup guild
 					 Local $ImageMenu = @ScriptDir & "\image\menu.bmp"
 					 Local $Result = _HandleImgWaitExist($Handle, $ImageMenu,300, 660,30, 60, 50,94, 2);search nut menu trong 300 de ket thuc
 					 AdlibUnRegister("_cauGiupGuild")
@@ -557,7 +557,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
 			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,80, 2);search toi trong 15s
 			If not @error Then ; thay toi ho tro\
-			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+26, $Result[1][1]+280) ; click toi
 			   Sleep(5000)
 			Else ;ket thuc bos
 			   ExitLoop
@@ -582,11 +582,11 @@ Return 1
 EndFunc   ;==>GotoPB
 
 Func _Covu()
-	  Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
+	  Sleep(1000)
 	  For $i = 0 to 4 Step + 1
-		 Sleep(1000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
+		 Sleep(300)
 	  Next
 	  Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu

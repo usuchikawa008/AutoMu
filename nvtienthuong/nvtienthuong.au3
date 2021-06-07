@@ -6,8 +6,8 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 		WinActivate($myLastWin)
 	 EndIf
 	 Sleep(500)
-		 $ImagePathHet = @ScriptDir & "\image\tienthuonghetluot.bmp"
-		 $ImagePathCon = @ScriptDir & "\image\tienthuongconluot1.bmp"
+		 Local $ImagePathHet = @ScriptDir & "\image\tienthuonghetluot.bmp"
+		 Local $ImagePathCon = @ScriptDir & "\image\tienthuongconluot1.bmp"
 		 Local $p = _searchNVAdvance($Handle,$ImagePathHet,$ImagePathCon,90,115);search nv tien thuong
 		 If @error Then
 			Return SetError(3)
@@ -28,8 +28,8 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,3, 290, 200, 250, 50,120, 10); search icon finish or not
 		 If @error Then
 		 Else
-			$Imagecheck = @ScriptDir & "\image\nvmoihaycu.bmp"
-			$Result2 = _HandleImgSearch($Handle,$Imagecheck, 0, 0, -1, -1,50, 10);search nv cu hay moi
+			Local $Imagecheck = @ScriptDir & "\image\nvmoihaycu.bmp"
+			Local $Result2 = _HandleImgSearch($Handle,$Imagecheck, 0, 0, -1, -1,50, 10);search nv cu hay moi
 			If not @error Then ;neu tim thay la nv cu
 			   writelog("Chua Finish..lam tiep nv cu " & _NowTime() & @CRLF) ; write console
 			Else
@@ -43,8 +43,8 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 	     ;cho menu nv tien thuong xuat hien
 		 Sleep(1000)
 		 writelog("Cho menu nv tien thuong xuat hien " & _NowTime() & @CRLF) ; write console
-		 $ImagePath = @ScriptDir & "\image\nhannvtienthuong.bmp"
-		 $p = _HandleImgWaitExist($Handle, $ImagePath,30, 0, 0, -1, -1,100, 10); search nhan nv tien thuong
+		 Local $ImagePath = @ScriptDir & "\image\nhannvtienthuong.bmp"
+		 Local $p = _HandleImgWaitExist($Handle, $ImagePath,30, 0, 0, -1, -1,100, 10); search nhan nv tien thuong
 		 If @error Then
 			Return
 		 Else
@@ -96,6 +96,15 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 615");click Nhan/Toi Nhiem Vu
 			Sleep($second*60000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 635 539");click to space to sure stop nv
+			Local $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
+			If Not @error Then
+			   writelog("Nhan Thuong NV Tien Thuong" & _NowTime() & @CRLF) ; write console
+			   Sleep(1000)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 250");click Nhan/Toi Nhiem Vu
+			   Sleep(1000)
+			   _closeSimple($Handle);tat cua so
+			EndIf
 		 EndIf
 
 EndFunc   ;==>Goto Tien Thuong
@@ -227,8 +236,8 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			   EndIf
 			   Sleep(2000)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
-			   $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
-			   $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
+			   Local $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
+			   Local $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
 			   If Not @error Then
 				  writelog("Thay NV Tien Thuong" & _NowTime() & @CRLF) ; write console
 				  Sleep(1000)
@@ -334,8 +343,8 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			EndIf
 			Sleep(2000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
-			$ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
-			$Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
+			Local $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
 			If Not @error Then
 			   writelog("Thay NV Tien Thuong" & _NowTime() & @CRLF) ; write console
 			   Sleep(1000)

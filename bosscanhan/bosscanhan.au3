@@ -79,7 +79,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  Sleep(30000)
 	  writelog("cho pb ket thuc...." & _NowTime() & @CRLF) ; write console
 	  $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  $Result = _HandleImgWaitExist($Handle, $ImagePath,420, 660,30, 60, 50,85, 2);search nut menu max 7p
+	  $Result = _HandleImgWaitExist($Handle, $ImagePath,420, 660,30, 60, 50,95, 2);search nut menu max 7p
 	  If not @error Then
 		 writelog("Ket Thuc " & _NowTime() & @CRLF) ; write console
 	  EndIf
