@@ -138,14 +138,14 @@ Func _GotoPhaoDaiDo($Title,$emuport,$Handle)
 	  If @error Then ;het luot
 		 Return SetError(3)
 	  Else
-		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi icon phao dai
+		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon phao dai
 		 writelog("Vao Phao Dai " & _NowTime() & @CRLF) ; write console
 		 Sleep(2000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
 		 ;click confirm neu dang trong party
 		 writelog("Cho ket thuc phao dai...." & _NowTime() & @CRLF) ; write console
 		 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,660, 660,30, 60, 50,85, 2);search nut menu
+		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,660, 660,30, 60, 50,94, 2);search nut menu
 	  EndIf
 	  Sleep(2000)
 EndFunc   ;==>GotoPB

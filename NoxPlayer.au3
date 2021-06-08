@@ -655,6 +655,10 @@ Func Auto()
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
 			 Return
 		  EndIf
+		  Local $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$doing) ; change status doing
 			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #blood.au3

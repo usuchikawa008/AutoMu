@@ -671,12 +671,13 @@ Func _checkBossCTC($y)
 		 writelog("Vao pb CTC" & _NowTime() & @CRLF) ; write console
 		 Sleep(10000); cho toi boss
 		 Local $ImageCauGiupGuild = @ScriptDir & "\image\caugiupguild.bmp"
-		 Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,20,0, 0, -1, -1,78,5 );search icon xac nhan
-		 If not @error Then ; thay icon xac nhan nghia la da~ gap boss
+		 Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,20,0, 0, -1, -1,78,5 );search icon cau giup guild
+		 If not @error Then ; thay icon cau giup guild ngia la da gap boss
+			_ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click vo diem vua tim thay
 			AdLibRegister("_cauGiupGuild", 11000);auto run this function every 11 s trigger cau giup guild
 			Local $i
 			For $i = 1 to 50 Step + 1
-			   Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,15,662, 272, 100, 40,90, 2 );search icon cau giup guild
+			   Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,15,662, 272, 100, 40,80, 2 );search icon cau giup guild
 			   If not @error Then
 				  Sleep(10000)
 			   Else
