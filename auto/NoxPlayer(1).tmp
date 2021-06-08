@@ -1,9 +1,6 @@
 [Run]
-PID = 14376
-Finish = 
-Name_In_Game = Lee
-
-
-StatusNox =Onl
-cmdStart = Nox.exe -clone:Nox_1
-
+PID=
+Finish=
+Name_In_Game=
+StatusNox=Onl
+cmdStart=Nox.exe -clone:Nox_1

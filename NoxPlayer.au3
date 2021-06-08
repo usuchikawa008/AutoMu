@@ -207,13 +207,13 @@ If $checkHARDMOD == True Then
    writelog("Run with hard mode"& @CRLF) ; write console
    $maxloop = 999999;
 EndIf
-$loadname = False
-_checkExpireDate() ; kiem tra het han auto
- If @error Then
-	  msgbox(0, '' , "Auto has been expired")
-	  IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
- Exit 0
- EndIf
+Local $loadname = False
+;~ _checkExpireDate() ; kiem tra het han auto
+;~  If @error Then
+;~ 	  msgbox(0, '' , "Auto has been expired")
+;~ 	  IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
+;~  Exit 0
+;~  EndIf
 If $statusNoxx == $off Then
    _startAndLogin()
 EndIf
@@ -1092,11 +1092,11 @@ Func _getNameCharacter()
 	   Return 1
 	EndFunc   ;==> Get Name Character
 Func _checkExpireDate()
-	  Local $currentDate = _getCurrentDate() ;MM/DD/YYYY
+	   Local $currentDate = _getCurrentDate() ;MM/DD/YYYY
 	   $current = StringRegExpReplace($currentDate, "[/]", "")
 	   $expire = StringRegExpReplace($expireDate, "[/]", "")
 	   If $current > $expire Then Return SetError(3)
-	   EndFunc   ;==> Get Name Character
+ EndFunc   ;==> check ExpireDate
 
 Func _resetStatus()
      IniWrite($pathstatus&$Title&".tmp", $status, $huyencanh, $notyet)
