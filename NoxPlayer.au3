@@ -116,7 +116,14 @@ Global Const $bosCTC_boss6 = "BossCTCBoss6"
 ;~ Global $Nox_Path = "D:\Program Files\Nox\bin"
 
 Global $checkOCR = IniRead($pathImage&"1.tmp", $general, $OCRFlag, False);kiem tra co open OCR hay ko
-Global $Nox_Path = @ScriptDir&"\adb"
+Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); luu vo config
+If $temp == "" Then
+   MsgBox(0,"","Khong tim thay duong dan Nox" &@CRLF ) ; write console
+   IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
+   Exit 0
+Else
+   Global $Nox_Path = $temp
+EndIf
 Func writelog($textlog)
   Opt("WinTitleMatchMode", 3)
   Local $hFileOpen = FileOpen($pathLog&$Title&".log", $FO_APPEND)

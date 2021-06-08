@@ -96,6 +96,8 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 615");click Nhan/Toi Nhiem Vu
 			Sleep($second*60000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 635 539");click to space to sure stop nv
+			Sleep(1000)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
 			Local $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
 			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,2, 290, 200, 250, 50,130, 10); search nv tien thuong hoan thanhe
 			If Not @error Then

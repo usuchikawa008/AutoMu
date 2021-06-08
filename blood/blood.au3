@@ -26,6 +26,7 @@ Func GotoPBBlood($Title,$emuport,$Handle)
         If @error Then
 		   return
 	    Else
+		   Sleep(1500)
 		   Local $Imagehetve = @ScriptDir & "\image\hetveblood.bmp"
 	       Local $rshetve = _HandleImgSearch($Handle, $Imagehetve, 500, 440, 50, 50,120, 2);search so luot pb blood
 		   If not @error Then
@@ -57,7 +58,7 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 				  Return SetError(3)
 			   EndIf
 
-		   EndIf
+			   EndIf
 		   writelog("Chuan bi vao blood...." & _NowTime() & @CRLF) ; write console
 		   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click Khieu chien
 		   ;Confirm

@@ -389,14 +389,8 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  WEnd
 	  AdlibUnRegister("_xacNhan")
 	   _closeSimple($Handle); dong cua so
-	  Sleep(1000)
-	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
-	  For $i = 0 to 4 Step + 1
-		 Sleep(1000)
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
-	  Next
-	  Sleep(1000)
-	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
+	  Sleep(1500)
+	  _Covu()
 	  Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
 	  EndIf

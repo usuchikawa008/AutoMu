@@ -20,6 +20,7 @@
 #include <Constants.au3>
 #include <WinAPI.au3>
 #include <ButtonConstants.au3>
+#include <getPathProcess.au3>
 
 
 
@@ -124,6 +125,7 @@ _setAutoGhepVeBlood(True)
 _setAutoAnThit(True)
 _setAutoTruyenCong(True)
 $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
+ConsoleWrite($Nox_PathFull)
 Global $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
 Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
 If $temp == "" Then
@@ -1592,20 +1594,14 @@ Func _setCmdStart($Title) ; set cmd to start Nox
    EndIf
 EndFunc
 
-Func _WinGetPath($Title="", $strComputer='localhost')
-    $win = WinGetTitle($Title)
-   Local $pid = WinGetProcess($win)
-   $wbemFlagReturnImmediately = 0x10
-   $wbemFlagForwardOnly = 0x20
-   $colItems = ""
-   $objWMIService = ObjGet("winmgmts:\\" & $strComputer & "\root\CIMV2")
-   $colItems = $objWMIService.ExecQuery ("SELECT * FROM Win32_Process WHERE ProcessId = " & $pid, "WQL", _
-         $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
-   If IsObj($colItems) Then
-      For $objItem In $colItems
-         If $objItem.ExecutablePath Then Return $objItem.ExecutablePath
-      Next
-   EndIf
+Func _WinGetPath($Title="")
+   Local $pathNox = ""
+   Opt("WinTitleMatchMode", 3)
+   $win = WinGetTitle($Title)
+   If $win == "" then Return $pathNox
+   Local $processID = WinGetProcess($win)
+   $pathNox = _WinAPI_ProcessGetPathname($processID)
+   Return $pathNox
 EndFunc
 
 Func _getProcess() ; pause script

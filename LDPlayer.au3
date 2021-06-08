@@ -152,6 +152,10 @@ If $Title == "NoxPlayer(5)" Then
    Global $emuport = 62029
    HotKeySet("+6", "_Exit") ; Press SHIFT+6 for exit
 EndIf
+If $Title == "LDPlayer" Then
+   Global $emuport = 62029
+   HotKeySet("+6", "_Exit") ; Press SHIFT+6 for exit
+EndIf
 ;config end
 Local $statusNoxx = IniRead($pathAuto&$Title&".tmp", $run, $statusNox, $onl)
 If $statusNoxx == $off Then

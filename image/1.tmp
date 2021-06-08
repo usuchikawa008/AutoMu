@@ -1,10 +1,10 @@
 [General]
-MAC=04:D9:F5:AD:B0:DA
 OCR=True
+MAC=04:D9:F5:AD:B0:DA
 HardMode=False
-NoxPath=D:\Program Files\Nox\bin
 AnDonExp=True
 CamTrain=True
 GhepVeBlood=True
 AutoAnThit=True
 TruyenCong=True
+NoxPath=D:\Program Files\Nox\bin
