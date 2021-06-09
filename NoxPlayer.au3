@@ -805,7 +805,7 @@ Func _close($Handle)
 	  $Result = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,94, 10);search close button
 	  If not @error Then ; thay close
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click close
+		 ControlClick($Title, "", "","", 1,$Result[1][0]+5, $Result[1][1]+5) ; click close
 	  EndIf
 	  $ImagePath2 = @ScriptDir & "\image\close2.bmp"
 	  $Result = _HandleImgWaitExist($Handle, $ImagePath2,1, 0, 0, -1, -1,94, 10);search close button 2

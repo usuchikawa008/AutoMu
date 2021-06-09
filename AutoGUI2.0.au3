@@ -145,26 +145,26 @@ If $CodeData == "" Then
 	  Local $MacValue = Json_Get_Data($Obj, '[0]["MAC"]')
 	  If $CodeValue == $sAnswer Then ; Nhap Code Đúng
 		 If $MacValue == "" Then ; chua co May nao xai code nay ; can put API update
-			Local $idCode = Json_Get_Data($Obj, '[0]["id"]')
-			put_authentication_test("https://60bf0f79320dac0017be452f.mockapi.io/Account/"&$idCode,'{"MAC":"'&$MacString&'"}')
-			IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
+			Local $idValue = Json_Get_Data($Obj, '[0]["id"]')
+			put_authentication_test("https://60bf0f79320dac0017be452f.mockapi.io/Account/"&$idValue,'{"MAC":"'&$MacString&'"}')
 			_checkExpireDate($expireDate) ; kiem tra het han auto
 			If @error Then
 			   msgbox(0, '' , "Auto has been expired")
 			   Exit 0
 			EndIf
+			IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 		 Else
 			If $MacValue <> $MacString Then
 			   MsgBox(0,'',"Auto đã được sử dụng ở máy khác")
 			   Exit 0
 			Else
 			   ConsoleWrite("Auto Start")
-			   IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 			   _checkExpireDate($expireDate) ; kiem tra het han auto
 			   If @error Then
 				  msgbox(0, '' , "Auto has been expired")
 				  Exit 0
 			   EndIf
+			   IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 			EndIf
 
 		 EndIf
@@ -184,25 +184,26 @@ Else
 	  Local $MacValue = Json_Get_Data($Obj, '[0]["MAC"]')
 	  If $CodeValue == $CodeData Then ; Nhap Code Đúng
 		 If $MacValue == "" Then ; chua co May nao xai code nay ; can put API update
-			Local $idCode = Json_Get_Data($Obj, '[0]["id"]')
-			put_authentication_test("https://60bf0f79320dac0017be452f.mockapi.io/Account/"&$idCode,'{"MAC":"'&$MacString&'"}')
+			Local $idValue = Json_Get_Data($Obj, '[0]["id"]')
+			put_authentication_test("https://60bf0f79320dac0017be452f.mockapi.io/Account/"&$idValue,'{"MAC":"'&$MacString&'"}')
 			_checkExpireDate($expireDate) ; kiem tra het han auto
 			If @error Then
 			   msgbox(0, '' , "Auto has been expired")
 			   Exit 0
 			EndIf
+			IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 		 Else
 			If $MacValue <> $MacString Then
 			   MsgBox(0,'',"Auto đã được sử dụng ở máy khác")
 			   Exit 0
 			Else
 			   ConsoleWrite("Auto Start")
-			   IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 			   _checkExpireDate($expireDate) ; kiem tra het han auto
 			   If @error Then
 				  msgbox(0, '' , "Auto has been expired")
 				  Exit 0
 			   EndIf
+			   IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 			EndIf
 		 EndIf
 	  Else

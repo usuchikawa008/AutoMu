@@ -157,12 +157,13 @@ Func _TreoMay($Handle,$p)
 			   Return
 			Else
 			   Sleep(1000)
-			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+			   _closeSimple($Handle);tat cua so
 			   ContinueLoop
 			EndIf
 		 Else
 			Sleep(1000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+;~ 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+			_closeSimple($Handle);tat cua so
 			ContinueLoop
 		 EndIf
 

@@ -1,5 +1,4 @@
 [General]
-OCR=True
 MAC=04:D9:F5:AD:B0:DA
 HardMode=False
 AnDonExp=True
@@ -8,4 +7,3 @@ GhepVeBlood=True
 AutoAnThit=True
 TruyenCong=True
 NoxPath=D:\Program Files\Nox\bin
-CodeClient=593F1UBL1U
