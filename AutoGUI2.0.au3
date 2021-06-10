@@ -49,6 +49,7 @@ Global Const $ghepveblood = "GhepVeBlood"
 Global Const $autoAnThit = "AutoAnThit"
 Global Const $autoTruyenCong = "TruyenCong"
 Global Const $codeClient = "CodeClient"
+Global Const $version = "Version"
 ;config hoat dong start
 Global Const $status = "Status"
 Global Const $notyet = "Wait"
@@ -119,6 +120,27 @@ Global Const $bosCTC_boss4 = "BossCTCBoss4"
 Global Const $bosCTC_boss5 = "BossCTCBoss5"
 Global Const $bosCTC_boss6 = "BossCTCBoss6"
 
+#Region check update latest version
+Global $versionPC = IniRead($pathImage&"version.ini", $general, $version, ""); doc config version
+Local $jsonString = get_authentication_test("https://60bf0f79320dac0017be452f.mockapi.io/Account?Code=DGZRLD1RKC",""); get Json code version
+Local $Obj = Json_Decode($jsonString)
+Local $versionJson = Json_Get_Data($Obj, '[0]["MAC"]')
+If $versionPC == "" Then
+   IniWrite($pathImage&"version.ini", $general, $version, $versionJson); luu vo config
+Else ; da co version o PC -> kiem tra co moi nhat ko
+   If $versionPC == $versionJson Then
+	  ConsoleWrite("Đã ở version mới nhất")
+   Else
+	  ConsoleWrite("Khác version")
+	  Run("AutoUpdate")
+	  IniWrite($pathImage&"version.ini", $general, $version, $versionJson); update version
+	  Exit 0
+   EndIf
+EndIf
+
+#EndRegion update version
+
+#Region check ma code
 Global $CodeData = IniRead($pathImage&"1.tmp", $general, $codeClient, ""); doc config code
 If $CodeData == "" Then
    Local $sAnswer = InputBox("Input Code", "Nhập Mã Code Của Bạn "& @LF & "Nếu Xài Test Không Cần Nhập", "", "",- 1, -1, 0, 0)
@@ -210,8 +232,16 @@ Else
 		 MsgBox(0,'',"Sai Code")
 		 Exit 0
 	  EndIf
-EndIf
-
+EndIf; end check ma code
+#EndRegion chck ma code
+#Region check Nox Path valid
+   Local $temppath = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
+   If StringInStr($temppath, "Nox",$STR_CASESENSE) == 0 Then ; neu chua tim dc path -> tim lai
+	  Local $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
+	  Local $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
+	  IniWrite($pathImage&"1.tmp", $general, $noxpath, $Nox_Path); luu vo config
+   EndIf
+#EndRegion check Nox Path valid
 Func _checkExpireDate($expireDate)
 	   Local $currentDate = _getCurrentDate() ;MM/DD/YYYY
 	   $current = StringRegExpReplace($currentDate, "[/]", "")
@@ -219,6 +249,7 @@ Func _checkExpireDate($expireDate)
 	   If $current > $expire Then Return SetError(3)
 EndFunc   ;==> check ExpireDate
 ;config path end
+
 _checkMacIP()
 _setHardMode(False)
 _setAnExp(True)
@@ -226,13 +257,7 @@ _setCamTrainKhiHetNV(True)
 _setAutoGhepVeBlood(True)
 _setAutoAnThit(True)
 _setAutoTruyenCong(True)
-$Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
-ConsoleWrite($Nox_PathFull)
-Global $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
-Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
-If $temp == "" Then
-   IniWrite($pathImage&"1.tmp", $general, $noxpath, $Nox_Path); luu vo config
-EndIf
+
 Gui()
 Func Gui()
 
@@ -430,42 +455,42 @@ Func Gui()
     #region Panel1 config
     Global $ChildGuiConfig = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
 	;group NV Guild
-	GUICtrlCreateGroup("Nhiệm Vụ Guild", 2, 5, 320, 65)
+	GUICtrlCreateGroup("Nhiệm Vụ Guild", 2, 5, 320, 45)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
-    Global $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("Làm nhiệm vụ cấp S", 10, 20, 150, 25)
-	Global $idInputTimeWaitNVRankS = GUICtrlCreateInput("",30,48,25,15,$ES_NUMBER)
-	Global $idLableText = GUICtrlCreateLabel("Đợi",10,50,20,15)
-	Global $idLableText2 = GUICtrlCreateLabel("giây sau đó bỏ qua NV này",60,50,140,15)
+    Global $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("NV cấp S", 10, 20, 70, 25)
+	Global $idInputTimeWaitNVRankS = GUICtrlCreateInput("",110,23,25,15,$ES_NUMBER)
+	Global $idLableText = GUICtrlCreateLabel("Đợi",90,25,20,15)
+	Global $idLableText2 = GUICtrlCreateLabel("giây sau đó bỏ qua NV này",138,25,140,15)
 	GUICtrlSetLimit(-1, 3) ; to limit the entry to 3 chars
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;group NV Tinh Anh
-	GUICtrlCreateGroup("Săn Tinh Anh", 2, 75, 320, 45)
+	GUICtrlCreateGroup("Săn Tinh Anh", 2, 55, 320, 45)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
-    Global $idCheckBoxSanTinhAnh = GUICtrlCreateCheckbox("Săn tinh anh ở tầng thấp hơn 1 bậc", 10, 90, 200, 25)
+    Global $idCheckBoxSanTinhAnh = GUICtrlCreateCheckbox("Săn tinh anh ở tầng thấp hơn 1 bậc", 10, 70, 200, 25)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
     ;group Hộ Tống Bảo Tàng
-	GUICtrlCreateGroup("Hộ Tống Bảo Tàng", 2, 125, 320, 45)
+	GUICtrlCreateGroup("Hộ Tống Bảo Tàng", 2, 105, 320, 45)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
-    Global $idCheckBox11h = GUICtrlCreateCheckbox("11h -> 12h", 10, 140, 70, 25)
-	Global $idCheckBox21h = GUICtrlCreateCheckbox("21h -> 22h", 110, 140, 70, 25)
+    Global $idCheckBox11h = GUICtrlCreateCheckbox("11h -> 12h", 10, 120, 70, 25)
+	Global $idCheckBox21h = GUICtrlCreateCheckbox("21h -> 22h", 110, 120, 70, 25)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;group Hỗ Trợ Guild
-	GUICtrlCreateGroup("Hỗ Trợ Guild", 2, 175, 320, 95)
+	GUICtrlCreateGroup("Hỗ Trợ Guild", 2, 155, 320, 75)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
-    Global $idCheckBoxSPBossTG = GUICtrlCreateCheckbox("Boss TG", 10, 190, 80, 25)
-	Global $idCheckBoxSPBossCTC = GUICtrlCreateCheckbox("Boss CTC", 110, 190, 100, 25)
-	Global $idCheckBoxSPBossCuopLaiMo = GUICtrlCreateCheckbox("Cướp lại mỏ", 210, 190, 100, 25)
-	Global $idCheckBoxSPNvS = GUICtrlCreateCheckbox("Hỗ trợ nv guild cấp S", 10, 215, 200, 25)
-    Global $idInputSPWait = GUICtrlCreateInput("",30,243,25,15,$ES_NUMBER)
-	Global $idLableSPText = GUICtrlCreateLabel("Đợi",10,245,20,15)
-	Global $idLableSPText2 = GUICtrlCreateLabel("giây sau đó bỏ qua hỗ trợ NV này",60,245,140,15)
+    Global $idCheckBoxSPBossTG = GUICtrlCreateCheckbox("Boss TG", 10, 170, 80, 25)
+	Global $idCheckBoxSPBossCTC = GUICtrlCreateCheckbox("Boss CTC", 110, 170, 100, 25)
+	Global $idCheckBoxSPBossCuopLaiMo = GUICtrlCreateCheckbox("Cướp lại mỏ", 210, 170, 100, 25)
+	Global $idCheckBoxSPNvS = GUICtrlCreateCheckbox("NV Guild S", 10, 195, 100, 25)
+    Global $idInputSPWait = GUICtrlCreateInput("",130,198,25,15,$ES_NUMBER)
+	Global $idLableSPText = GUICtrlCreateLabel("Đợi",110,200,20,15)
+	Global $idLableSPText2 = GUICtrlCreateLabel("giây sau đó bỏ qua hỗ trợ",158,200,150,15)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;group Cướp mỏ
-	GUICtrlCreateGroup("Cướp Mỏ", 2, 275, 320, 45)
+	GUICtrlCreateGroup("Cướp Mỏ", 2, 235, 320, 45)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
-    Global $idCheckBoxMoDe = GUICtrlCreateCheckbox("Mỏ Dễ", 10, 290, 80, 25)
-	Global $idCheckBoxMoThuong = GUICtrlCreateCheckbox("Mỏ thường", 110, 290, 100, 25)
-	Global $idCheckBoxMoKho = GUICtrlCreateCheckbox("Mỏ khó", 210, 290, 100, 25)
+    Global $idCheckBoxMoDe = GUICtrlCreateCheckbox("Mỏ Dễ", 10, 250, 80, 25)
+	Global $idCheckBoxMoThuong = GUICtrlCreateCheckbox("Mỏ thường", 110, 250, 100, 25)
+	Global $idCheckBoxMoKho = GUICtrlCreateCheckbox("Mỏ khó", 210, 250, 100, 25)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;Button Save
     Local $idBtn_Save = GUICtrlCreateButton("Save", 250, 365, 70, 25)

@@ -619,10 +619,10 @@ Func Auto()
 	     Local $statusBaoTang = IniRead($pathstatus&$Title&".tmp", $status, $baotang, $notyet)
 	     If $scheckboxBaoTang == True And $statusBaoTang <> $done Then
 		  $countNVHenGio = $countNVHenGio + 1
-		  $rs = _openHoatDong()
-		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
-			 Return
-		  EndIf
+		  $rs = _openMenu()
+			 If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+				Return
+			 EndIf
 		  Sleep(500)
 		  IniWrite($pathstatus&$Title&".tmp", $status, $baotang,$doing) ; change status doing
 		  _GotoHoTongBaoTang($Title,$emuport,$hwnd) ; nv hộ tống #laythanhvat
@@ -655,11 +655,11 @@ Func Auto()
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$done) ; change status done
 			 Return
 		  EndIf
-		  Local $rs = _openHoatDong()
-		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
-			 Return
-		  EndIf
 		  If $var1 > $timestart And $var1 < $timeend Then
+			 $rs = _openMenu()
+			 If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+				Return
+			 EndIf
 			 IniWrite($pathstatus&$Title&".tmp", $status, $phaodai,$doing) ; change status doing
 			 _GotoPhaoDaiDo($Title,$emuport,$hwnd) ;Phao Dai Do #blood.au3
 			 If @error Then
@@ -880,7 +880,7 @@ Func _checkbossguild()
 			 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$doing) ; change status doing
 			 _GotoNVBossGuild($Title,$emuport,$hwnd) ;Boss guild #tinhanh.au3
 			 If @error Then
-				writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
+				writelog("Lỗi khi vô boss guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
 				$Boss12hDone = True
 				Return 1
@@ -896,7 +896,7 @@ Func _checkbossguild()
 			 Sleep($wait*60000)
 			 _GotoNVBossGuild($Title,$emuport,$hwnd) ;Boss guild #tinhanh.au3
 			 If @error Then
-				writelog("Het Thoi Gian Vao Boss Guild...." & _NowTime() & @CRLF) ; write console
+				writelog("Lỗi khi vô boss guild...." & _NowTime() & @CRLF) ; write console
 				IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h,$done) ; change status done
 				$Boss12hDone = True
 				Return 1

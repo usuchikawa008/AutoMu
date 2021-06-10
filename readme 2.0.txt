@@ -1,5 +1,5 @@
-Auto Mu Vượt thời đại version 2.0
-Chỉ chạy trên giả lập NOX và độ phân giải màn hình 1600x900
+Auto Mu Vượt thời đại version 2.2
+Chỉ chạy trên giả lập NOX phiên bản 7.0.10 trở xuống và độ phân giải màn hình 1600x900
 Phiên bản hiện tại bao gồm những tính năng :
  - Huyễn cảnh trên không (Tự cổ vũ và giảm tốc)
  - Blood (Tự cổ vũ + ghép vé khi hết)
@@ -18,9 +18,8 @@ Phiên bản hiện tại bao gồm những tính năng :
  - Pháo đài đỏ
  - Hỗ trợ guild
  - Tự động login khi offline
- - Boss TG
- - Boss CTC
-
+ - Boss TG (chọn boss)
+ - Boss CTC (chọn boss)
 Tiện ích :
 - Ăn đan exp khi xong hết NV
 - Cắm train khi xong hết NV

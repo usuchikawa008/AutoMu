@@ -39,5 +39,7 @@ DirMove($_DownLoadPath & "\"& $OldName, $_DownLoadPath & "\"& $NewName) ; doi te
 ;copy
 DirCopy($_DownLoadPath & "\"& $NewName, @scriptDir, $FC_OVERWRITE)
 DirRemove($_DownLoadPath,$DIR_REMOVE)
-Sleep ( 3000 )
+InetClose($_Download)
+Sleep (2000)
+; Close the handle returned by InetGet.
 Exit 0

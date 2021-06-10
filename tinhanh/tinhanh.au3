@@ -132,7 +132,7 @@ Func _GotoBossTheGioi($Title,$emuport,$Handle)
 			   Sleep(1000)
 			   _ControlClickExactly($Title, "", "","", 1,$x, $y-75) ; click len phia tren lock boss
 			   Local $Imagedahoisinh = @ScriptDir & "\image\bosstghoisinh.bmp"
-			   Local $p = _HandleImgWaitExist($Handle,$Imagedahoisinh,1, $x+70,$y-75, 100, 40,110, 5);search top 1 boss hoi sinh
+			   Local $p = _HandleImgWaitExist($Handle,$Imagedahoisinh,1, $x+70,$y-75, 100, 40,112, 5);search top 1 boss hoi sinh
 			   If not @error Then
 				  Sleep(1000)
 				  writelog("Boss top 1 San Sang" & _NowTime() & @CRLF) ; write console
@@ -265,8 +265,9 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 	 Else ;xu li boss nhung ngay con lai trong tuan
 		_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 325 130") ;chuyen sang tab hoat dong han gio
 		 Local $Imagebossguild = @ScriptDir & "\image\bossguild.bmp"
-		 Local $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,120, 2);search boss guild icon
+		 Local $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,115, 2);search boss guild icon
 		 If @error Then ;het luot
+			writelog("Ko thay icon boss guild" & _NowTime() & @CRLF) ; write console
 			Return SetError(3)
 		 Else
 			writelog("Vao Boss Guild 12h " & _NowTime() & @CRLF) ; write console
@@ -412,8 +413,8 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 EndFunc   ;==>GotoPB
 
 Func _GotoHoTroGuild($Title,$emuport,$Handle)
-    Local $flagbosstg = False
-	Local $flagbossctc = False
+    Global $flagbosstg = False
+	Global $flagbossctc = False
 	If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
 		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
@@ -507,7 +508,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
 			   Sleep(6000)
 			   Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-			   Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
+			   Local $rsthoatpbCTC = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
 			   If not @error Then ; da vo pho ban
 				  $flagbossctc = True
 				  ExitLoop
@@ -547,24 +548,26 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 	  WEnd
 	  If $flagbosstg == True Then
 		 _Covu()
+		 writelog("Vo PB Boss TG"& @CRLF) ; write console
 		 While 1
 			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
 			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,80, 2);search toi trong 15s
 			If not @error Then ; thay toi ho tro\
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+26, $Result[1][1]+280) ; click toi
-			   Sleep(5000)
+			   Sleep(10000)
 			Else ;ket thuc bos
 			   ExitLoop
 			EndIf
 		 WEnd
 	  EndIf
 	  If $flagbossctc == True Then
+		 writelog("Vo PB Boss CTC"& @CRLF) ; write console
 		 While 1
 			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
 			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,80, 2);search toi
 			If not @error Then ; thay toi ho tro\
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
-			   Sleep(5000)
+			   Sleep(10000)
 			Else ;ket thuc bos
 			   ExitLoop
 			EndIf
