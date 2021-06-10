@@ -238,6 +238,10 @@ EndIf; end check ma code
    Local $temppath = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
    If StringInStr($temppath, "Nox",$STR_CASESENSE) == 0 Then ; neu chua tim dc path -> tim lai
 	  Local $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
+	  If StringInStr($Nox_PathFull, "Nox",$STR_CASESENSE) == 0 Then
+		 MsgBox(0,'',"Không tìm thấy đường dẫn của Nox, Vui lòng mở NoxPlayer sẵn")
+		 Exit 0
+	  EndIf
 	  Local $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
 	  IniWrite($pathImage&"1.tmp", $general, $noxpath, $Nox_Path); luu vo config
    EndIf
