@@ -21,7 +21,7 @@ Func GotoPBHuyenCanh($Title,$emuport,$Handle)
 		Return
      EndIf
      writelog("Con luot pb huyen canh...."& @CRLF) ; write console
-	 ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi pb
+	 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi pb
 	 Sleep(3000)
 	 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click Khieu chien
 	 Sleep(1000)
@@ -44,7 +44,7 @@ Func GotoPBHuyenCanh($Title,$emuport,$Handle)
 		_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 900 550"); click giam toc
 		writelog("cho pb huyen canh ket thuc" & _NowTime() & @CRLF) ; write console
 	    $ImagePath = @ScriptDir & "\image\menu.bmp"
-	    $Result = _HandleImgWaitExist($Handle, $ImagePath,260, 660,30, 60, 50,94, 2);search nut menu
+	    $Result = _HandleImgWaitExist($Handle, $ImagePath,260, 660,30, 60, 50,103, 2);search nut menu
 	  EndIf
 EndFunc   ;==>GotoPB
 

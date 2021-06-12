@@ -43,6 +43,7 @@ Global Const $general = "General"
 Global Const $hardmode = "HardMode"
 Global Const $mac = "MAC"
 Global Const $noxpath = "NoxPath"
+Global Const $ldplayerpath = "LDPlayerPath"
 Global Const $anExp = "AnDonExp"
 Global Const $camtrain = "CamTrain"
 Global Const $ghepveblood = "GhepVeBlood"
@@ -188,7 +189,6 @@ If $CodeData == "" Then
 			   EndIf
 			   IniWrite($pathImage&"1.tmp", $general, $codeClient, $CodeValue); luu vo config
 			EndIf
-
 		 EndIf
 	  Else
 		 MsgBox(0,'',"Sai Code")
@@ -233,19 +233,36 @@ Else
 		 Exit 0
 	  EndIf
 EndIf; end check ma code
-#EndRegion chck ma code
+#EndRegion check ma code
+Local $nox_start = True
 #Region check Nox Path valid
    Local $temppath = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
-   If StringInStr($temppath, "Nox",$STR_CASESENSE) == 0 Then ; neu chua tim dc path -> tim lai
+   If StringInStr($temppath, "Nox",$STR_CASESENSE) == 0 Then ; neu chua tim dc path Nox -> tim lai
 	  Local $Nox_PathFull = _WinGetPath("NoxPlayer") ;get path cua Nox
 	  If StringInStr($Nox_PathFull, "Nox",$STR_CASESENSE) == 0 Then
-		 MsgBox(0,'',"Không tìm thấy đường dẫn của Nox, Vui lòng mở NoxPlayer sẵn")
-		 Exit 0
+		 $nox_start = False
 	  EndIf
-	  Local $Nox_Path = StringLeft(StringSplit($Nox_PathFull,'.')[1],StringLen(StringSplit($Nox_PathFull,'.')[1])-4)
+	  Local $Nox_Path = StringLeft($Nox_PathFull,StringInStr($Nox_PathFull,"\",0,-1)-1)
 	  IniWrite($pathImage&"1.tmp", $general, $noxpath, $Nox_Path); luu vo config
    EndIf
 #EndRegion check Nox Path valid
+Local $ldp_start = True
+#Region check LDplayer valid
+   Local $temppath = IniRead($pathImage&"1.tmp", $general, $ldplayerpath, ""); doc config
+   If StringInStr($temppath, "LDPlayer",$STR_CASESENSE) == 0 Then ; neu chua tim dc path LDplayer -> tim lai
+	  Local $LD_PathFull = _WinGetPath("LDPlayer") ;get path cua LDplayer
+	  If StringInStr($LD_PathFull, "LDPlayer",$STR_CASESENSE) == 0 Then
+		 $ldp_start = False
+	  EndIf
+	  Local $LD_Path = StringLeft($LD_PathFull,StringInStr($LD_PathFull,"\",0,-1)-1)
+	  IniWrite($pathImage&"1.tmp", $general, $ldplayerpath, $LD_Path); luu vo config
+   EndIf
+#EndRegion check LDplayer valid
+If $nox_start == False and $ldp_start == False Then
+   MsgBox(0,"","không tìm thấy đường dẫn của giả lập, vui lòng mở Ldplayer hoặc Nox")
+   Exit 0
+EndIf
+
 Func _checkExpireDate($expireDate)
 	   Local $currentDate = _getCurrentDate() ;MM/DD/YYYY
 	   $current = StringRegExpReplace($currentDate, "[/]", "")
@@ -299,12 +316,16 @@ Func Gui()
 	_GUICtrlListView_SetHoverTime($hListHoatDong, 1234)
 	Global $countDevices = 0;
 	Global $aCheck[10]    ; Array of CheckBoxes
+	#Region get list emulator online
    ; Retrieve a list of window handles.
-    Local $aList = WinList("[CLASS:Qt5QWindowIcon]")
+    Local $aList = WinList("[CLASS:Qt5QWindowIcon]") ; list Nox
+	Local $aListLDPlayer = WinList("[CLASS:LDPlayerMainFrame]") ; list LD
+	_ArrayAdd($aList,$aListLDPlayer) ; add LDplayer to Nox List
     ; Loop through the array displaying only visable windows with a title.
+	#EndRegion
 	Global $listNoxRunning[10]
-    For $i = 1 To $aList[0][0]
-        If $aList[$i][0] <> "" And BitAND(WinGetState($aList[$i][1]), 2) And StringInStr($aList[$i][0], "NoxPlayer") Then
+    For $i = 1 To UBound($aList)-1
+        If $aList[$i][0] <> "" And BitAND(WinGetState($aList[$i][1]), 2) And (StringInStr($aList[$i][0], "NoxPlayer") OR StringInStr($aList[$i][0], "LDPlayer")) Then
 		   $countDevices = $countDevices + 1
 		   $listNoxRunning[$countDevices] = $aList[$i][0]&".tmp" ;set vo array
 		   $aCheck[$countDevices] = GUICtrlCreateListViewItem($aList[$i][0], $hListEmulators) ;add emulators
@@ -872,7 +893,8 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 			   EndIf
 			  Case $NM_RCLICK ;If it was a right click...to list gia lap
 				 $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam) ;get the information about the item clicked.
-				 $sItemText =  _GUICtrlListView_GetItemText($hWndListView1, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem")) ;store the item text in a global variable in case the get text option is clicked.
+				 ;store the item text in a global variable in case the get text option is clicked.
+				 $sItemText =  _GUICtrlListView_GetItemText($hWndListView1, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem"))
 			     $indexItem = _GUICtrlListView_GetHotItem($hWndListView1) ;store the item index in a global variable in case the get text option is clicked.
 			  Case $NM_DBLCLK,$NM_RDBLCLK ; double click trai or phai
 			  Local $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
@@ -901,7 +923,8 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
             Switch $iCode
                 Case $NM_CLICK, $NM_DBLCLK
                     Local $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam)
-					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem")) ;store the item text in a global variable in case the get text option is clicked.
+					;store the item text in a global variable in case the get text option is clicked.
+					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem"))
 			        $indexItemHoatDong = _GUICtrlListView_GetHotItem($hWndListView2) ;store the item index in a global variable in case the get text option is clicked.
                     Local $iIndex = DllStructGetData($tInfo, "Index")
 
@@ -922,7 +945,8 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 					  EndIf
 			   Case $NM_RCLICK ;If it was a right click...to list hoat dong
 					Local $tInfo = DllStructCreate($tagNMITEMACTIVATE, $lParam) ;get the information about the item clicked.
-					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem")) ;store the item text in a global variable in case the get text option is clicked.
+					;store the item text in a global variable in case the get text option is clicked.
+					$sItemTextHoatDong =  _GUICtrlListView_GetItemText($hWndListView2, DllStructGetData($tInfo, "Index"), DllStructGetData($tInfo, "SubItem"))
 					$indexItemHoatDong = _GUICtrlListView_GetHotItem($hWndListView2) ;store the item index in a global variable in case the get text option is clicked.
 ;~ 			   Case $LVN_HOTTRACK ; Sent by a list-view control when the user moves the mouse over an item
 ;~                     $tInfo = DllStructCreate($tagNMLISTVIEW, $lParam)
@@ -1233,11 +1257,13 @@ Func _updateEmulatorAuto() ; refresh status AUTO emulator
 Func _updateStatusAuto() ; update status AUTO emulator
 	  Local $NoxListConfig = _FileListToArrayRec($pathAuto, "*tmp", $FLTAR_FILES,0,0, $FLTAR_NOPATH )
 	  Local $ListNox = WinList("[CLASS:Qt5QWindowIcon]"); list Nox
+	  Local $ListLDPlayer = WinList("[CLASS:LDPlayerMainFrame]"); list LDPlayer
+	  _ArrayAdd($ListNox,$ListLDPlayer) ; add LDplayer to Nox List
 ;~ 	  _ArrayDisplay($ListNox)
 	  Local $count = 0
 	  Local $NoxRunning[10]
-	  For $i = 1 To $ListNox[0][0]
-        If $ListNox[$i][0] <> "" And BitAND(WinGetState($ListNox[$i][1]), 2) And StringInStr($ListNox[$i][0], "NoxPlayer") Then
+	  For $i = 1 To UBound($ListNox)-1
+        If $ListNox[$i][0] <> "" And BitAND(WinGetState($ListNox[$i][1]), 2) And (StringInStr($ListNox[$i][0], "NoxPlayer") Or StringInStr($ListNox[$i][0], "LDPlayer")) Then
 		   $count = $count + 1
 		   $NoxRunning[$count] = $ListNox[$i][0]&".tmp" ;set vo array
 	    EndIf
@@ -1723,6 +1749,25 @@ Func _setCmdStart($Title) ; set cmd to start Nox
    If $Title == "NoxPlayer(5)" Then
 	  Return "Nox.exe -clone:Nox_5"
    EndIf
+   If $Title == "LDPlayer" Then
+	  Return "dnconsole.exe launch --index 0"
+   EndIf
+   If $Title == "LDPlayer-1" Then
+	  Return "dnconsole.exe launch --index 1"
+   EndIf
+   If $Title == "LDPlayer-2" Then
+	  Return "dnconsole.exe launch --index 2"
+   EndIf
+   If $Title == "LDPlayer-3" Then
+	  Return "dnconsole.exe launch --index 3"
+   EndIf
+   If $Title == "LDPlayer-4" Then
+	  Return "dnconsole.exe launch --index 4"
+   EndIf
+   If $Title == "LDPlayer-5" Then
+	  Return "dnconsole.exe launch --index 5"
+   EndIf
+   Return ""
 EndFunc
 
 Func _WinGetPath($Title="")

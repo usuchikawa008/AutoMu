@@ -97,31 +97,44 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 	 Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 325 130") ;chuyen sang tab hoat dong han gio
 	  $Imagebossguild = @ScriptDir & "\image\devilicon.bmp"
-	  $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,110, 2);search boss guild icon
-	  If @error Then ;het luot
-		 Return SetError(3)
+	  Local $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,110, 2);search boss guild icon
+	  If @error Then ;ko tim thay -> tim cach khac
+		 _closeSimple($Handle); dong cua so NV
+		 While 1 ; tim icon boss guild
+			Local $Imagexnho = @ScriptDir & "\image\xnho.bmp"
+			Local $p_nho = _HandleImgWaitExist($Handle,$Imagexnho,1, 630, 190, 20, 20,100, 2);search dau X
+			If Not @error Then ; thay x nho
+			   Local $ImageIconDevil = @ScriptDir & "\image\devilicon2.bmp"
+			   Local $rsDevil= _HandleImgWaitExist($Handle,$ImageIconDevil,1, 550, 225, 100, 100,80, 2);search icon boss guild
+			   If Not @error Then ; thay icon Tu hoi click
+				  _ControlClickExactly($Title, "", "","", 1,$rsDevil[1][0]+550, $rsDevil[1][1]+320) ; click toi ngay
+				  Sleep(2000)
+				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
+				  writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
+				  ;click toi xac nhan
+				  ExitLoop
+			   EndIf
+			   _ControlClickExactly($Title, "", "","", 1,$p_nho[1][0]+631, $p_nho[1][1]+191) ; click tat notify
+			   Sleep(500)
+			Else ; het icon nho
+			   Return SetError(3)
+			EndIf
+		 WEnd
 	  Else
 		 writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
 		 Sleep(2000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
 		 ;click toi xac nhan
-		 Sleep(7000)
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
-		 For $i = 0 to 5 Step + 1
-			Sleep(1000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
-		 Next
-		 Sleep(1000)
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
-		 Sleep(1000)
-;~ 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
-		 EndIf
-		 writelog("Cho 5 phut ket thuc Devil"& @CRLF) ; write console
-		 Sleep(310000); cho 5p
-	   $ImagePath = @ScriptDir & "\image\menu.bmp"
-	   $Result = _HandleImgWaitExist($Handle, $ImagePath,100, 660,30, 60, 50,94, 2);search nut menu
-	   Sleep(2000)
+	  EndIf
+	  Sleep(7000)
+	  _Covu()
+	  Sleep(1000)
+	  writelog("Cho 5 phut ket thuc Devil"& @CRLF) ; write console
+	  Sleep(310000); cho 5p
+	  $ImagePath = @ScriptDir & "\image\menu.bmp"
+	  $Result = _HandleImgWaitExist($Handle, $ImagePath,100, 660,30, 60, 50,94, 2);search nut menu
+	  Sleep(2000)
 EndFunc   ;==>GotoPB
 
 Func _GotoPhaoDaiDo($Title,$emuport,$Handle)

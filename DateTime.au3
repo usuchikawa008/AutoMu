@@ -2,7 +2,7 @@
 Func _getCurrentDate()
   Local $Date = _TimeFromNTP("pool.ntp.org")
   Local $Dateconvert = StringSplit($Date,' ',$STR_ENTIRESPLIT)[1] ;get script name : example Noxplayer
-   Return $Dateconvert
+  Return $Dateconvert
 EndFunc
 
 
@@ -43,8 +43,8 @@ Func _TimeFromNTP($sNTPServer)
     Local $iMonth = StringMid($sUTC, 6, 2), $iDay = StringMid($sUTC, 9, 2), $iYear = StringMid($sUTC, 1, 4), _
     $iHour = StringMid($sUTC, 12, 2), $iMinute = StringMid($sUTC, 15, 2), $iSecond = StringMid($sUTC, 18, 2)
 
-    $sOut = $iMonth & "/" & $iDay & "/" & $iYear & " " & $iHour & ":" & $iMinute & ":" & $iSecond
-
+;~     $sOut = $iMonth & "/" & $iDay & "/" & $iYear & " " & $iHour & ":" & $iMinute & ":" & $iSecond
+    $sOut = $iYear & "/" & $iMonth & "/" & $iDay & " " & $iHour & ":" & $iMinute & ":" & $iSecond
     return $sOut
 
 EndFunc

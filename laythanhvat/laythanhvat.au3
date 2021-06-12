@@ -82,16 +82,9 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap "&$x&" "&$y);click to map
 		 Sleep(1000)
 		 _close($Handle)
-		 Sleep(4000)
-		 Local $Imageduoockhaithac = @ScriptDir & "\image\duockhaithac.bmp"
-		 Local $rs = _HandleImgWaitExist($Handle, $Imageduoockhaithac,4, 0, 0, -1, -1,125, 2);search image duoc khai thac
-		 If Not @error Then
-			writelog("Thay Mo" & _NowTime() & @CRLF) ; write console
-			_ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click toi image duoc khai thac
-			Sleep(2000)
-		 EndIf
+		 Sleep(3000)
 		 Local $Imagekhaithac = @ScriptDir & "\image\khaithacmo.bmp"
-		 Local $rs2 = _HandleImgWaitExist($Handle, $Imagekhaithac,2, 0, 0, -1, -1,80, 2);search image duoc khai thac
+		 Local $rs2 = _HandleImgWaitExist($Handle, $Imagekhaithac,8, 0, 0, -1, -1,90, 2);search image duoc khai thac
 		 If Not @error Then
 			writelog("Khai Thac" & _NowTime() & @CRLF) ; write console
 			_ControlClickExactly($Title, "", "","", 1,$rs2[1][0], $rs2[1][1]) ; click khai thac
@@ -142,7 +135,7 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 	  EndIf
 	  Local $ImageHoTong = @ScriptDir & "\image\conluothotong.bmp"
 	  Local $ImagehetluotHoTong = @ScriptDir & "\image\hetluothotong.bmp"
-	  Local $p = _searchNVAdvance($Handle,$ImagehetluotHoTong,$ImageHoTong,90,90,3);search nv ho tong
+	  Local $p = _searchNVAdvance($Handle,$ImagehetluotHoTong,$ImageHoTong,105,100,3);search nv ho tong
 	  If @error Then ; het luot
 		 Return SetError(3)
 	  EndIf

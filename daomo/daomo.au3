@@ -112,39 +112,39 @@ Func GotoCuopMo($Title,$emuport,$Handle) ;;function cuop mo
 	   Return SetError(3)
 	EndIf
 	_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 300 770");click danh sach cuop doat
-	Sleep(1000)
+	Sleep(1500)
 
 	  ;cuop mo thuong
 	  Local $flagcuop_mo_kho = IniRead($pathconfig&$Title&".config", $config, $cuop_mo_kho, False)
 	  If $flagcuop_mo_kho == True Then
 		 Local $Imagecuopmokho = @ScriptDir & "\image\cuopmokho.bmp"
-		 Local $pkho = _HandleImgSearch($Handle,$Imagecuopmokho, 0, 0, -1, -1,70, 10);search mo thuong
+		 Local $pkho = _HandleImgSearch($Handle,$Imagecuopmokho, 0, 0, -1, -1,100, 5);search mo kho
 		 If not @error Then
 			$cuopmoflag = True
 			writelog("Tim Thay mo kho...chuan bi cuop " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$pkho[1][0], $pkho[1][1]) ; click to thuong
+			_ControlClickExactly($Title, "", "","", 1,$pkho[1][0], $pkho[1][1]) ; click to thuong
 		 EndIf
 	  EndIf
 	  ;cuop mo thuong
 	  Local $flagcuop_mo_thuong = IniRead($pathconfig&$Title&".config", $config, $cuop_mo_thuong, False)
 	  If $flagcuop_mo_thuong == True Then
 		 Local $Imagecuopmothuong = @ScriptDir & "\image\cuopmothuong.bmp"
-		 Local $pthuong = _HandleImgSearch($Handle,$Imagecuopmothuong, 0, 0, -1, -1,70, 10);search mo thuong
+		 Local $pthuong = _HandleImgSearch($Handle,$Imagecuopmothuong, 0, 0, -1, -1,105, 5);search mo thuong
 		 If not @error Then
 			$cuopmoflag = True
 			writelog("Tim Thay mo thuong...chuan bi cuop " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$pthuong[1][0], $pthuong[1][1]) ; click to thuong
+			_ControlClickExactly($Title, "", "","", 1,$pthuong[1][0], $pthuong[1][1]) ; click to thuong
 		 EndIf
 	  EndIf
 	  ;code cuop mo de
 	  Local $flagcuop_mo_de = IniRead($pathconfig&$Title&".config", $config, $cuop_mo_de, False)
 	  If $flagcuop_mo_de == True Then
 		 Local $Imagecuopmode = @ScriptDir & "\image\cuopmode.bmp"
-		 $pde = _HandleImgSearch($Handle,$Imagecuopmode, 0, 0, -1, -1,70, 10);search mo de
+		 Local $pde = _HandleImgSearch($Handle,$Imagecuopmode, 0, 0, -1, -1,105, 5);search mo de
 		 If not @error Then
 			$cuopmoflag = True
 			writelog("Tim Thay mo de...chuan bi cuop " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$pde[1][0], $pde[1][1]) ; click to dễ
+			_ControlClickExactly($Title, "", "","", 2,$pde[1][0], $pde[1][1]) ; click to dễ
 		 EndIf
 	  EndIf
 	  If $cuopmoflag == True Then

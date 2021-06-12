@@ -15,5 +15,5 @@ Devil=False
 BaoTang=False
 PhaoDai=True
 HoTroGuild=True
-BossTheGioi=False
-BossChienTruong=False
+BossTheGioi=True
+BossChienTruong=True

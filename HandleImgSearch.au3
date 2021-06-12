@@ -293,6 +293,7 @@ EndFunc
 ;					Failure: Returns 0 and sets @error to 1
 ; ===============================================================================================================================
 Func _HandleImgSearch($hwnd, $bmpLocal, $x = 0, $y = 0, $iWidth = -1, $iHeight = -1, $Tolerance = 15, $MaxImg = 1000)
+    $scale = _GetDPI_Ratio()
 	If StringInStr($hwnd, "*") Then
 		Local $BMP = Ptr(StringReplace($hwnd, "*", ""))
 		If @error Then
@@ -315,6 +316,9 @@ Func _HandleImgSearch($hwnd, $bmpLocal, $x = 0, $y = 0, $iWidth = -1, $iHeight =
 		EndIf
 	Else
 		Local $Bitmap = _GDIPlus_BitmapCreateFromFile($bmpLocal)
+		$iX = _GDIPlus_ImageGetWidth($Bitmap)
+	    $iY = _GDIPlus_ImageGetHeight($Bitmap)
+		$Bitmap = _GDIPlus_ImageResize($Bitmap, $iX*$scale, $iY*$scale) ;resize image base on scale
 		If @error Then
 			Local $result[1][4] = [[0, 0, 0, 0]]
 			Return SetError(1, 0, $result)
@@ -441,6 +445,7 @@ EndFunc
 ;				   $IsUser32					- Sử dụng User32.dll thay vì _WinAPI_BitBlt (Thử để tìm tuỳ chọn phù hợp)
 ; ===============================================================================================================================
 Func _HandleCapture($hwnd = "", $x = 0, $y = 0, $Width = -1, $Height = -1, $IsBMP = False, $SavePath = "", $IsUser32 = False)
+   $scale = _GetDPI_Ratio()
 	If $hwnd = "" Then
 		Local $Right = $Width = -1 ? -1 : $x + $Width - 1
 		Local $Bottom = $Height = -1 ? -1 : $y + $Height - 1
@@ -476,7 +481,10 @@ Func _HandleCapture($hwnd = "", $x = 0, $y = 0, $Width = -1, $Height = -1, $IsBM
 	Local $hCDC = _WinAPI_CreateCompatibleDC($hDC)
 	If $Width = -1 Then $Width = _WinAPI_GetWindowWidth($Handle)
 	If $Height = -1 Then $Height = _WinAPI_GetWindowHeight($Handle)
-
+	 $x = $x*$scale
+	 $y = $y*$scale
+	 $Width = $Width*$scale
+	 $Height = $Height*$scale
 	If $IsUser32 Then
 		Local $hBMP = _WinAPI_CreateCompatibleBitmap($hDC, _WinAPI_GetWindowWidth($Handle), _WinAPI_GetWindowHeight($Handle))
 		_WinAPI_SelectObject($hCDC, $hBMP)
@@ -526,7 +534,7 @@ Func __ImgSearch($x, $y, $right, $bottom, $BitmapFind, $BitmapSource, $tolerance
 	Local $hBitmapSource = _GDIPlus_BitmapCreateHBITMAPFromBitmap($BitmapSource)
 	Local $Pos, $Error = 0
 	Dim $PosAr[1][4] = [[0,0,0,0]]
-	
+
 	; Tính trước giá trị màu sắc pixel cần thay đổi khi tìm được kết quả
 	Local $LocalPixel = _GDIPlus_BitmapGetPixel($BitmapFind, 0, 0)
 	$LocalPixel = _ColorGetBlue($LocalPixel)
@@ -560,7 +568,7 @@ Func __ImgSearch($x, $y, $right, $bottom, $BitmapFind, $BitmapSource, $tolerance
 		; Set lại màu sắc của vị trí ảnh vừa tìm được
 		_GDIPlus_BitmapSetPixel($BitmapSource, $PosSplit[1], $PosSplit[2], $LocalPixel)
 		_WinAPI_DeleteObject($hBitmapSource)
-		
+
 		; Xác định lại toạ độ $y để không phải tìm từ đầu nếu tìm nhiều ảnh
 		$y = $PosSplit[2]
 
@@ -2113,3 +2121,11 @@ $__HandleImgSearch_Opcode &= "000000000000000"
 
 __HandleImgSearch_StartUp()
 #EndRegion Internal Functions
+Func _GetDPI_Ratio()
+    Local $hWnd = 0
+    Local $hDC = DllCall("user32.dll", "long", "GetDC", "long", $hWnd)
+    Local $aRet = DllCall("gdi32.dll", "long", "GetDeviceCaps", "long", $hDC[0], "long", 10)  ; = reported vert height (not logical, which is param=90)
+    Local $bRet = DllCall("gdi32.dll", "long", "GetDeviceCaps", "long", $hDC[0], "long", 117) ; = true vert pixels of desktop
+    $hDC = DllCall("user32.dll", "long", "ReleaseDC", "long", $hWnd, "long", $hDC)
+    Return $bRet[0] / $aRet[0]
+EndFunc

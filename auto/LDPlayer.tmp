@@ -3,4 +3,4 @@ PID=
 Finish=True
 Name_In_Game=
 StatusNox=Off
-cmdStart=Nox.exe -clone:Nox_2
+cmdStart=dnconsole.exe launch --index 0

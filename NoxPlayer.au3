@@ -27,7 +27,6 @@ EndIf
 ;~ Global $Title =  "NoxPlayer(1)"
 ;~ Global $Title =  "NoxPlayer(1)(1)"
 Sleep(200)
-Global $hwAuto = WinGetHandle("[CLASS:AutoIt v3 GUI]") ;handle cua GUI AUTO de set log
 Global Const $expireDate = "06/10/2021" ; format MM/DD/YYYY
 ;dir config file
 Global Const $path = @ScriptDir&"\hoatdong\"
@@ -37,10 +36,12 @@ Global Const $pathAuto = @ScriptDir&"\auto\"
 Global Const $pathImage = @ScriptDir&"\image\"
 Global Const $pathLog = @ScriptDir&"\log\"
 Global Const $pathOCR = @ScriptDir&"\OCR.jar"
+Global Const $adbpath = @ScriptDir&"\adb"
 Global Const $OCRFlag = "OCR"
 Global Const $general = "General"
 Global Const $hardmode = "HardMode"
 Global Const $noxpath = "NoxPath"
+Global Const $ldplayerpath = "LDPlayerPath"
 Global Const $anExp = "AnDonExp"
 Global Const $camtrain = "CamTrain"
 Global Const $ghepveblood = "GhepVeBlood"
@@ -116,19 +117,32 @@ Global Const $bosCTC_boss6 = "BossCTCBoss6"
 ;~ Global $Nox_Path = "D:\Program Files\Nox\bin"
 
 Global $checkOCR = IniRead($pathImage&"1.tmp", $general, $OCRFlag, False);kiem tra co open OCR hay ko
-Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); luu vo config
-If $temp == "" Then
-   MsgBox(0,"","Khong tim thay duong dan Nox" &@CRLF ) ; write console
-   IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
-   Exit 0
+If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ;-> ldplayer
+   Local $temp = IniRead($pathImage&"1.tmp", $general, $ldplayerpath, ""); doc config ldplayer
+   If $temp == "" Then
+	  MsgBox(0,"","Khong tim thay duong dan LDPlayer" &@CRLF ) ; write console
+	  IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
+	  Exit 0
+   Else
+	  Global $LD_Path = $temp
+   EndIf
 Else
-   Global $Nox_Path = $temp
+   Local $temp = IniRead($pathImage&"1.tmp", $general, $noxpath, ""); doc config
+   If $temp == "" Then
+	  MsgBox(0,"","Khong tim thay duong dan NoxPlayer" &@CRLF ) ; write console
+	  IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
+	  Exit 0
+   Else
+	  Global $Nox_Path = $temp
+   EndIf
 EndIf
+
 Func writelog($textlog)
   Opt("WinTitleMatchMode", 3)
   Local $hFileOpen = FileOpen($pathLog&$Title&".log", $FO_APPEND)
   If $hFileOpen = -1 Then
 	 MsgBox($MB_SYSTEMMODAL, "", "An error occurred whilst writing the temporary file.")
+	 IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
 	 Exit 0
   Else
      FileWriteLine($hFileOpen, $Title & ": " & $textlog)
@@ -159,14 +173,42 @@ If $Title == "NoxPlayer(5)" Then
    Global $emuport = 62029
    HotKeySet("+6", "_Exit") ; Press SHIFT+6 for exit
 EndIf
+If $Title == "LDPlayer" Then
+   Global $emuport = 5554
+EndIf
+If $Title == "LDPlayer-1" Then
+   Global $emuport = 5556
+EndIf
+If $Title == "LDPlayer-2" Then
+   Global $emuport = 5558
+EndIf
+If $Title == "LDPlayer-3" Then
+   Global $emuport = 5560
+EndIf
+If $Title == "LDPlayer-4" Then
+   Global $emuport = 5562
+EndIf
+If $Title == "LDPlayer-5" Then
+   Global $emuport = 5564
+EndIf
 ;config end
-Local $statusNoxx = IniRead($pathAuto&$Title&".tmp", $run, $statusNox, $onl)
+Global $statusNoxx = IniRead($pathAuto&$Title&".tmp", $run, $statusNox, $onl)
 If $statusNoxx == $off Then
-   Local $cmd = IniRead($pathAuto&$Title&".tmp", $run, $cmdStart, "")
+   Global $cmd = IniRead($pathAuto&$Title&".tmp", $run, $cmdStart, "")
    If $cmd <> ""  Then
-	  $cmdfull = $Nox_Path & "\" & $cmd
-	  $DOS = Run($cmdfull, $Nox_Path, @SW_HIDE, $STDERR_MERGED); Start Nox
-	  Sleep(30000)
+	  If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
+		 Local $cmdfull = $LD_Path & "\" & $cmd
+;~ 		 MsgBox(0,"",$cmdfull)
+		 $DOS = Run($cmdfull, $LD_Path, @SW_SHOW, $STDERR_MERGED); Start Nox
+		 Sleep(30000)
+	  Else
+		 Local $cmdfull = $Nox_Path & "\" & $cmd
+;~ 		 MsgBox(0,"",$cmdfull)
+		 $DOS = Run($cmdfull, $Nox_Path, @SW_SHOW, $STDERR_MERGED); Start Nox
+		 Sleep(30000)
+	  EndIf
+
+
    EndIf
 EndIf
 Global $hwnd = GetHwnd($Title);get handle gia lap
@@ -214,11 +256,29 @@ Local $loadname = False
 ;~ 	  IniWrite($pathAuto&$Title&".tmp", $run, $finish,True) ; update finish AUTO
 ;~  Exit 0
 ;~  EndIf
-If $statusNoxx == $off Then
+If $statusNoxx == $off And $cmd <> ""  Then
    _startAndLogin()
 EndIf
-Opt("WinTitleMatchMode", 3)
-WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
+
+_resizeAuto()
+
+Func _resizeAuto()
+   If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; ko phai Nox -> LD player
+	  Local $ImageminiLD = @ScriptDir & "\image\miniModel.bmp"
+	  Local	$ResultLD = _HandleImgWaitExist($hwnd,$ImageminiLD,1, 0, 0, -1, -1,90, 10);search mini
+	  If not @error Then ; thay
+		 ControlClick($Title, "", "","", 1,$ResultLD[1][0], $ResultLD[1][1]) ; click mini
+		 Opt("WinTitleMatchMode", 3)
+		 WinMove($Title, "",Random(0,20) ,Random(0,80) , 849, 512) ;resize auto again
+	  Else
+		 Opt("WinTitleMatchMode", 3)
+		 WinMove($Title, "",Default ,Default , 849, 512) ;resize auto again
+	  EndIf
+   Else ;-> LDplayer
+	  Opt("WinTitleMatchMode", 3)
+	  WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
+   EndIf
+EndFunc
 ;~ _outParty()
 While $countLoop < $maxloop;loop auto 1000 lan
    _close($hwnd) ;close het cua so truoc khi bat dau auto
@@ -736,9 +796,6 @@ Func Auto()
 		 $resetNV = $resetNV + 1
 		 _anDanExp()
 		 _diCamTrain()
-;~ 		 _resetStatus()
-;~ 		 writelog("Reset auto lan "&$resetNV& @CRLF) ; write console
-;~ 		 Return ;next
 	  EndIf
    EndIf
    If $countNV == 0 And $countNVHenGio == 0 Then ; het nv ngay va nv hen gio thi stop auto
@@ -747,14 +804,18 @@ Func Auto()
    EndIf
 EndFunc   ;==>Auto
 Func CheckInPbOrNot($Title,$Handle)
+   Local $x = 94
 	If BitAND(WinGetState($Title), 16) Then
 		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
 		WinActivate($Title)
 		WinActivate($myLastWin)
 	 EndIf
    While 1 ;tim den khi thay menu
-	 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-	 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 0, 0, -1, -1,94, 2);search nut menu
+	  If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
+		 $x = 103
+	  EndIf
+	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 660,30, 60, 50,$x, 2);search nut menu
 	  If @error Then ; ko thay menu
 		  writelog("Tim kiem menu " & @CRLF) ; write console
 		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 450") ;click giua man hinh
@@ -763,7 +824,7 @@ Func CheckInPbOrNot($Title,$Handle)
 		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
 		 If Not @error Then
 			writelog("Dang Trong Pho Ban .. Thoat " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$rsthoatpb[1][0], $rsthoatpb[1][1]) ; click thoat
+			_ControlClickExactly($Title, "", "","", 1,$rsthoatpb[1][0], $rsthoatpb[1][1]) ; click thoat
 			Sleep(700)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 985 600") ;click Xac nhan
 			Sleep(6000)
@@ -772,7 +833,7 @@ Func CheckInPbOrNot($Title,$Handle)
 	  Else
 		 writelog("Tim thay menu " & _NowTime() & @CRLF) ; write console
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click menu
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+1+660, $Result[1][1]+30) ; click menu
 		 ExitLoop
 	  EndIf
    WEnd
@@ -791,7 +852,7 @@ Func _CheckNhanSoiNoi($Title,$Handle)
 		 writelog("Nhan thuong soi noi " & _NowTime() & @CRLF) ; write console
 		 Sleep(500)
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0]+250, $Result[1][1]-30) ; click nhan soi noi
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+250, $Result[1][1]-30) ; click nhan soi noi
 	  EndIf
 EndFunc   ;==>ControlClickWindowsByImage
 
@@ -802,22 +863,22 @@ Func _close($Handle)
 		WinActivate($myLastWin)
 	 EndIf
 	  $ImagePath = @ScriptDir & "\image\close.bmp"
-	  $Result = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,94, 10);search close button
+	  $Result = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,100, 10);search close button
 	  If not @error Then ; thay close
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0]+5, $Result[1][1]+5) ; click close
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+5, $Result[1][1]+5) ; click close
 	  EndIf
 	  $ImagePath2 = @ScriptDir & "\image\close2.bmp"
-	  $Result = _HandleImgWaitExist($Handle, $ImagePath2,1, 0, 0, -1, -1,94, 10);search close button 2
+	  $Result = _HandleImgWaitExist($Handle, $ImagePath2,1, 0, 0, -1, -1,95, 10);search close button 2
 	  If not @error Then ;  thay close
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click close
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click close
 	  EndIf
 	  $ImagePath3 = @ScriptDir & "\image\huy.bmp"
 	  $Result = _HandleImgSearch($Handle, $ImagePath3, 480, 250, 80, 60,149, 2);search huy button
 	  If not @error Then ;  thay huy
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0]+480, $Result[1][1]+250) ; click close
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+480, $Result[1][1]+250) ; click close
 	  EndIf
    EndFunc   ;==>Example
 
@@ -828,10 +889,10 @@ Func _closeSimple($Handle)
 		WinActivate($myLastWin)
 	 EndIf
 	  Local $ImagePath = @ScriptDir & "\image\close.bmp"
-	  Local $Result = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,94, 10);search close button
+	  Local $Result = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,100, 10);search close button
 	  If not @error Then ; thay close
 		 Opt("WinTitleMatchMode", 3)
-		 ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click close
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click close
 	  EndIf
 EndFunc   ;==>Example
 
@@ -1027,13 +1088,25 @@ Func _openMenu()
 EndFunc   ;==>Open menu
 
  Func _ADB_Command($Command, $WorkingDir = @ScriptDir)
-    $DOS = Run($Nox_Path & "\" & $Command, $Nox_Path, @SW_HIDE, $STDERR_MERGED)
-    While 1
-        Sleep(50)
-        If @error Or Not ProcessExists($DOS) Then ExitLoop
-    WEnd
-    $Message = StdoutRead($DOS)
-    Return $Message
+	If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then  ;->LDPlayer
+	   Local $newCommand = StringReplace($Command,"127.0.0.1:","emulator-")
+	   $DOS = Run($adbpath & "\" & $newCommand, $adbpath, @SW_HIDE, $STDERR_MERGED)
+	   While 1
+		   Sleep(50)
+		   If @error Or Not ProcessExists($DOS) Then ExitLoop
+	   WEnd
+	   $Message = StdoutRead($DOS)
+	   Return $Message
+    Else
+	   $DOS = Run($Nox_Path & "\" & $Command, $Nox_Path, @SW_HIDE, $STDERR_MERGED)
+	   While 1
+		   Sleep(50)
+		   If @error Or Not ProcessExists($DOS) Then ExitLoop
+	   WEnd
+	   $Message = StdoutRead($DOS)
+	   Return $Message
+	EndIf
+
  EndFunc   ;==>_ADB_Command
 
 Func _searchNV($Handle, $imagepath, $tor = 115 , $sizeSan = 6)
@@ -1098,21 +1171,11 @@ Func _checkExpireDate()
 	   If $current > $expire Then Return SetError(3)
  EndFunc   ;==> check ExpireDate
 
-Func _resetStatus()
-     IniWrite($pathstatus&$Title&".tmp", $status, $huyencanh, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $blood, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $bosscanhan, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $tienthuong, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $daomo, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $cuopmo, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $treomay, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $nvguild, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $tinhanh, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $bossguild12h, $notyet)
-	 IniWrite($pathstatus&$Title&".tmp", $status, $tuhoiguild8h, $notyet)
-EndFunc
 Func _anDanExp()
+   Local $x_balo = 80
+   If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
+		 $x_balo = 100
+   EndIf
    Local $flagAnExp = IniRead($pathImage&"1.tmp", $general, $anExp, ""); check flag an exp
    If $flagAnExp <> True Then Return
    ;check an Dan
@@ -1121,10 +1184,10 @@ Func _anDanExp()
    While $count < 5
 	  $count = $count + 1
 	  Local $ImageIconBalo = @ScriptDir & "\image\iconBalo.bmp"
-	  Local $Result = _HandleImgWaitExist($hwnd, $ImageIconBalo,2, 687, 328, 45, 45,80, 2);search balo
+	  Local $Result = _HandleImgWaitExist($hwnd, $ImageIconBalo,2, 687, 328, 45, 45,$x_balo, 2);search balo
 	  If not @error Then ; thay balo -> click
 		 writelog("Thay Balo" & @CRLF) ; write console
-		 ControlClick($Title, "", "","", 1,$Result[1][0]+687, $Result[1][1]+328) ; click balo
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+687, $Result[1][1]+328) ; click balo
 		 Sleep(2000)
 		 ;search Dan Exp
 		 While 1
@@ -1132,12 +1195,12 @@ Func _anDanExp()
 			Local $Imageexplon = @ScriptDir & "\image\expLon.bmp"
 			$Result = _HandleImgWaitExist($hwnd,$Imageexplon,1, 0, 0, -1, -1,90, 10);search exp lon
 			If not @error Then ; thay exp -> click
-			   ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp Lon
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp Lon
 			   Sleep(1000)
 			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
 			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,90, 10);search btn su dung
 			   If not @error Then ; thay su dung btn -> click
-				  ControlClick($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
+				  _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
 				  Sleep(1000)
 				  ContinueLoop
 			   EndIf
@@ -1146,12 +1209,12 @@ Func _anDanExp()
 			Local $Imageexpnho = @ScriptDir & "\image\expNho.bmp"
 			$Result = _HandleImgWaitExist($hwnd,$Imageexpnho,1, 0, 0, -1, -1,90, 10);search exp nho
 			If not @error Then ; thay exp -> click
-			   ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
 			   Sleep(1000)
 			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
 			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,90, 10);search btn su dung
 			   If not @error Then ; thay su dung btn -> click
-				  ControlClick($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
+				  _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
 				  Sleep(1000)
 				  ContinueLoop
 			   EndIf
@@ -1182,15 +1245,19 @@ Func _diCamTrain()
 	  Return
    Else
 	  writelog("Di treo may" & @CRLF) ; write console
-	  ControlClick($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
+	  _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
 	  Sleep(20000);Cho 20s
    EndIf
 EndFunc
 Func _findIconMenu($Handle)
+   Local $x = 94
    While 1 ;tim den khi thay menu
-	 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-	 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 0, 0, -1, -1,94, 2);search nut menu
-     If @error Then ; ko thay menu
+	  If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
+		 $x = 103
+	  EndIf
+	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 660,30, 60, 50,$x, 2);search nut menu
+      If @error Then ; ko thay menu
 		  writelog("Tim kiem menu " & @CRLF) ; write console
 		  _close($Handle); close all window
 		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 450") ;click giua man hinh
@@ -1198,11 +1265,11 @@ Func _findIconMenu($Handle)
 		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 0, 0, -1, -1,80, 2);search icon thoat pho ban
 		 If Not @error Then
 			writelog("Dang Trong Pho Ban .. Thoat " & _NowTime() & @CRLF) ; write console
-			ControlClick($Title, "", "","", 1,$rsthoatpb[1][0], $rsthoatpb[1][1]) ; click thoat
+			_ControlClickExactly($Title, "", "","", 1,$rsthoatpb[1][0], $rsthoatpb[1][1]) ; click thoat
 			Sleep(700)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 985 600") ;click Xac nhan
 			Sleep(6000)
-			$Result2 = _HandleImgWaitExist($Handle, $ImagePath,2, 0, 0, -1, -1,94, 2);search nut menu again trong 5s
+			$Result2 = _HandleImgWaitExist($Handle, $ImagePath,2, 0, 0, -1, -1,$x, 2);search nut menu again trong 5s
 		 EndIf
 	  Else
 		 writelog("Tim thay menu " & _NowTime() & @CRLF) ; write console
@@ -1239,13 +1306,17 @@ Func _outParty()
 	  Return
    EndIf
    _findIconMenu($hwnd)
-
-
-
 EndFunc
-Func _ControlClickExactly($Title,$text,$ctrID,$type,$click,$x,$y)
-   Opt("WinTitleMatchMode", 3)
-   ControlClick($Title, $text, $ctrID,$type, $click,$x, $y) ; click dung title
+Func _ControlClickExactly($Title,$text,$ctrID,$type,$click,$x,$y,$singleclick = False)
+   If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; ko phai Nox -> LD player
+	  Opt("WinTitleMatchMode", 3)
+	  ControlClick($Title, $text, $ctrID,$type, 2,$x, $y-34) ; click dung title
+	  ControlClick($Title, $text, $ctrID,$type, 2,$x, $y-34) ; click dung title
+   Else ; Nox
+	  Opt("WinTitleMatchMode", 3)
+      ControlClick($Title, $text, $ctrID,$type, $click,$x, $y) ; click dung title
+   EndIf
+
 EndFunc
 Func _startAndLogin()
    Local $count = 0
@@ -1268,11 +1339,11 @@ Func _startAndLogin()
 			Local $Imagewait = @ScriptDir & "\image\wait.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
-			   ControlClick($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
+			   _ControlClickExactly($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
 			EndIf
 
 			Sleep(2000)
-			ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon game
+			_ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon game
 			ExitLoop
 	    Else
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
@@ -1280,7 +1351,7 @@ Func _startAndLogin()
 			Local $Imagewait = @ScriptDir & "\image\wait.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
-			   ControlClick($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
+			   _ControlClickExactly($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
 			EndIf
 		 EndIf
 		 ;icon lon
@@ -1294,9 +1365,9 @@ Func _startAndLogin()
 			Local $Imagewait = @ScriptDir & "\image\waitBig.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
-			   ControlClick($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
+			   _ControlClickExactly($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
 			EndIf
-			ControlClick($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon game
+			_ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon game
 			Sleep(3000)
 			Opt("WinTitleMatchMode", 3)
 			WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
@@ -1307,7 +1378,7 @@ Func _startAndLogin()
 			Local $Imagewait = @ScriptDir & "\image\waitBig.bmp"
 			Local $Result1 = _HandleImgSearch($hwnd, $Imagewait, 0, 0, -1, -1,149, 2);search icon close App
 			If not @error Then
-			   ControlClick($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
+			   _ControlClickExactly($Title, "", "","", 1,$Result1[1][0], $Result1[1][1]) ; click vo icon close app
 			EndIf
 	    EndIf
 	 WEnd
@@ -1346,13 +1417,13 @@ Func _startAndLogin()
 			$Result = _HandleImgWaitExist($hwnd, $ImagePath2,5, 0, 0, -1, -1,70, 2);search thiet lap treo may
 			If Not @error Then ; ko thay thiet lap
 			   Opt("WinTitleMatchMode", 3)
-			   ControlClick($Title, "", "","", 1,$Result[1][0]+275, $Result[1][1]) ; click xac nhan
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+275, $Result[1][1]) ; click xac nhan
 			EndIf
 			Local $ImagePath3 = @ScriptDir & "\image\close2.bmp"
 			$Result2 = _HandleImgWaitExist($hwnd, $ImagePath3,5, 0, 0, -1, -1,80, 2);search close button 2 trong 15s
 			If not @error Then ; ko thay close
 			   Opt("WinTitleMatchMode", 3)
-			   ControlClick($Title, "", "","", 1,$Result2[1][0], $Result2[1][1]) ; click close
+			   _ControlClickExactly($Title, "", "","", 1,$Result2[1][0], $Result2[1][1]) ; click close
 			EndIf
 		 Else
 		 EndIf
