@@ -1,6 +1,6 @@
 [Run]
-PID=14696
-Finish=True
+PID=8908
+Finish=
 Name_In_Game=
 StatusNox=Onl
 cmdStart=dnconsole.exe launch --index 2

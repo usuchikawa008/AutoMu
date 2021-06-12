@@ -523,8 +523,10 @@ Func _HandleCapture($hwnd = "", $x = 0, $y = 0, $Width = -1, $Height = -1, $IsBM
 EndFunc   ;==>_HandleCapture
 
 #Region Internal Functions
-; Author: Lâm Thành Nhân
+; Author: Lâm Thành Nhân; Phong
 Func __ImgSearch($x, $y, $right, $bottom, $BitmapFind, $BitmapSource, $tolerance = 15, $MaxImg = 1000)
+   $scale = _GetDPI_Ratio()
+   $scaleback =  1 - ($scale - 1)/$scale
 	If $_HandleImgSearch_IsDebug Then
 		_GDIPlus_ImageSaveToFile($BitmapSource, @ScriptDir & "\HandleImgSearchSource.bmp")
 		_GDIPlus_ImageSaveToFile($BitmapFind, @ScriptDir & "\HandleImgSearchFind.bmp")
@@ -560,8 +562,8 @@ Func __ImgSearch($x, $y, $right, $bottom, $BitmapFind, $BitmapSource, $tolerance
 		Local $PosSplit = StringSplit($Pos[0], "|", 2)
 		Redim $PosAr[$i + 1][4]
 		$PosAr[0][0] = $i
-		$PosAr[$i][0] = $PosSplit[1]
-		$PosAr[$i][1] = $PosSplit[2]
+		$PosAr[$i][0] = $PosSplit[1]*$scaleback
+		$PosAr[$i][1] = $PosSplit[2]*$scaleback
 		$PosAr[$i][2] = $PosSplit[3]
 		$PosAr[$i][3] = $PosSplit[4]
 
