@@ -293,7 +293,6 @@ EndFunc
 ;					Failure: Returns 0 and sets @error to 1
 ; ===============================================================================================================================
 Func _HandleImgSearch($hwnd, $bmpLocal, $x = 0, $y = 0, $iWidth = -1, $iHeight = -1, $Tolerance = 15, $MaxImg = 1000)
-    $scale = _GetDPI_Ratio()
 	If StringInStr($hwnd, "*") Then
 		Local $BMP = Ptr(StringReplace($hwnd, "*", ""))
 		If @error Then
@@ -445,7 +444,6 @@ EndFunc
 ;				   $IsUser32					- Sử dụng User32.dll thay vì _WinAPI_BitBlt (Thử để tìm tuỳ chọn phù hợp)
 ; ===============================================================================================================================
 Func _HandleCapture($hwnd = "", $x = 0, $y = 0, $Width = -1, $Height = -1, $IsBMP = False, $SavePath = "", $IsUser32 = False)
-   $scale = _GetDPI_Ratio()
 	If $hwnd = "" Then
 		Local $Right = $Width = -1 ? -1 : $x + $Width - 1
 		Local $Bottom = $Height = -1 ? -1 : $y + $Height - 1
@@ -525,7 +523,6 @@ EndFunc   ;==>_HandleCapture
 #Region Internal Functions
 ; Author: Lâm Thành Nhân; Phong
 Func __ImgSearch($x, $y, $right, $bottom, $BitmapFind, $BitmapSource, $tolerance = 15, $MaxImg = 1000)
-   $scale = _GetDPI_Ratio()
    $scaleback =  1 - ($scale - 1)/$scale
 	If $_HandleImgSearch_IsDebug Then
 		_GDIPlus_ImageSaveToFile($BitmapSource, @ScriptDir & "\HandleImgSearchSource.bmp")
@@ -2123,11 +2120,3 @@ $__HandleImgSearch_Opcode &= "000000000000000"
 
 __HandleImgSearch_StartUp()
 #EndRegion Internal Functions
-Func _GetDPI_Ratio()
-    Local $hWnd = 0
-    Local $hDC = DllCall("user32.dll", "long", "GetDC", "long", $hWnd)
-    Local $aRet = DllCall("gdi32.dll", "long", "GetDeviceCaps", "long", $hDC[0], "long", 10)  ; = reported vert height (not logical, which is param=90)
-    Local $bRet = DllCall("gdi32.dll", "long", "GetDeviceCaps", "long", $hDC[0], "long", 117) ; = true vert pixels of desktop
-    $hDC = DllCall("user32.dll", "long", "ReleaseDC", "long", $hWnd, "long", $hDC)
-    Return $bRet[0] / $aRet[0]
-EndFunc

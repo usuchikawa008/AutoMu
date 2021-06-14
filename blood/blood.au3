@@ -39,6 +39,9 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 					_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
 					Sleep(1000)
 					Local $Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
+					If isLDPlayer() Then
+					    $Imageghepve = @ScriptDir & "\image\ghepveblood_ld.bmp"
+					EndIf
 					Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,80, 2);search icon gep ve
 					If not @error Then
 						 _ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+270) ; click vao ghep ve

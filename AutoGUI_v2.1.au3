@@ -133,8 +133,8 @@ Else ; da co version o PC -> kiem tra co moi nhat ko
 	  ConsoleWrite("Đã ở version mới nhất")
    Else
 	  ConsoleWrite("Khác version")
-	  Run("AutoUpdate")
 	  IniWrite($pathImage&"version.ini", $general, $version, $versionJson); update version
+	  Run("AutoUpdate")
 	  Exit 0
    EndIf
 EndIf
@@ -1249,7 +1249,8 @@ Func _updateEmulatorAuto() ; refresh status AUTO emulator
 	    ;check name character and statusNox
 		Local $name = IniRead($pathAuto&_GUICtrlListView_GetItemText($hListEmulators, $i)&".tmp", $run, $nameingame, "")
 		Local $statusNoxx = IniRead($pathAuto&_GUICtrlListView_GetItemText($hListEmulators, $i)&".tmp", $run, $statusNox, "")
-	    GUICtrlSetData($aCheck[$i+1], "|"&$name&"|"&$statusNoxx)
+		_GUICtrlListView_SetItemText($hListEmulators, $i, $name,1)
+		_GUICtrlListView_SetItemText($hListEmulators, $i, $statusNoxx,2)
 	 Next
 	 _GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column hoat dong
 	 _GUICtrlListView_SetColumnWidth($hListEmulators, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
@@ -1420,9 +1421,11 @@ Func deleteItemEmulator()
 	  MsgBox($MB_SYSTEMMODAL, "Information", "Không Thể Xóa Auto Đang Chạy")
    Else
 	  _GUICtrlListView_DeleteItem($hListEmulators, $indexItem); delete item in list emulator
-	  FileDelete($path&$sItemText&".tmp");delete file in config
-	  FileDelete($pathstatus&$sItemText&".tmp");delete file in config
-	  FileDelete($pathAuto&$sItemText&".tmp");delete file in config
+	  FileDelete($path&$sItemText&".tmp");delete file in config hoat dong
+	  FileDelete($pathstatus&$sItemText&".tmp");delete file in config status
+	  FileDelete($pathAuto&$sItemText&".tmp");delete file in config auto
+	  FileDelete($pathconfig&$sItemText&".tmp");delete file in config log
+	  FileDelete($pathLog&$sItemText&".tmp");delete file in config-config
 	  if $indexItem == 0 Then ; neu xoa vi tri 0.. update lai current Auto
 		 $currentAuto = _GUICtrlListView_GetItemText($hListEmulators,0)
 		 _reloadEmu($currentAuto)

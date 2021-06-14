@@ -1,6 +1,0 @@
-[Run]
-PID=
-Finish=True
-Name_In_Game=
-StatusNox=Off
-cmdStart=dnconsole.exe launch --index 1

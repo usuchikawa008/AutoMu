@@ -19,8 +19,13 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 	  writelog("NV tien thuong con luot " & _NowTime() & @CRLF) ; write console
 	  _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+20) ; click toi
 	  ;cho menu xuat hien
+	  Local $x = 95
 	  Local $Imagemenu = @ScriptDir & "\image\menutienthuong.bmp"
-	  Local $Result = _HandleImgWaitExist($Handle, $Imagemenu,20, 0, 0, -1, -1,95, 2); search menu trong 20s
+	  If isLDPlayer() Then
+		 $Imagemenu = @ScriptDir & "\image\menutienthuong_ld.bmp"
+		 $x = 105
+	  EndIf
+	  Local $Result = _HandleImgWaitExist($Handle, $Imagemenu,20, 0, 0, -1, -1,$x, 2); search menu trong 20s
 	  If @error Then ; ko tim thay thi stop nv nay
 		 Return
 	  EndIf
@@ -30,6 +35,9 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 		 If @error Then
 		 Else
 			Local $Imagecheck = @ScriptDir & "\image\nvmoihaycu.bmp"
+			If isLDPlayer() Then
+			   $Imagecheck = @ScriptDir & "\image\toi_ld.bmp"
+			EndIf
 			Local $Result2 = _HandleImgSearch($Handle,$Imagecheck, 0, 0, -1, -1,50, 10);search nv cu hay moi
 			If not @error Then ;neu tim thay la nv cu
 			   writelog("Chua Finish..lam tiep nv cu " & _NowTime() & @CRLF) ; write console
