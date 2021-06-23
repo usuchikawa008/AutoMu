@@ -27,12 +27,13 @@ Func GotoPBHuyenCanh($Title,$emuport,$Handle)
 	 Sleep(1000)
 	 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 600 600");click kien tri vao neu co
 	 Sleep(8000)
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
-		 $confirmPass = True
-	     For $i = 0 to 5 Step + 1
-		 Sleep(1000)
-	     _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
-	     Next
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
+	  $confirmPass = True
+	  Sleep(800)
+	  For $i = 0 to 5 Step + 1
+	  Sleep(200)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
+	  Next
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
 
 	 if $confirmPass Then ; xac nhan da vo pho ban
@@ -44,7 +45,7 @@ Func GotoPBHuyenCanh($Title,$emuport,$Handle)
 		_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 900 550"); click giam toc
 		writelog("cho pb huyen canh ket thuc" & _NowTime() & @CRLF) ; write console
 	    $ImagePath = @ScriptDir & "\image\menu.bmp"
-	    $Result = _HandleImgWaitExist($Handle, $ImagePath,260, 660,30, 60, 50,103, 2);search nut menu
+	    $Result = _HandleImgWaitExist($Handle, $ImagePath,260, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 	  EndIf
 EndFunc   ;==>GotoPB
 

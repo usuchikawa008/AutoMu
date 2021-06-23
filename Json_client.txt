@@ -5,7 +5,7 @@
   "ClientName": "Trial",
   "MAC": "TEST",
   "Social": "",
-  "DateExpire": "2021/06/14"
+  "DateExpire": "2021/06/22"
  },
  {
   "id": "2",
@@ -27,7 +27,7 @@
   "id": "4",
   "Code": "DGZRLD1RKC",
   "ClientName": "CodeVersion",
-  "MAC": "10.0.0.0.2",
+  "MAC": "10.0.0.0.6",
   "Social": "",
   "DateExpire": ""
  },
@@ -45,39 +45,39 @@
   "ClientName": "VUI",
   "MAC": "3C:7C:3F:23:E8:D3",
   "Social": "ZALO",
-  "DateExpire": "2021/06/19"
+  "DateExpire": "2021/07/20"
  },
  {
   "id": "7",
   "Code": "ZM4NFCDCU7",
   "ClientName": "Duong Dinh Vu",
-  "MAC": "",
+  "MAC": "FC:AA:14:76:B9:62",
   "Social": "FB",
-  "DateExpire": "2021/06/19"
+  "DateExpire": "2021/08/19"
  },
  {
   "id": "8",
   "Code": "YPEM5NZAD8",
-  "ClientName": "P",
-  "MAC": "B8:8A:60:B4:1F:72",
+  "ClientName": "TEST",
+  "MAC": "40:B0:76:5B:E3:48",
   "Social": "ZALO",
-  "DateExpire": "2021/06/09"
+  "DateExpire": "2021/06/20"
  },
  {
   "id": "9",
   "Code": "5PNW4JO1O2",
-  "ClientName": "AccTest1",
-  "MAC": "38:DE:AD:A8:30:54",
-  "Social": "",
-  "DateExpire": "2021/06/13"
+  "ClientName": "Duy Anh",
+  "MAC": "40:8D:5C:C1:FA:BD",
+  "Social": "FB",
+  "DateExpire": "2021/06/19"
  },
  {
   "id": "10",
   "Code": "O9AUBOXK38",
-  "ClientName": "AccTest2",
-  "MAC": "20:19:12:1A:09:35",
-  "Social": "",
-  "DateExpire": "2021/06/13"
+  "ClientName": "Hòa Lê",
+  "MAC": "F4:8C:50:E5:2C:89",
+  "Social": "ZALO",
+  "DateExpire": "2021/07/16"
  },
  {
   "id": "11",
@@ -91,33 +91,33 @@
   "id": "12",
   "Code": "YNWUYOQEF3",
   "ClientName": "Pham Hoang An",
-  "MAC": "",
+  "MAC": "98:48:27:8F:1D:4F",
   "Social": "FB",
   "DateExpire": "2021/07/14"
  },
  {
   "id": "13",
   "Code": "JHV9TRGPBK",
-  "ClientName": "Ha Ngoc Thanh",
-  "MAC": "",
+  "ClientName": "Ha Ngoc Thanh-AgentSell",
+  "MAC": "00:23:4E:9E:6E:85",
   "Social": "FB",
   "DateExpire": "2021/07/14"
  },
  {
   "id": "14",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
+  "Code": "JHVR0IE6KQ",
+  "ClientName": "Bui Van Cuong-AgentSell",
+  "MAC": "24:77:03:05:7B:A8",
+  "Social": "FB",
+  "DateExpire": "2021/07/16"
  },
  {
   "id": "15",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
+  "Code": "LEFE0Z0T53",
+  "ClientName": "Doan Van Quang-Hikary",
+  "MAC": "50:46:5D:6A:20:3F",
+  "Social": "FB",
+  "DateExpire": "2021/07/16"
  },
  {
   "id": "16",

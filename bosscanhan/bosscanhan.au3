@@ -32,7 +32,12 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 800");click TOI NGAY
       Sleep(3000)
 	  $Imagehetluot = @ScriptDir & "\image\hetluotbosscanhan3.bmp"
-	  $Rshetluot = _HandleImgWaitExist($Handle,$Imagehetluot,2, 0, 0, -1, -1,120, 10);search icon het luot boss
+	  Local $x_tolerance_hetluotboss = 120
+	  If $isLDPlayer == True Then
+		 $x_tolerance_hetluotboss = 130
+	  EndIf
+
+	  $Rshetluot = _HandleImgWaitExist($Handle,$Imagehetluot,2, 390, 230, 80, 60,$x_tolerance_hetluotboss, 2);search icon het luot boss
 	  If not @error Then ; thay icon mua them luot => het luot boss ca nhan
 		 writelog("Het Luot " & _NowTime() & @CRLF) ; write console
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
@@ -80,7 +85,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  Sleep(30000)
 	  writelog("cho pb ket thuc...." & _NowTime() & @CRLF) ; write console
 	  $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  $Result = _HandleImgWaitExist($Handle, $ImagePath,420, 660,30, 60, 50,95, 2);search nut menu max 7p
+	  $Result = _HandleImgWaitExist($Handle, $ImagePath,420, 660,30, 60, 50,$x_toler_menu, 2);search nut menu max 7p
 	  If not @error Then
 		 writelog("Ket Thuc " & _NowTime() & @CRLF) ; write console
 	  EndIf

@@ -14,6 +14,7 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 			Return SetError(3)
 		 EndIf
 		 If $p == 2 Then ; ko tim thay hinh nao het
+			_closeSimple($Handle);tat cua so
 			Return
 		 EndIf
 	  writelog("NV tien thuong con luot " & _NowTime() & @CRLF) ; write console
@@ -50,15 +51,17 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 			EndIf
 		 EndIf
 	     ;cho menu nv tien thuong xuat hien
-		 Sleep(1000)
 		 writelog("Cho menu nv tien thuong xuat hien " & _NowTime() & @CRLF) ; write console
 		 Local $ImagePath = @ScriptDir & "\image\nhannvtienthuong.bmp"
-		 Local $p = _HandleImgWaitExist($Handle, $ImagePath,30, 0, 0, -1, -1,110, 10); search nhan nv tien thuong
+		 If $isLDPlayer == True Then
+			$ImagePath = @ScriptDir & "\image\nhannvtienthuong_ld.bmp"
+		 EndIf
+		 Local $p = _HandleImgWaitExist($Handle, $ImagePath,30, 0, 0, -1, -1,$x_toler_nvtienthuong, 10); search nhan nv tien thuong
 		 If @error Then
 			Return
 		 Else
-			Local $second = 2
-			Sleep(1500)
+			Local $second = 9
+			Sleep(500)
 			writelog("NV TIEN THUONG BAT DAU " & _NowTime() & @CRLF) ; write console
 			Local $Tor = 110
 			$ImagePath = @ScriptDir & "\image\v1tienthuong.bmp"
@@ -104,7 +107,7 @@ Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 			writelog("Cho "&$second &" phut"& @CRLF) ; write console
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 615");click Nhan/Toi Nhiem Vu
 			Sleep($second*60000)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 635 539");click to space to sure stop nv
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 500 570 500 640 500"); di chuyen cuon xun 1 chut
 			Sleep(1000)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1400 260");click check nv done or not
 			Local $ImagePath = @ScriptDir & "\image\dahoanthanhnvtienthuong.bmp"
@@ -138,6 +141,7 @@ Func _GotoTrainQuai($Title,$emuport,$Handle,$pos)
 			Return SetError(3)
 		 EndIf
 		 If $p == 2 Then ; ko tim thay hinh nao het
+			_closeSimple($Handle);tat cua so
 			Return
 		 EndIf
 		 _TreoMay($Handle,$p)
@@ -155,7 +159,7 @@ Func _TreoMay($Handle,$p)
 		 $i = $i + 1
 		 Sleep(15000)
 		 $Imagemenu = @ScriptDir & "\image\menu.bmp"
-		 $Result = _HandleImgWaitExist($Handle, $Imagemenu,1, 660,30, 60, 50,94, 2);search nut menu
+		 $Result = _HandleImgWaitExist($Handle, $Imagemenu,1, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 		 If not @error Then ; neu thay  menu thi click vao
 			writelog("Check Lan " &$i & @CRLF) ; write console
 			_ControlClickExactly($Title, "", "","", 1,$Result[1][0]+660, $Result[1][1]+30) ; click menu
@@ -178,12 +182,14 @@ Func _TreoMay($Handle,$p)
 
 	  WEnd
 	EndFunc   ;==>Goto Treo Quai
-
+Global $tor_vaopbrankS = 95
 Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 	  Local $lastone = False
+	  Local $tor_vaopbrankS = 95
 	  Global $X_matuongthaophat = 100 ; Default
-	  If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
+	  If $isLDPlayer == True Then ; -> LDplayer
 		 $X_matuongthaophat = 105
+		 $tor_vaopbrankS = 100
 	  EndIf
 	  If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
@@ -199,6 +205,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 		 Return SetError(3)
 	  EndIf
 	  If $p == 2 Then ; ko tim thay hinh nao het
+		 _closeSimple($Handle);tat cua so
 		 Return
 	  EndIf
 	  writelog("NV guild con luot" & _NowTime() & @CRLF) ; write console
@@ -243,11 +250,11 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			Sleep(500)
 			Opt("WinTitleMatchMode", 3)
 			_ControlClickExactly($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click lay nv
-			Sleep(40000) ;cho lam xong nv khoang 20s
+			Sleep(40000) ;cho lam xong nv khoang 40s
 			$count = 0
 			While 1 ;loop click
 			   $count = $count + 1
-			   If $count > 15 Then
+			   If $count > 10 Then
 				  Return
 			   EndIf
 			   Sleep(2000)
@@ -293,7 +300,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 		 ;check nv S
 		 Sleep(1500)
 		 $ImagenvS = @ScriptDir & "\image\nvS.bmp"
-		 $ps = _HandleImgWaitExist($Handle, $ImagenvS,2, 0, 0, -1, -1,90, 2);search nv rank S
+		 $ps = _HandleImgWaitExist($Handle, $ImagenvS,2, 0, 0, -1, -1,100, 2);search nv rank S
 		 If not @error Then ; tim thay nv rank S
 			   Local $flag_nv_rankS = IniRead($pathconfig&$Title&".config", $config, $nvguildRankS, False)
 			   If $flag_nv_rankS == True Then ; cho phep lam NV rank S
@@ -306,7 +313,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1300 800");click toi ngay/lay nv
 				  Sleep(4000)
 				  Local $ImagevaopbrankS = @ScriptDir & "\image\vaopbrankS.bmp"
-				  Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,10, 0, 0, -1, -1,95, 2);search icon vao pho ban
+				  Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,10, 0, 0, -1, -1,$tor_vaopbrankS, 2);search icon vao pho ban
 				  If not @error Then ; thay icon vao pb ban
 					 Opt("WinTitleMatchMode", 3)
 					 _ControlClickExactly($Title, "", "","", 1,$rs_vaopbRankS[1][0]+30, $rs_vaopbRankS[1][1]+60) ; click cau cuu
@@ -319,17 +326,16 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 				  If not @error Then ; da du nguoi support -> vo nv
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 600");click Xac Nhan vo PB
 					 Local $ImagevaopbrankS = @ScriptDir & "\image\vaopbrankS.bmp"
-					 Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,4, 0, 0, -1, -1,80, 2);search icon vao pho ban
+					 Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,4, 0, 0, -1, -1,$tor_vaopbrankS, 2);search icon vao pho ban
 					 If not @error Then ; thay icon vao phu ban
 						Sleep(1000)
-						Opt("WinTitleMatchMode", 3)
 						_ControlClickExactly($Title, "", "","", 1,$rs_vaopbRankS[1][0]+30, $rs_vaopbRankS[1][1]) ; click
 						Sleep(4000)  ; cho 4s
 						Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
 						Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,4, 0, 0, -1, -1,80, 2);search icon thoat pho ban
 						If not @error Then ; da vo pho ban
 						   Local $ImageMenu = @ScriptDir & "\image\menu.bmp"
-						   Local $Result = _HandleImgWaitExist($Handle, $ImageMenu,150, 660,30, 60, 50,85, 2);search nut menu trong 120 de ket thuc
+						   Local $Result = _HandleImgWaitExist($Handle, $ImageMenu,150, 660,30, 60, 50,$x_toler_menu, 2);search nut menu trong 120 de ket thuc
 						   _outParty()
 						EndIf
 						Return "Exit"
@@ -354,7 +360,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 		 $count = 0
 		 While 1 ;loop click
 			$count = $count + 1
-			If $count > 15 Then
+			If $count > 10 Then
 			   Return
 			EndIf
 			Sleep(2000)
@@ -392,7 +398,7 @@ Func _reloadNV($Title,$Handle);case nhan nv moi
 			;check nv S
 			Sleep(2500)
 			Local $ImagenvS = @ScriptDir & "\image\nvS.bmp"
-		    Local $ps = _HandleImgWaitExist($Handle, $ImagenvS,2, 0, 0, -1, -1,90, 2);search nv rank S
+		    Local $ps = _HandleImgWaitExist($Handle, $ImagenvS,2, 0, 0, -1, -1,100, 2);search nv rank S
 			If not @error Then ; tim thay nv rank S
 			   Local $flag_nv_rankS = IniRead($pathconfig&$Title&".config", $config, $nvguildRankS, False)
 			   If $flag_nv_rankS == True Then ; cho phep lam NV rank S
@@ -405,7 +411,7 @@ Func _reloadNV($Title,$Handle);case nhan nv moi
 				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1300 800");click toi ngay/lay nv
 				  Sleep(4000)
 				  Local $ImagevaopbrankS = @ScriptDir & "\image\vaopbrankS.bmp"
-				  Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,10, 0, 0, -1, -1,95, 2);search icon vao pho ban
+				  Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,10, 0, 0, -1, -1,$tor_vaopbrankS, 2);search icon vao pho ban
 				  If not @error Then ; thay icon vao pb ban
 					 Opt("WinTitleMatchMode", 3)
 					 _ControlClickExactly($Title, "", "","", 1,$rs_vaopbRankS[1][0]+30, $rs_vaopbRankS[1][1]+60) ; click cau cuu
@@ -418,7 +424,7 @@ Func _reloadNV($Title,$Handle);case nhan nv moi
 				  If not @error Then ; da du nguoi support -> vo nv
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 600");click Xac Nhan vo PB
 					 Local $ImagevaopbrankS = @ScriptDir & "\image\vaopbrankS.bmp"
-					 Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,4, 0, 0, -1, -1,80, 2);search icon vao pho ban
+					 Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,4, 0, 0, -1, -1,$tor_vaopbrankS, 2);search icon vao pho ban
 					 If not @error Then ; thay icon vao phu ban
 						Sleep(1000)
 						Opt("WinTitleMatchMode", 3)
@@ -428,7 +434,7 @@ Func _reloadNV($Title,$Handle);case nhan nv moi
 						Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,4, 0, 0, -1, -1,80, 2);search icon thoat pho ban
 						If not @error Then ; da vo pho ban
 						   Local $ImageMenu = @ScriptDir & "\image\menu.bmp"
-						   Local $Result = _HandleImgWaitExist($Handle, $ImageMenu,150, 660,30, 60, 50,85, 2);search nut menu trong 120 de ket thuc
+						   Local $Result = _HandleImgWaitExist($Handle, $ImageMenu,150, 660,30, 60, 50,$x_toler_menu, 2);search nut menu trong 120 de ket thuc
 						   _outParty()
 						EndIf
 						Return "Exit"

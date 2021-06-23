@@ -32,6 +32,7 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 		 Return SetError(3)
 	  EndIf
 	  If $p == 2 Then ; ko tim thay hinh nao het
+		 _closeSimple($Handle);tat cua so
 		 Return
 	  EndIf
 	  writelog("Vô Lấy Thánh Vật" & _NowTime() & @CRLF) ; write console
@@ -81,7 +82,7 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 		 ;click to toa do 1
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap "&$x&" "&$y);click to map
 		 Sleep(1000)
-		 _close($Handle)
+		 _closeSimple($Handle)
 		 Sleep(3000)
 		 Local $Imagekhaithac = @ScriptDir & "\image\khaithacmo.bmp"
 		 Local $rs2 = _HandleImgWaitExist($Handle, $Imagekhaithac,8, 0, 0, -1, -1,90, 2);search image duoc khai thac
@@ -148,8 +149,9 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1260 800");click toi ngay
 	  Sleep(3000)
 	  Local $ImageBaoTangGolbin = @ScriptDir & "\image\baotangicon.bmp"
-	  Local $rs = _HandleImgWaitExist($Handle, $ImageBaoTangGolbin,10, 0, 0, -1, -1,90, 2);search image Bao Tang Golbin
+	  Local $rs = _HandleImgWaitExist($Handle, $ImageBaoTangGolbin,10, 0, 0, -1, -1,98, 2);search image Bao Tang Golbin
 	  If Not @error Then
+		 writelog("Ho Tong" & _NowTime() & @CRLF) ; write console
 		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click toi image
 		 Sleep(2000)
 		 Local $Image1tren3 = @ScriptDir & "\image\theluc1tren3.bmp"
@@ -188,14 +190,16 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 			   ExitLoop
 			Else ; het 60s ko thay thi bam Cau Ho tro again
 			   Sleep(2000)
+			   _closeSimple($hwnd)
+			   Sleep(1500)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 750");click to Cau ho tro
 			EndIf
 		 WEnd
 		 If $count == 0 Then ; da vo pho ban
 			writelog("Bat Dau Ho Tong" & _NowTime() & @CRLF) ; write console
 			Local $ImageTrieuHoiVS = @ScriptDir & "\image\trieutapvesi.bmp"
-			While 1
-			   Local $rs = _HandleImgWaitExist($Handle, $ImageTrieuHoiVS,15, 0, 0, -1, -1,70, 2);search image trieu tap ve si
+			For $i = 0 to 30 Step + 1
+			   Local $rs = _HandleImgWaitExist($Handle, $ImageTrieuHoiVS,15, 10, 260, 80, 40,80, 2);search image trieu tap ve si
 			   If Not @error Then ; van thay icon trieu hoi nghia la chua ho tong xong
 				  Sleep(15000); cho 15s kiem tra 1 lan
 			   Else ; ko thay la ket thuc ho tong roi
@@ -203,9 +207,113 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 				  Sleep(15000); cho 15 ket thuc ho tong
 				  ExitLoop
 			   EndIf
-			WEnd
+			Next
 		 EndIf
 	  EndIf
+EndFunc   ;==>GotoPB
+
+Func _GotoMaHoa($Title,$emuport,$Handle)
+	  If BitAND(WinGetState($Title), 16) Then
+		MsgBox(0,"Message",WinGetState($Title))
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	  EndIf
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1110 50");click to Ma Hoa
+	  Sleep(2000)
+	  ;check con soi noi hay ko
+	  Local $Imagesoinoi = @ScriptDir & "\image\soinoi0diem.bmp"
+	  _HandleImgWaitExist($Handle, $Imagesoinoi,1, 310, 320, 200, 60,90, 2);search soi noi 0 diem
+      If Not @error Then ;neu thay nghia la da het soi noi
+		 Return SetError(3)
+	  EndIf
+	  ;check Default
+	  Local $Imagecheckdefault = @ScriptDir & "\image\checkdefaultmahoa_ld.bmp"
+	  $rs_default = _HandleImgWaitExist($Handle,$Imagecheckdefault,1, 0, 0, -1, -1,60, 2);search check default ma hoa
+	  If Not @error Then ; neu thay can check de tat
+		 _ControlClickExactly($Title, "", "","", 1,$rs_default[1][0]+3, $rs_default[1][1]+3) ; check
+		 Sleep(500)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+		 Sleep(1500)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1110 50");click to Ma Hoa
+		 Sleep(2000)
+	  EndIf
+	  Local $Imagemahoatrc = @ScriptDir & "\image\mahoalantruoc.bmp"
+	  Local $x_tolerance_mahoa = 65
+	  If $isLDPlayer == True Then
+		 $x_tolerance_mahoa = 66
+	  EndIf
+	  Local $rs = _HandleImgWaitExist($Handle, $Imagemahoatrc,4, 0, 0, -1, -1,$x_tolerance_mahoa, 2);search image ma hoa lan trc
+	  If Not @error Then
+		 Sleep(500)
+		 Local $result = _checkToaDo($rs,$Handle)
+		 If $result == "Exit" Then Return
+		 If $result == 2 Then
+			Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+			Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,6, 0, 0, -1, -1,$x_toler_thoatpb, 2);search icon thoat pho ban
+			If not @error Then ; da vo pho ban
+			   writelog("Da vo Ma Hoa" & _NowTime() & @CRLF) ; write console
+			   While 1
+				  Local $Imagexacnhanbtn = @ScriptDir & "\image\xacnhanbtn.bmp"
+				  Local $rs_xacnhanbtn = _HandleImgWaitExist($Handle, $Imagexacnhanbtn,2, 0, 0, -1, -1,90, 2);search icon thoat pho ban
+				  If not @error Then ; thay image nay la ma hoa ket thuc
+					 writelog("Ma Hoa Ket Thuc" & _NowTime() & @CRLF) ; write console
+					 Return SetError(3)
+				  EndIf
+				  Local $ImageMenu = @ScriptDir & "\image\menu.bmp"
+				  Local $Result_menu = _HandleImgWaitExist($Handle, $ImageMenu,2, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
+				  If not @error Then ; thay image nay la da thoat khoi ma hoa
+					 Return
+				  EndIf
+				  Sleep(15000);
+			   WEnd
+			EndIf
+		 EndIf
+
+	  Else
+		 writelog("Ko tim thay lich su train lan truoc" & _NowTime() & @CRLF) ; write console
+	  EndIf
+EndFunc   ;==>GotoPB
+
+
+Func _checkToaDo($pointer,$Handle)
+   	  Local $Imagekct = @ScriptDir & "\image\kct.bmp"
+	  Local $x_tolerance_kct = 80
+	  If $isLDPlayer == True Then
+		 $Imagekct = @ScriptDir & "\image\kct_ld.bmp"
+		 $x_tolerance_kct = 90
+	  EndIf
+
+	  _ControlClickExactly($Title, "", "","", 1,$pointer[1][0]+60, $pointer[1][1]-50) ; click toa do 1
+	  Sleep(500)
+	  Local $rs= _HandleImgWaitExist($Handle, $Imagekct,1, 0, 0, -1, -1,$x_tolerance_kct, 2);search image kct
+	  If Not @error Then
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+120) ; click toi ngay ma hoa
+		 Sleep(600)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 600");click  kien tri toi
+		 Return 2
+	  EndIf
+	  Sleep(500)
+	  _ControlClickExactly($Title, "", "","", 1,$pointer[1][0]+150, $pointer[1][1]) ; click toa do 2
+	  Sleep(500)
+	  Local $rs= _HandleImgWaitExist($Handle, $Imagekct,1, 0, 0, -1, -1,$x_tolerance_kct, 2);search image kct
+	  If Not @error Then
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+120) ; click toi ngay ma hoa
+		 Sleep(600)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 600");click  kien tri toi
+		 Return 2
+	  EndIf
+	  Sleep(500)
+	  _ControlClickExactly($Title, "", "","", 1,$pointer[1][0]-30, $pointer[1][1]) ; click toa do 3
+	  Sleep(500)
+	  Local $rs= _HandleImgWaitExist($Handle, $Imagekct,1, 0, 0, -1, -1,$x_tolerance_kct, 2);search image kct
+	  If Not @error Then
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+120) ; click toi ngay ma hoa
+		 Sleep(600)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 600");click  kien tri toi
+		 Return 2
+	  EndIf
+	  Return "Exit"
 EndFunc   ;==>GotoPB
 
 

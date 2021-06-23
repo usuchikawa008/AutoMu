@@ -75,17 +75,18 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 	 ;cho menu blood xuat hien end
 	  Sleep(10000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
+	  Sleep(1000)
 	  For $i = 0 to 5 Step + 1
-		 Sleep(1000)
+		 Sleep(200)
 	     _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 549 535");click Co vu ZEN 5 lan
 	  Next
-	  Sleep(1000)
+	  Sleep(300)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1127 224");click close co vu
 	  writelog("Xac nhan da vo pho ban blood wait 80s " & @CRLF) ; write console
 	  Sleep(80000);cho 80s
 	  writelog("Cho ket thuc pb blood...." & _NowTime() & @CRLF) ; write console
 	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,91, 2);search nut menu
+	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 EndFunc   ;==>GotoPB
 
 
@@ -100,7 +101,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 	 Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 325 130") ;chuyen sang tab hoat dong han gio
 	  $Imagebossguild = @ScriptDir & "\image\devilicon.bmp"
-	  Local $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,110, 2);search boss guild icon
+	  Local $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,110, 2);search devil icon
 	  If @error Then ;ko tim thay -> tim cach khac
 		 _closeSimple($Handle); dong cua so NV
 		 While 1 ; tim icon boss guild
@@ -125,7 +126,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 		 WEnd
 	  Else
 		 writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
-		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
+		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+21) ; click toi
 		 Sleep(2000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
 		 ;click toi xac nhan
@@ -136,7 +137,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 	  writelog("Cho 5 phut ket thuc Devil"& @CRLF) ; write console
 	  Sleep(310000); cho 5p
 	  $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  $Result = _HandleImgWaitExist($Handle, $ImagePath,100, 660,30, 60, 50,94, 2);search nut menu
+	  $Result = _HandleImgWaitExist($Handle, $ImagePath,100, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 	  Sleep(2000)
 EndFunc   ;==>GotoPB
 
@@ -161,7 +162,7 @@ Func _GotoPhaoDaiDo($Title,$emuport,$Handle)
 		 ;click confirm neu dang trong party
 		 writelog("Cho ket thuc phao dai...." & _NowTime() & @CRLF) ; write console
 		 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,660, 660,30, 60, 50,94, 2);search nut menu
+		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,660, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 	  EndIf
 	  Sleep(2000)
 EndFunc   ;==>GotoPB

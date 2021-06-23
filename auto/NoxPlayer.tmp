@@ -1,6 +1,6 @@
 [Run]
-PID=
+PID=9208
 Finish=
 Name_In_Game=
-StatusNox=Off
+StatusNox=Onl
 cmdStart=Nox.exe
