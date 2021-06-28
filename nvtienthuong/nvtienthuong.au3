@@ -478,4 +478,52 @@ EndFunc   ;==>Goto NV GUIDE
 
 
 
+Func _GotoNVChinhTuyen($Title,$emuport,$Handle)
+	If BitAND(WinGetState($Title), 16) Then
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	 EndIf
+	 Sleep(1000)
+		 ;find icon danh sach nv
+		 For $i = 0 to 4 Step + 1
+			Local $Imageicon_danhsach = @ScriptDir & "\image\icondanhsachNV.bmp"
+		    Local $p = _HandleImgWaitExist($Handle, $Imageicon_danhsach,1, 0, 0, -1, -1,80, 2);search icon chinh tuyen trong
+			If not @error Then ; tim thay thi
+			   ExitLoop
+			Else
+			   _closeSimple($Handle);tat cua so
+			EndIf
+		 Next
 
+		 Local $p_start = _HandleImgWaitExist($Handle, $Imageicon_danhsach,1, 0, 0, -1, -1,80, 2);search icon chinh tuyen trong
+		 If not @error Then ; tim thay thi
+			writelog("Start NV Chinh Tuyen" & _NowTime() & @CRLF) ; write console
+			AdLibRegister("_macNgayItem", 5000);auto run this function every 3 s
+			_ControlClickExactly($Title, "", "","", 1,$p_start[1][0]-100, $p_start[1][1]+2) ; click vo chinh tuyen
+			Local $count = 0
+			While 1
+			   $count = $count + 1
+			   Local $p = _HandleImgWaitExist($Handle, $Imageicon_danhsach,1, 0, 0, -1, -1,80, 2);search icon chinh tuyen trong
+			   If not @error Then ; tim thay thi
+				  If Mod($count,20) == 0 Then ; lau lau click lai 1 lan
+					 _ControlClickExactly($Title, "", "","", 1,$p_start[1][0]-100, $p_start[1][1]+2) ; click vo chinh tuyen
+				  EndIf
+			   Else
+				  _ControlClickExactly($Title, "", "","", 1,$p_start[1][0]-100, $p_start[1][1]+2) ; click vo chinh tuyen
+
+			   EndIf
+			WEnd
+			AdlibUnRegister("_macNgayItem");auto run this function every 3 s
+		 Else
+		 EndIf
+
+	   Sleep(2000)
+	EndFunc   ;==>Goto Treo Quai
+Func _macNgayItem()
+   Local $ImageMacNgay = @ScriptDir & "\image\macngaytext.bmp"
+   Local $rs = _HandleImgSearch($hwnd, $ImageMacNgay,0, 0, -1, -1,80,5 );search icon xac nhan
+   If not @error Then ; thay toi ho tro\
+	  _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click mac ngay
+   EndIf
+EndFunc   ;==>GotoXac Nhan

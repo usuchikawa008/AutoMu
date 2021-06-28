@@ -27,6 +27,7 @@
 
 
 ;~  #include <_Dbug.au3>
+Global $sortSence = False
 Global $idDelete, $idEdit ,$oDictionary
 $oDictionary = ObjCreate("Scripting.Dictionary")
 Global $currentAuto
@@ -76,6 +77,7 @@ Global Const $hotroguild = "HoTroGuild"
 Global Const $bossthegioi = "BossTheGioi"
 Global Const $bosschientruong = "BossChienTruong"
 Global Const $mahoa = "MaHoa"
+Global Const $chinhtuyen = "ChinhTuyen"
 ;config hoat dong End
 ;config start Auto
 Global Const $run = "Run"
@@ -369,6 +371,7 @@ Func Gui()
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $bossthegioi, False)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $bosschientruong, False)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $mahoa, False)
+		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $chinhtuyen, False)
 		   ; init status
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $blood, $notyet)
@@ -389,6 +392,7 @@ Func Gui()
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bossthegioi, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $bosschientruong, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $mahoa, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $chinhtuyen, $notyet)
 		   ; init Run
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $pid, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $finish, "")
@@ -471,6 +475,8 @@ Func Gui()
 	Global $idItemBossTG = GUICtrlCreateListViewItem("Boss Thế Giới ||Config", $hListHoatDong)
 	Global $idItemBossCTC = GUICtrlCreateListViewItem("Boss Chiến Trường ||Config", $hListHoatDong)
 	Global $idItemMaHoa = GUICtrlCreateListViewItem("Ma Hóa (thử nghiệm) ||", $hListHoatDong)
+	Global $idItemChinhTuyen = GUICtrlCreateListViewItem("Nhiệm Vụ Chính ||", $hListHoatDong)
+	_GUICtrlListView_DeleteItem($hListHoatDong, 19)
 ;~ 	_GUICtrlStatusBar_SetText($g_hStatus, "Current Emulator: " & $currentAuto); set default
 	GUICtrlSetData($JblNotify,"Current Emulator: " & $currentAuto)
 	_GUICtrlListView_SetColumnWidth($hListHoatDong, 0, $LVSCW_AUTOSIZE) ;auto size column hoat dong
@@ -493,8 +499,14 @@ Func Gui()
 	#Region tab 3 start
 	GUICtrlCreateTabItem("Info")
 	Global $textInfo = GUICtrlCreateEdit("", 10, 145, 330, 400) ; Text info
-	GUICtrlSetData(-1,FileRead(@ScriptDir&"\readme.log"))
-	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+	$file = FileOpen(@ScriptDir&"\readme.log", 0)
+   For $i = 1 to _FileCountLines($file)
+    $line = FileReadLine($file, $i) & @CRLF
+;~ 	ConsoleWrite($line)
+   	GUICtrlSetData($textInfo,$line,$i)
+   Next
+   FileClose($file)
 	#EndRegion tab 3 end
 
 
@@ -728,8 +740,8 @@ Func ItemChecked_Proc_RunAuto($iIndex,$iItem, $sState)
 	  ConsoleWrite("Start PID = "&$iPID &@CRLF)
 	  $oDictionary.Add($currentAuto,$iPID)
 	  If $statusNoxx == $off Then
-		 Sleep(1000)
-		 AdLibRegister("_updateStatusAuto", 4000);auto run this function every 4 s
+		 Sleep(2000)
+		 AdLibRegister("_updateStatusAuto", 3000);auto run this function every 4 s
 	  EndIf
    Else
 	  $sreadPID = IniRead($pathAuto&$currentAuto&".tmp", $run, $pid, "")
@@ -889,8 +901,14 @@ EndFunc
 			  Else
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $mahoa, False)
 			  EndIf
+		  Case 19 ; Chinh Tuyen
+			  If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $chinhtuyen, True)
+			  Else
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $chinhtuyen, False)
+			  EndIf
 		EndSwitch
-EndFunc
+	 EndFunc
 Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
     Local $hWndFrom, $iIDFrom, $iCode, $tNMHDR, $hWndListView
     $hWndListView1 = $hListEmulators
@@ -952,6 +970,14 @@ Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
 				   EndIf
 
 			  EndIf
+			  Case $LVN_COLUMNCLICK ; A column was clicked
+                    _GUICtrlListView_SimpleSort($hWndListView1, $sortSence, DllStructGetData($tNMHDR, "SubItem")) ; Sort direction for next sort toggled by default
+;~ 					If $sortSence == False Then
+;~ 					   $sortSence == True
+;~ 					Else
+;~ 					   $sortSence == False
+;~ 					EndIf
+
 		    EndSwitch
 		 Case $hWndListView2 ; list hoat dong
             Switch $iCode
@@ -1184,6 +1210,16 @@ Func _updateAcTion()
 	 Else
 		_GUICtrlListView_SetItemChecked($hListHoatDong, 18,False)
 	 EndIf
+	 ;auto NV chinh tuyen line 19
+	 Local $sReadChinhTuyen = IniRead($path&$currentAuto&".tmp", $hoatdong, $chinhtuyen, False)
+	 Local $statusChinhTuyen = IniRead($pathstatus&$currentAuto&".tmp", $status, $chinhtuyen, $notyet)
+;~ 	 GUICtrlSetData($idItemChinhTuyen, "|"&$statusChinhTuyen)
+;~ 	 GUICtrlSetColor($idItemChinhTuyen,_changeColor($statusChinhTuyen))
+	 If $sReadChinhTuyen == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 19)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 19,False)
+	 EndIf
 	 ;Auto resize column
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	 _GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
@@ -1223,6 +1259,7 @@ Func _resetStatus()
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bossthegioi, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $bosschientruong, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $mahoa, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $chinhtuyen, $notyet)
      _updateAcTion()
 
 EndFunc
@@ -1264,6 +1301,7 @@ Func _checkAndUncheckAll($sState)
 	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $bossthegioi, $sState)
 	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $bosschientruong, $sState)
 	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $mahoa, $sState)
+	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $chinhtuyen, $sState)
      _updateAcTion()
 
 EndFunc
@@ -1334,8 +1372,7 @@ Func _updateStatusAuto() ; update status AUTO emulator
 ;~ 			ConsoleWrite("Nox On :"&$NoxOnl&@CRLF)
 			IniWrite($pathAuto&$NoxListConfig[$i], $run, $statusNox, $onl)
 		 EndIf
-
-    Next
+	  Next
 EndFunc
 
 Func _refeshLogAuto() ; Clear LOG AUTO emulator
@@ -1404,6 +1441,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $bossthegioi, False)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $bosschientruong, False)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $mahoa, False)
+		IniWrite($path&$NoxOff&".tmp", $hoatdong, $chinhtuyen, False)
 		; init status
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $huyencanh, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $blood, $notyet)
@@ -1424,6 +1462,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bossthegioi, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $bosschientruong, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $mahoa, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $chinhtuyen, $notyet)
 		; init Run
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $pid, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $finish, "")
@@ -1524,6 +1563,8 @@ Func changeStatus($statusHoatDong)
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $bosschientruong, $statusHoatDong)
 		  Case 18 ; hỖ TRỢ guild
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $mahoa, $statusHoatDong)
+		  Case 19 ; hỖ TRỢ guild
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $chinhtuyen, $statusHoatDong)
 	  EndSwitch
 	  _updateAcTion()
 EndFunc   ;==>
@@ -1850,22 +1891,22 @@ Func _setCmdStart($Title) ; set cmd to start Nox
 	  Return "Nox.exe -clone:Nox_5"
    EndIf
    If $Title == "LDPlayer" Then
-	  Return "dnconsole.exe launch --index 0"
+	  Return "ldconsole.exe launch --index 0"
    EndIf
    If $Title == "LDPlayer-1" Then
-	  Return "dnconsole.exe launch --index 1"
+	  Return "ldconsole.exe launch --index 1"
    EndIf
    If $Title == "LDPlayer-2" Then
-	  Return "dnconsole.exe launch --index 2"
+	  Return "ldconsole.exe launch --index 2"
    EndIf
    If $Title == "LDPlayer-3" Then
-	  Return "dnconsole.exe launch --index 3"
+	  Return "ldconsole.exe launch --index 3"
    EndIf
    If $Title == "LDPlayer-4" Then
-	  Return "dnconsole.exe launch --index 4"
+	  Return "ldconsole.exe launch --index 4"
    EndIf
    If $Title == "LDPlayer-5" Then
-	  Return "dnconsole.exe launch --index 5"
+	  Return "ldconsole.exe launch --index 5"
    EndIf
    Return ""
 EndFunc

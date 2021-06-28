@@ -1,3 +1,4 @@
+Global $count_covu = 0
 Func _GotoNVTinhAnh($Title,$emuport,$Handle)
 	If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
@@ -44,12 +45,13 @@ Func _GotoNVTinhAnh($Title,$emuport,$Handle)
 	   Sleep(2000)
 	EndFunc   ;==>GotoPB
 Func _GotoBossCTC($Title,$emuport,$Handle)
-	If BitAND(WinGetState($Title), 16) Then
-		MsgBox(0,"Message",WinGetState($Title))
-		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
-		WinActivate($Title)
-		WinActivate($myLastWin)
-    EndIf
+   $count_covu = 0
+   If BitAND(WinGetState($Title), 16) Then
+	  MsgBox(0,"Message",WinGetState($Title))
+	  Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+	  WinActivate($Title)
+	  WinActivate($myLastWin)
+   EndIf
 		 Local $ImageconluotBossCTC = @ScriptDir & "\image\bosschientruongconluot.bmp"
 		 Local $ImagehetluotBossCTC = @ScriptDir & "\image\bosschientruonghetluot.bmp"
 		 Local $p = _searchNVAdvance($Handle,$ImagehetluotBossCTC,$ImageconluotBossCTC,95,102);search boss CTC
@@ -103,6 +105,7 @@ Func _GotoBossCTC($Title,$emuport,$Handle)
 
 
 Func _GotoBossTheGioi($Title,$emuport,$Handle)
+   $count_covu = 0
    Global $x_lockboss_tolerance = 50
    Global $ImageBigLockBossTG = @ScriptDir & "\image\biglockBossTG.bmp"
    If $isLDPlayer == True Then
@@ -368,6 +371,8 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  _checkTruyenCong()
 	  ;loop den thoi gian boss
 	  AdLibRegister("_xacNhan", 5000);auto run this function every 5 s
+	  Sleep(2000)
+	  _traLoiCauDo()
 	  While 1
 		 Sleep(10000)
 		 Local $Imagecovukiem = @ScriptDir & "\image\covukiem.bmp"
@@ -377,7 +382,7 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 		 EndIf
 		 Local $Now = _NowTime(4);time hien tai
 		 Local $var1 = StringRegExpReplace($Now, "[:]", "")
-	     Local $timestart = StringRegExpReplace("20:00", "[:]", "")
+	     Local $timestart = StringRegExpReplace("19:59", "[:]", "")
 	     Local $timeend = StringRegExpReplace("20:10", "[:]", "")
 		 If $var1 > $timestart And $var1 < $timeend Then
 			ExitLoop
@@ -605,12 +610,11 @@ Func _xacNhan()
 	  _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click xac nhan
    EndIf
 EndFunc   ;==>GotoXac Nhan
-Global $count_covu = 0
 Func _cauGiupGuild() ;config co vu 2 lan la max
    If $count_covu > 2 then Return
    Local $x = 78
    Local $ImageCauGiupGuild = @ScriptDir & "\image\caugiupguild.bmp"
-   If isLDPlayer() Then ; -> LDplayer
+   If $isLDPlayer == True Then
 	  $x = 80
 	  $ImageCauGiupGuild = @ScriptDir & "\image\caugiupguild_ld.bmp"
    EndIf
@@ -700,7 +704,7 @@ Func _checkBossCTC($y)
 		 writelog("Vao pb CTC" & _NowTime() & @CRLF) ; write console
 		 Sleep(10000); cho toi boss
 		 Local $ImageCauGiupGuild = @ScriptDir & "\image\caugiupguild.bmp"
-		 If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
+		 If $isLDPlayer == True Then
 			$ImageCauGiupGuild = @ScriptDir & "\image\caugiupguild_ld.bmp"
 		 EndIf
 		 Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,20,648, 258, 110, 50,80, 2);search icon cau giup guild
@@ -787,4 +791,59 @@ Func _checkTruyenCong()
 		 EndIf
 	  EndIf
    EndIf
+EndFunc
+
+Func _traLoiCauDo()
+   Global $listcauhoi = _FileListToArray($pathCauHoi,"*.bmp")
+   _closeSimple($hwnd); dong cua so NV
+   While 1
+	  Local $Now = _NowTime(4);time hien tai
+	  Local $var1 = StringRegExpReplace($Now, "[:]", "")
+	  Local $timestart = StringRegExpReplace("19:57", "[:]", "")
+	  If $var1 > $timestart Then
+		 Return
+	  EndIf
+
+	  Local $ImageTapGuildChat = @ScriptDir & "\image\tapGuildChat.bmp"
+	  _HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 0,0, -1, -1,90, 5)
+	  If Not @error Then
+		 Local $dapan = _traloi()
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 359 855");click khung chat
+		 Local $ImageKeyboard = @ScriptDir & "\image\iconkeyboard.bmp"
+		 _HandleImgWaitExist($hwnd,$ImageKeyboard,2, 0,0, -1, -1,80, 5)
+		 If Not @error Then
+			Opt("WinTitleMatchMode", 3)
+			ControlSend($Title,"","",$dapan);gui dap an vo box chat
+			Sleep(200)
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1450 250");click done
+			Sleep(300)
+			_HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 0,0, -1, -1,90, 5) ; kiem tra co dang o tab guild
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 700 850");click gui
+		 EndIf
+
+	  Else
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 90 685");click guild chat
+		 Sleep(1000)
+	  EndIf
+
+   WEnd
+EndFunc
+
+Func _traloi()
+   While 1
+	  For $i = 1 To UBound($listcauhoi)-1
+	  Local $name = StringSplit($listcauhoi[$i],".")[1]
+	  Local $Imagepath = @ScriptDir & "\image\cauhoi\"&$name&".bmp"
+	  _HandleImgSearch($hwnd,$Imagepath,0,0, -1, -1,90, 5)
+	  If Not @error Then ; tim thay  cau hoi
+		 Local $dapan = IniRead($pathDapan, "Answer", $name, ""); doc
+		 If $dapan <> "" Then
+			_ArrayDelete($listcauhoi,$i)
+			Return $dapan
+		 Else
+			writelog("Chưa có đáp án cho câu hỏi này")
+		 EndIf
+	  EndIf
+	  Next
+   WEnd
 EndFunc

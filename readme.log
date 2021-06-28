@@ -1,6 +1,8 @@
-Auto Mu Vượt thời đại version 4.0
+Auto Mu Vượt thời đại version 4.5
 Chạy trên giả lập NOX phiên bản 7.0.10 trở xuống và Ldplayer với độ phân giải màn hình 1600x900
  - Chạy trên win 10
+ - Khi Auto chạy tránh thao tác trong game để auto chạy đc chính xác 
+ - Mún thao tác nhân vật thì tắt auto rồi làm sau đó bật lại
 Phiên bản hiện tại bao gồm những tính năng :
  - Huyễn cảnh trên không (Tự cổ vũ và giảm tốc)
  - Blood (Tự cổ vũ + ghép vé khi hết)
@@ -10,7 +12,7 @@ Phiên bản hiện tại bao gồm những tính năng :
  - Cướp mỏ (tùy chỉnh tại mục config)
  - Treo quái dã ngoại
  - NV Guild (Tự động reload ra NV A nếu còn lượt, Nhiệm Vụ S tùy chỉnh tại mục config)
- - Săn tinh anh (tùy chỉnh tại mục config)
+ - Săn tinh anh (tùy chỉnh tại mục config/ Mỗi lần vô phó bản đánh 1 phút xong out)
  - Lấy thánh vật thưởng (chỉ lấy thánh vật thường)
  - Boss guild 12h (tự cổ vũ )
  - Tụ hội guild + Boss guild 8h (tự ăn thịt + cổ vũ boss + truyền công)
@@ -18,10 +20,10 @@ Phiên bản hiện tại bao gồm những tính năng :
  - Hộ Tống (lần đầu đi bảo tàng vàng, lần 2 đi bảo tàng bạc)
  - Pháo đài đỏ 
  - Hỗ trợ guild (tùy chỉnh tại mục config)
- - Tự động login khi offline (đã support NoxPlayer)
+ - Tự động login khi offline (đã support Nox va LD, Có thể bật auto bất kì lúc nào không nhất thiết phải vô game trước)
  - Boss TG (chọn boss top 1 : đánh con cao nhất, top 2: đánh 2 con cao nhất, top 3 tương tự)
  - Boss CTC (chọn 6 con trong tầng cao nhất)
- - Ma Hóa (chỉ đánh lại địa điểm đánh lần trước)
+ - Ma Hóa (chỉ đánh lại địa điểm đánh lần trước/ Chỉ làm khi tất cả các nhiệm vụ đã xong)
 Tiện ích :
 - Ăn đan exp khi xong hết NV
 - Cắm train khi xong hết NV

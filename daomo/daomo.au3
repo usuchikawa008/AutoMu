@@ -190,7 +190,7 @@ Func _checkMoCuop($Handle)
    If $flagcuop_mo_thuong == True Then
 	  Local $x_toler_cuopmothuong = 93
 	  If $isLDPlayer == True Then
-		 $x_toler_cuopmothuong = 104
+		 $x_toler_cuopmothuong = 112
 	  EndIf
 	  Local $Imagecuopmothuong = @ScriptDir & "\image\cuopmothuong.bmp"
 	  Local $pthuong = _HandleImgSearch($Handle,$Imagecuopmothuong, 0, 0, -1, -1,$x_toler_cuopmothuong, 5);search mo thuong
