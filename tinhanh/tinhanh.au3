@@ -794,43 +794,62 @@ Func _checkTruyenCong()
 EndFunc
 
 Func _traLoiCauDo()
-   Global $listcauhoi = _FileListToArray($pathCauHoi,"*.bmp")
-   _closeSimple($hwnd); dong cua so NV
+   Local $flag_traloicauhoi = IniRead($pathconfig&$Title&".config", $config, $traloicauhoi, False)
+   If $flag_traloicauhoi == True Then ; support boss TG
+	  writelog("Chuẩn bị trả lời câu hỏi")
+	  Global $listcauhoi = _FileListToArray($pathCauHoi,"*.bmp")
+	  _closeSimple($hwnd); dong cua so NV
+	  While 1
+		 Local $ImageTapGuildChat = @ScriptDir & "\image\tapGuildChat.bmp"
+		 _HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 10,365, 60, 60,115, 5)
+		 If Not @error Then
+			Local $dapan = _traloi()
+			If $dapan == "Exit" Then Return
+			If $isLDPlayer == True Then
+			   _SendByLD($dapan)
+			Else
+			   _SendByNox($dapan)
+			EndIf
+			_HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 10,365, 60, 60,115, 5) ; kiem tra co dang o tab guild
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 700 850");click gui
+		 Else
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 90 685");click guild chat
+			Sleep(1000)
+		 EndIf
+	  WEnd
+   EndIf
+EndFunc
+Func _SendByLD($dapan)
+   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 359 855");click khung chat
+   Local $Imageok = @ScriptDir & "\image\ok_ld.bmp"
+   _HandleImgWaitExist($hwnd,$Imageok,2, 0,0, -1, -1,80, 5)
+   If Not @error Then
+	  Opt("WinTitleMatchMode", 3)
+	  ControlSend($Title,"","",_ANSIToUnicode($dapan));gui dap an vo box chat
+	  Sleep(300)
+	  _ControlClickExactly($Title, "", "","", 1,$Imageok[1][0], $Imageok[1][1]) ; click icon ok
+	  Sleep(300)
+   EndIf
+EndFunc
+Func _SendByNox($dapan)
+   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 359 855");click khung chat
+   Local $ImageKeyboard = @ScriptDir & "\image\iconkeyboard.bmp"
+   _HandleImgWaitExist($hwnd,$ImageKeyboard,2, 0,0, -1, -1,80, 5)
+   If Not @error Then
+	  Opt("WinTitleMatchMode", 3)
+	  ControlSend($Title,"","",_ANSIToUnicode($dapan));gui dap an vo box chat
+	  Sleep(300)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1450 250");click done
+	  Sleep(300)
+   EndIf
+EndFunc
+Func _traloi()
    While 1
 	  Local $Now = _NowTime(4);time hien tai
 	  Local $var1 = StringRegExpReplace($Now, "[:]", "")
-	  Local $timestart = StringRegExpReplace("19:57", "[:]", "")
-	  If $var1 > $timestart Then
-		 Return
+	  If $var1 > 1957 Then
+		 Return "Exit"
 	  EndIf
-
-	  Local $ImageTapGuildChat = @ScriptDir & "\image\tapGuildChat.bmp"
-	  _HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 0,0, -1, -1,90, 5)
-	  If Not @error Then
-		 Local $dapan = _traloi()
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 359 855");click khung chat
-		 Local $ImageKeyboard = @ScriptDir & "\image\iconkeyboard.bmp"
-		 _HandleImgWaitExist($hwnd,$ImageKeyboard,2, 0,0, -1, -1,80, 5)
-		 If Not @error Then
-			Opt("WinTitleMatchMode", 3)
-			ControlSend($Title,"","",$dapan);gui dap an vo box chat
-			Sleep(200)
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1450 250");click done
-			Sleep(300)
-			_HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 0,0, -1, -1,90, 5) ; kiem tra co dang o tab guild
-			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 700 850");click gui
-		 EndIf
-
-	  Else
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 90 685");click guild chat
-		 Sleep(1000)
-	  EndIf
-
-   WEnd
-EndFunc
-
-Func _traloi()
-   While 1
 	  For $i = 1 To UBound($listcauhoi)-1
 	  Local $name = StringSplit($listcauhoi[$i],".")[1]
 	  Local $Imagepath = @ScriptDir & "\image\cauhoi\"&$name&".bmp"
@@ -838,6 +857,7 @@ Func _traloi()
 	  If Not @error Then ; tim thay  cau hoi
 		 Local $dapan = IniRead($pathDapan, "Answer", $name, ""); doc
 		 If $dapan <> "" Then
+			writelog($dapan)
 			_ArrayDelete($listcauhoi,$i)
 			Return $dapan
 		 Else

@@ -13,7 +13,7 @@
 #include <Array.au3>
 #include <DateTime.au3>
 #include <File.au3>
-
+#include <WinAPI.au3>
 AutoItSetOption ("TrayIconDebug", 1);0-off
 HotKeySet("+{Esc}", "_Exit") ; Press Shift + ESC for exit
 Func _Exit()
@@ -124,6 +124,7 @@ Global Const $bosCTC_boss3 = "BossCTCBoss3"
 Global Const $bosCTC_boss4 = "BossCTCBoss4"
 Global Const $bosCTC_boss5 = "BossCTCBoss5"
 Global Const $bosCTC_boss6 = "BossCTCBoss6"
+Global Const $traloicauhoi= "TraLoiCauHoi"
 ;config path EndFunc
 
 #Region debug
@@ -1566,3 +1567,13 @@ Func isLDPlayer()
 	  Return False
    EndIf
 EndFunc
+Func _ANSIToUnicode($sString)
+    #cs
+        Local Const $SF_ANSI = 1
+        Local Const $SF_UTF16_LE = 2
+        Local Const $SF_UTF16_BE = 3
+        Local Const $SF_UTF8 = 4
+    #ce
+    Local Const $SF_ANSI = 1, $SF_UTF8 = 4
+    Return BinaryToString(StringToBinary($sString, $SF_ANSI), $SF_UTF8)
+ EndFunc   ;==>_ANSIToUnicode

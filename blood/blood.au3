@@ -104,7 +104,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 	  Local $p = _HandleImgWaitExist($Handle,$Imagebossguild,2, 0, 0, -1, -1,110, 2);search devil icon
 	  If @error Then ;ko tim thay -> tim cach khac
 		 _closeSimple($Handle); dong cua so NV
-		 While 1 ; tim icon boss guild
+		 While 1 ; tim icon devil
 			Local $Imagexnho = @ScriptDir & "\image\xnho.bmp"
 			Local $p_nho = _HandleImgWaitExist($Handle,$Imagexnho,1, 630, 190, 20, 20,100, 2);search dau X
 			If Not @error Then ; thay x nho
@@ -112,9 +112,6 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 			   Local $rsDevil= _HandleImgWaitExist($Handle,$ImageIconDevil,1, 550, 225, 100, 100,80, 2);search icon boss guild
 			   If Not @error Then ; thay icon Tu hoi click
 				  _ControlClickExactly($Title, "", "","", 1,$rsDevil[1][0]+550, $rsDevil[1][1]+320) ; click toi ngay
-				  Sleep(2000)
-				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
-				  writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
 				  ;click toi xac nhan
 				  ExitLoop
 			   EndIf
@@ -125,12 +122,47 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 			EndIf
 		 WEnd
 	  Else
-		 writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
+		 Sleep(1000)
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+21) ; click toi
-		 Sleep(2000)
-		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
-		 ;click toi xac nhan
 	  EndIf
+	  Sleep(2000)
+	  ;check het ve hay ko ->>> here
+	  Local $Imagehetvedevil = @ScriptDir & "\image\hetvedevil.bmp"
+	  Local $rshetve = _HandleImgSearch($Handle, $Imagehetvedevil, 0,0, -1, -1,80, 5);search het ve devil
+	  If not @error Then
+		 writelog("Het ve devil...." & _NowTime() & @CRLF) ; write console
+		 ;xu li het ve
+		 Local $flagghepVe = IniRead($pathImage&"1.tmp", $general, $ghepveblood, ""); check flag ghep ve
+		 If $flagghepVe == True Then
+		   _ControlClickExactly($Title, "", "","", 1,$rshetve[1][0]+3, $rshetve[1][1]+3) ; click vao het ve
+		   Sleep(1000)
+		   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
+		   Sleep(1000)
+		   Local $Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
+		   If isLDPlayer() Then
+			   $Imageghepve = @ScriptDir & "\image\ghepveblood_ld.bmp"
+		   EndIf
+		   Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,0,0, -1, -1,80, 5);search icon gep ve
+		   If not @error Then
+				_ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0], $rsghepve[1][1]) ; click vao ghep ve
+		   Else
+				writelog("Loi..ko the ghep ve luc nay...." & _NowTime() & @CRLF) ; write console
+				Return
+			EndIf
+			Sleep(3000)
+			For $i = 0 to 10 Step + 1
+			   Sleep(100)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1300 550");click + 10 lan
+			Next
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click ghep
+			_closeSimple($Handle)
+			Sleep(3000)
+		 EndIf
+
+	  EndIf
+
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
+	  writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
 	  Sleep(7000)
 	  _Covu()
 	  Sleep(1000)

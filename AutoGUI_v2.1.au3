@@ -127,6 +127,7 @@ Global Const $bosCTC_boss3 = "BossCTCBoss3"
 Global Const $bosCTC_boss4 = "BossCTCBoss4"
 Global Const $bosCTC_boss5 = "BossCTCBoss5"
 Global Const $bosCTC_boss6 = "BossCTCBoss6"
+Global Const $traloicauhoi= "TraLoiCauHoi"
 
 #Region check update latest version
 Global $versionPC = IniRead($pathImage&"version.ini", $general, $version, ""); doc config version
@@ -427,6 +428,7 @@ Func Gui()
 			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss4, True)
 			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss5, True)
 			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss6, True)
+			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $traloicauhoi, False)
 	    EndIf
 	 Next
 	 ;search tat ca gia lap da tung chay o foler config
@@ -467,7 +469,7 @@ Func Gui()
 	Global $idItemTinhAnh = GUICtrlCreateListViewItem("Săn Tinh Anh||Config", $hListHoatDong)
 	Global $idItemLayThanhVat = GUICtrlCreateListViewItem("Lấy Thánh Vật Thường ||", $hListHoatDong)
 	Global $idItemBossGuild12h = GUICtrlCreateListViewItem("Boss Guild 12h ||", $hListHoatDong)
-	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 8h ||", $hListHoatDong)
+	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 8h ||Config", $hListHoatDong)
 	Global $idItemDevil = GUICtrlCreateListViewItem("Devil Square ||", $hListHoatDong)
 	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||Config", $hListHoatDong)
 	Global $idItemPhaoDai = GUICtrlCreateListViewItem("Pháo Đài Đỏ ||", $hListHoatDong)
@@ -563,7 +565,7 @@ Func Gui()
     GUISetStyle(BitOR($iStyle, $WS_VISIBLE), $iExStyle, $ChildGuiConfig)
 	#endregion Panel1 config
 	#region Panel1 config boss
-    Global $ChildGuiConfig_Boss = GUICreate("", 319, 367, 12, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
+    Global $ChildGuiConfig_Boss = GUICreate("", 325, 420, 10, 123, Default, $WS_EX_MDICHILD, $hGUI) ;;;WHLT
 	;group Boss The Gioi
 	GUICtrlCreateGroup("Boss Thế Giới", 2, 5, 320, 65)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
@@ -585,8 +587,13 @@ Func Gui()
     Global $idCheckBoxCon5 = GUICtrlCreateCheckbox("Boss 5", 110, 110, 50, 25)
     Global $idCheckBoxCon6 = GUICtrlCreateCheckbox("Boss 6 (mạnh nhất)", 210, 110, 110, 25)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group Boss Tụ hội guild
+	GUICtrlCreateGroup("Tụ Hội Guild", 2, 150, 320, 45)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxTraLoi = GUICtrlCreateCheckbox("Trả lời câu hỏi trong tụ hội guild", 10, 165, 200, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
     ;Button Save boss config
-    Local $idBtn_Save_Config = GUICtrlCreateButton("Save", 250, 365, 70, 25)
+    Local $idBtn_Save_Config = GUICtrlCreateButton("Save", 250, 420, 70, 25)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
 	GUICtrlSetBkColor(-1, 0xf2f2f2)
     $iStyle = _WinAPI_GetWindowLong(GUICtrlGetHandle($ChildGuiConfig_Boss), $GWL_STYLE)
@@ -1498,6 +1505,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss4, True)
 		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss5, True)
 		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss6, True)
+		 IniWrite($pathconfig&$NoxOff&".config", $config, $traloicauhoi, False)
 	 EndIf
    Next
  EndFunc
@@ -1574,7 +1582,7 @@ Func checkConfigurator()
    if $sItemTextHoatDong == "Config" Then
 	  WinSetState($hWndListHoatDong,"",@SW_HIDE)
 	  readconfig()
-	  If $indexItemHoatDong == 16 Or $indexItemHoatDong == 17 then ;config boss
+	  If $indexItemHoatDong == 16 Or $indexItemHoatDong == 17 Or $indexItemHoatDong == 11 then ;config boss
 		 GUISetState(@SW_SHOW, $ChildGuiConfig_Boss)
 	  else
 		 GUISetState(@SW_SHOW, $ChildGuiConfig)
@@ -1739,6 +1747,13 @@ Func readconfig()
 	 Else
 		GUICtrlSetState($idCheckBoxCon6,$GUI_UNCHECKED)
 	 EndIf
+	 ;tu hoi guild config
+	 Local $checkbox_config_traloicauhoi = IniRead($pathconfig&$currentAuto&".config", $config, $traloicauhoi, False) ; tra loi cau hoi
+     If $checkbox_config_traloicauhoi == True Then
+		GUICtrlSetState($idCheckBoxTraLoi,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxTraLoi,$GUI_UNCHECKED)
+	 EndIf
 EndFunc   ;=> readconfig
 Func writeconfig()
      ;NV GUILD
@@ -1869,6 +1884,12 @@ Func writeconfig()
 		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss6, True) ;con 6
 	 Else
 		IniWrite($pathconfig&$currentAuto&".config", $config, $bosCTC_boss6, False)
+	 EndIf
+	 ;Tu hoi guild write config
+	 If GUICtrlRead($idCheckBoxTraLoi) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $traloicauhoi, True) ;con 6
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $traloicauhoi, False)
 	 EndIf
 EndFunc   ;=> writeconfig
 Func _setCmdStart($Title) ; set cmd to start Nox
