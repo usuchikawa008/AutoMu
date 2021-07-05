@@ -73,7 +73,9 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 		   EndIf
 		EndIf
 	 ;cho menu blood xuat hien end
-	  Sleep(10000)
+	  Sleep(7000)
+	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+      _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
 	  Sleep(1000)
 	  For $i = 0 to 5 Step + 1
@@ -126,6 +128,9 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+21) ; click toi
 	  EndIf
 	  Sleep(2000)
+	  ;check devil da san sang
+	  Local $Imagetabhoatdongguild = @ScriptDir & "\image\tabhoatdongguild.bmp"
+	  _HandleImgWaitExist($Handle, $Imagetabhoatdongguild,12, 0,0, -1, -1,100, 5); cho menu devil xuat hien
 	  ;check het ve hay ko ->>> here
 	  Local $Imagehetvedevil = @ScriptDir & "\image\hetvedevil.bmp"
 	  Local $rshetve = _HandleImgSearch($Handle, $Imagehetvedevil, 0,0, -1, -1,80, 5);search het ve devil
@@ -164,6 +169,8 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
 	  writelog("Vao Devil  " & _NowTime() & @CRLF) ; write console
 	  Sleep(7000)
+	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+	  _HandleImgWaitExist($hwnd, $Imagethoatpb,6, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 	  _Covu()
 	  Sleep(1000)
 	  writelog("Cho 5 phut ket thuc Devil"& @CRLF) ; write console

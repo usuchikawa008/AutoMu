@@ -12,7 +12,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1208 56");click BOSS
 	  Sleep(1000)
 	  Local $ImageIconBossCaNhan = @ScriptDir & "\image\bosscanhanicon.bmp"
-	  Local $RsIconBoss = _HandleImgWaitExist($Handle,$ImageIconBossCaNhan,2, 0, 0, -1, -1,80, 2);search icon boss ca nhan
+	  Local $RsIconBoss = _HandleImgWaitExist($Handle,$ImageIconBossCaNhan,5, 0, 0, -1, -1,80, 2);search icon boss ca nhan
 	  If not @error Then ; Neu tim thay boss ca nhan icon
 		 _ControlClickExactly($Title, "", "","", 1,$RsIconBoss[1][0]+4, $RsIconBoss[1][1]+4) ; click toi cho vua tim
 	  Else

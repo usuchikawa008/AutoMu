@@ -27,6 +27,8 @@ Func GotoPBHuyenCanh($Title,$emuport,$Handle)
 	 Sleep(1000)
 	 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 600 600");click kien tri vao neu co
 	 Sleep(8000)
+	 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+      _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1160 50");click Co vu
 	  $confirmPass = True
 	  Sleep(800)

@@ -20,7 +20,7 @@ Func _GotoNVTinhAnh($Title,$emuport,$Handle)
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
 		 Sleep(4000)
 		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,4, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 		 If Not @error Then ;da vo pho ban
 			Local $timewait = 50
 			Local $flag_weak_tinhanh = IniRead($pathconfig&$Title&".config", $config, $weaktinhanh, False)
@@ -251,7 +251,12 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 			Local $p = _HandleImgWaitExist($Handle,$Imagexnho,1, 630, 190, 20, 20,100, 2);search dau X
 			If Not @error Then ; thay x nho
 			   Local $ImageIconBossGuild = @ScriptDir & "\image\iconboss12h.bmp"
-			   Local $pBossGuild = _HandleImgWaitExist($Handle,$ImageIconBossGuild,1, 550, 225, 100, 100,80, 2);search icon boss guild
+			   Local $x_tolerance_iconboss12h = 80
+			   If $isLDPlayer == True Then
+				  $x_tolerance_iconboss12h = 110
+			   EndIf
+
+			   Local $pBossGuild = _HandleImgWaitExist($Handle,$ImageIconBossGuild,1, 550, 225, 100, 100,$x_tolerance_iconboss12h, 2);search icon boss guild
 			   If Not @error Then ; thay exp Lon
 				  _ControlClickExactly($Title, "", "","", 1,$pBossGuild[1][0]+550, $pBossGuild[1][1]+320) ; click vo boss guild
 				  Sleep(2000)
@@ -389,8 +394,8 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 		 EndIf
 	  WEnd
 	  AdlibUnRegister("_xacNhan")
-	   _closeSimple($Handle); dong cua so
 	  Sleep(20000)
+	  _closeSimple($Handle); dong cua so
 	  _Covu()
 	  Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
@@ -663,10 +668,9 @@ Func _doiTangBossCTC()
    _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1129 800");click toi ngay
    Sleep(1000)
    _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 600 600");click van toi
-   Sleep(2000)
    Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
    Local $rsthoatpb = _HandleImgWaitExist($hwnd, $Imagethoatpb,10, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
-   Sleep(300)
+   Sleep(500)
    _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 570 800"); di chuyen vuot len 1 chut
    #EndRegion
 EndFunc   ;==>doi tang
@@ -804,7 +808,12 @@ Func _traLoiCauDo()
 		 _HandleImgWaitExist($hwnd,$ImageTapGuildChat,1, 10,365, 60, 60,115, 5)
 		 If Not @error Then
 			Local $dapan = _traloi()
-			If $dapan == "Exit" Then Return
+			If $dapan == "Exit" Then
+			   writelog("Hoạt động kết thúc")
+			   _closeSimple($hwnd); dong cua so NV
+			   Return
+			EndIf
+
 			If $isLDPlayer == True Then
 			   _SendByLD($dapan)
 			Else
@@ -828,7 +837,6 @@ Func _SendByLD($dapan)
 	  ControlSend($Title,"","",_ANSIToUnicode($dapan));gui dap an vo box chat
 	  Sleep(300)
 	  _ControlClickExactly($Title, "", "","", 1,$Imageok[1][0], $Imageok[1][1]) ; click icon ok
-	  Sleep(300)
    EndIf
 EndFunc
 Func _SendByNox($dapan)
@@ -840,7 +848,6 @@ Func _SendByNox($dapan)
 	  ControlSend($Title,"","",_ANSIToUnicode($dapan));gui dap an vo box chat
 	  Sleep(300)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1450 250");click done
-	  Sleep(300)
    EndIf
 EndFunc
 Func _traloi()
@@ -857,7 +864,6 @@ Func _traloi()
 	  If Not @error Then ; tim thay  cau hoi
 		 Local $dapan = IniRead($pathDapan, "Answer", $name, ""); doc
 		 If $dapan <> "" Then
-			writelog($dapan)
 			_ArrayDelete($listcauhoi,$i)
 			Return $dapan
 		 Else

@@ -250,6 +250,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			Sleep(500)
 			Opt("WinTitleMatchMode", 3)
 			_ControlClickExactly($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click lay nv
+			writelog("Bắt đầu" & _NowTime() & @CRLF) ; write console
 			Sleep(40000) ;cho lam xong nv khoang 40s
 			$count = 0
 			While 1 ;loop click
@@ -356,6 +357,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 		 Sleep(500)
 		 Opt("WinTitleMatchMode", 3)
 		 _ControlClickExactly($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click toi nv guild
+		 writelog("Bắt đầu" & _NowTime() & @CRLF) ; write console
 		 Sleep(40000) ;cho lam xong nv khoang 30s
 		 $count = 0
 		 While 1 ;loop click

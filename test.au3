@@ -9,7 +9,6 @@ Opt("WinTitleMatchMode", 3)
 Global Const $pathDapan = @ScriptDir&"\image\dapan.ini"
 Local $read = IniRead($pathDapan, "Answer", "songbenhaivasong", ""); doc
 ConsoleWrite($read)
-$out = _WinAPI_WideCharToMultiByte($read, 65001)
 Opt("WinTitleMatchMode", 3)
 ControlSend("NoxPlayer","","",_ANSIToUnicode($read))
 

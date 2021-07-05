@@ -146,7 +146,7 @@ Global $x_toler_nvtienthuong = 110
 If isLDPlayer() Then ; -> LDplayer
    $x_toler_menu = 103
    $x_toler_thoatpb = 90
-   $x_toler_close = 103
+   $x_toler_close = 105
    $x_toler_nvtienthuong = 115
 EndIf
 #EndRegion debug end
@@ -1327,10 +1327,10 @@ Func _diCamTrain()
    EndIf
 EndFunc
 Func _findIconMenu($Handle)
+   Local $loopindex = 0
    While 1 ;tim den khi thay menu
 	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
 	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
-	  Local $loopindex = 0
       If @error Then ; ko thay menu
 		 $loopindex = $loopindex + 1
 		  writelog("Tim kiem menu " & @CRLF) ; write console
@@ -1475,6 +1475,7 @@ Func _startAndLogin()
 	    EndIf
 	 WEnd
 	 Local $count = 0
+	 AdLibRegister("_resolveBug", 6000);auto run every 6 s
 	 While 1 ;buoc dang nhap
 		$count = $count + 1
 		If $count > 50 Then
@@ -1492,6 +1493,7 @@ Func _startAndLogin()
 			Sleep(5000)
 		 EndIf
 	  WEnd
+	  AdlibUnRegister("_resolveBug")
 		 writelog("Dang Nhap " & _NowTime() & @CRLF) ; write console
 		 Sleep(4000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 669") ;click to dang nhap
@@ -1576,4 +1578,11 @@ Func _ANSIToUnicode($sString)
     #ce
     Local Const $SF_ANSI = 1, $SF_UTF8 = 4
     Return BinaryToString(StringToBinary($sString, $SF_ANSI), $SF_UTF8)
+ EndFunc   ;==>_ANSIToUnicode
+ Func _resolveBug()
+   Local $Imagelockwait = @ScriptDir & "\image\lockwait_ld.bmp"
+   Local $Result = _HandleImgSearch($hwnd, $Imagelockwait, 0, 0, -1, -1,100, 2);search icon lock wait
+   If not @error Then ;
+	  _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo icon
+   EndIf
  EndFunc   ;==>_ANSIToUnicode
