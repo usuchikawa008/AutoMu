@@ -37,7 +37,7 @@
   "ClientName": "BinhPham",
   "MAC": "",
   "Social": "ZALO",
-  "DateExpire": "2021/06/19"
+  "DateExpire": "2021/08/06"
  },
  {
   "id": "6",
@@ -66,10 +66,10 @@
  {
   "id": "9",
   "Code": "5PNW4JO1O2",
-  "ClientName": "Duy Anh",
-  "MAC": "40:8D:5C:C1:FA:BD",
+  "ClientName": "Nguyen Duy",
+  "MAC": "",
   "Social": "FB",
-  "DateExpire": "2021/06/19"
+  "DateExpire": "2021/08/07"
  },
  {
   "id": "10",
@@ -163,17 +163,17 @@
   "id": "21",
   "Code": "IMZPH5XYRN",
   "ClientName": "Le Thanh Dat",
-  "MAC": "",
+  "MAC": "64:00:6A:80:A6:88",
   "Social": "Zalo",
   "DateExpire": "2021/08/05"
  },
  {
   "id": "22",
-  "Code": "",
-  "ClientName": "",
+  "Code": "Q6U75EXKTG",
+  "ClientName": "Duy Giang",
   "MAC": "",
-  "Social": "",
-  "DateExpire": ""
+  "Social": "ZALO",
+  "DateExpire": "2021/08/07"
  },
  {
   "id": "23",

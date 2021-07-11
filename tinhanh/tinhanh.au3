@@ -411,7 +411,7 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  If not @error Then
 			writelog("Ket thuc boss guild " & _NowTime() & @CRLF) ; write console
 		    Sleep(1500)
-		 EndIf
+	  EndIf
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 	  Sleep(2000)
 EndFunc   ;==>GotoPB
@@ -718,7 +718,7 @@ Func _checkBossCTC($y)
 			AdLibRegister("_cauGiupGuild", 8000);auto run this function every 8 s trigger cau giup guild
 			Local $i
 			For $i = 1 to 50 Step + 1
-			   Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,15,648, 258, 110, 50,80, 2 );search icon cau giup guild
+			   Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,11,648, 258, 110, 50,80, 2 );search icon cau giup guild
 			   If not @error Then
 				  Sleep(10000)
 			   Else

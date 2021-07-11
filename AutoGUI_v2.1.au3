@@ -590,7 +590,7 @@ Func Gui()
 	;group Boss Tụ hội guild
 	GUICtrlCreateGroup("Tụ Hội Guild", 2, 150, 320, 45)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
-    Global $idCheckBoxTraLoi = GUICtrlCreateCheckbox("Trả lời câu hỏi trong tụ hội guild", 10, 165, 200, 25)
+    Global $idCheckBoxTraLoi = GUICtrlCreateCheckbox("Trả lời câu hỏi trong tụ hội guild (NoxPLayer)", 10, 165, 250, 25)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
     ;Button Save boss config
     Local $idBtn_Save_Config = GUICtrlCreateButton("Save", 250, 420, 70, 25)
@@ -1896,38 +1896,50 @@ Func _setCmdStart($Title) ; set cmd to start Nox
    If $Title == "NoxPlayer" Then
 	  Return "Nox.exe"
    EndIf
-   If $Title == "NoxPlayer(1)" Then
+   If $Title == "NoxPlayer(1)" Or $Title == "NoxPlayer1" Then
 	  Return "Nox.exe -clone:Nox_1"
    EndIf
-   If $Title == "NoxPlayer(2)" Then
+   If $Title == "NoxPlayer(2)" Or $Title == "NoxPlayer2" Then
 	  Return "Nox.exe -clone:Nox_2"
    EndIf
-   If $Title == "NoxPlayer(3)" Then
+   If $Title == "NoxPlayer(3)" Or $Title == "NoxPlayer3" Then
 	  Return "Nox.exe -clone:Nox_3"
    EndIf
-   If $Title == "NoxPlayer(4)" Then
+   If $Title == "NoxPlayer(4)" Or $Title == "NoxPlayer4" Then
 	  Return "Nox.exe -clone:Nox_4"
    EndIf
-   If $Title == "NoxPlayer(5)" Then
+   If $Title == "NoxPlayer(5)" Or $Title == "NoxPlayer5" Then
 	  Return "Nox.exe -clone:Nox_5"
+   EndIf
+   If $Title == "NoxPlayer(6)" Or $Title == "NoxPlayer6" Then
+	  Return "Nox.exe -clone:Nox_6"
+   EndIf
+   If $Title == "NoxPlayer(7)" Or $Title == "NoxPlayer7" Then
+	  Return "Nox.exe -clone:Nox_7"
    EndIf
    If $Title == "LDPlayer" Then
 	  Return "ldconsole.exe launch --index 0"
    EndIf
-   If $Title == "LDPlayer-1" Then
+   If $Title == "LDPlayer-1" Or $Title == "LDPlayer1" Then
 	  Return "ldconsole.exe launch --index 1"
    EndIf
-   If $Title == "LDPlayer-2" Then
+   If $Title == "LDPlayer-2" Or $Title == "LDPlayer2" Then
 	  Return "ldconsole.exe launch --index 2"
    EndIf
-   If $Title == "LDPlayer-3" Then
+   If $Title == "LDPlayer-3" Or $Title == "LDPlayer3" Then
 	  Return "ldconsole.exe launch --index 3"
    EndIf
-   If $Title == "LDPlayer-4" Then
+   If $Title == "LDPlayer-4" Or $Title == "LDPlayer4" Then
 	  Return "ldconsole.exe launch --index 4"
    EndIf
-   If $Title == "LDPlayer-5" Then
+   If $Title == "LDPlayer-5" Or $Title == "LDPlayer5" Then
 	  Return "ldconsole.exe launch --index 5"
+   EndIf
+   If $Title == "LDPlayer-6" Or $Title == "LDPlayer6" Then
+	  Return "ldconsole.exe launch --index 6"
+   EndIf
+   If $Title == "LDPlayer-7" Or $Title == "LDPlayer7" Then
+	  Return "ldconsole.exe launch --index 7"
    EndIf
    Return ""
 EndFunc

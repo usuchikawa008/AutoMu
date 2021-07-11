@@ -42,7 +42,7 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1260 800");click toi ngay
 	  Local $maxloop = 0
 	  Local $count = 0;
-	  While $maxloop < 30
+	  While $maxloop < 20
 	  $maxloop = $maxloop + 1
 	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
 	  Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,2, 0, 0, -1, -1,95, 2);search icon thoat pho ban
@@ -145,7 +145,7 @@ Func _GotoHoTongBaoTang($Title,$emuport,$Handle)
 	  EndIf
 	  Opt("WinTitleMatchMode", 3)
 	  _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
-	  Sleep(1000)
+	  Sleep(3000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1260 800");click toi ngay
 	  Sleep(3000)
 	  Local $ImageBaoTangGolbin = @ScriptDir & "\image\baotangicon.bmp"

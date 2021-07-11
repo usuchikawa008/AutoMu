@@ -146,7 +146,7 @@ Global $x_toler_nvtienthuong = 110
 If isLDPlayer() Then ; -> LDplayer
    $x_toler_menu = 103
    $x_toler_thoatpb = 90
-   $x_toler_close = 105
+   $x_toler_close = 102
    $x_toler_nvtienthuong = 115
 EndIf
 #EndRegion debug end
@@ -193,45 +193,51 @@ Func writelog($textlog)
 EndFunc   ;==>Example
 If $Title == "NoxPlayer" Then
    Global $emuport = 62001
-   HotKeySet("+1", "_Exit") ; Press SHIFT+1 for exit
 EndIf
-If $Title == "NoxPlayer(1)" Then
+If $Title == "NoxPlayer(1)" Or $Title == "NoxPlayer1" Then
    Global $emuport = 62025
-   HotKeySet("+2", "_Exit") ; Press SHIFT+2 for exit
 EndIf
-If $Title == "NoxPlayer(2)" Then
+If $Title == "NoxPlayer(2)" Or $Title == "NoxPlayer2" Then
    Global $emuport = 62026
-   HotKeySet("+3", "_Exit") ; Press SHIFT+3 for exit
 EndIf
-If $Title == "NoxPlayer(3)" Then
+If $Title == "NoxPlayer(3)" Or $Title == "NoxPlayer3" Then
    Global $emuport = 62027
-   HotKeySet("+4", "_Exit") ; Press SHIFT+4 for exit
 EndIf
-If $Title == "NoxPlayer(4)" Then
+If $Title == "NoxPlayer(4)" Or $Title == "NoxPlayer4" Then
    Global $emuport = 62028
-   HotKeySet("+5", "_Exit") ; Press SHIFT+5 for exit
 EndIf
-If $Title == "NoxPlayer(5)" Then
+If $Title == "NoxPlayer(5)" Or $Title == "NoxPlayer5" Then
    Global $emuport = 62029
-   HotKeySet("+6", "_Exit") ; Press SHIFT+6 for exit
+EndIf
+If $Title == "NoxPlayer(6)" Or $Title == "NoxPlayer6" Then
+   Global $emuport = 62030
+EndIf
+If $Title == "NoxPlayer(7)" Or $Title == "NoxPlayer7" Then
+   Global $emuport = 62031
 EndIf
 If $Title == "LDPlayer" Then
    Global $emuport = 5554
 EndIf
-If $Title == "LDPlayer-1" Then
+If $Title == "LDPlayer-1" Or $Title == "LDPlayer1" Then
    Global $emuport = 5556
 EndIf
-If $Title == "LDPlayer-2" Then
+If $Title == "LDPlayer-2" Or $Title == "LDPlayer2" Then
    Global $emuport = 5558
 EndIf
-If $Title == "LDPlayer-3" Then
+If $Title == "LDPlayer-3" Or $Title == "LDPlayer3" Then
    Global $emuport = 5560
 EndIf
-If $Title == "LDPlayer-4" Then
+If $Title == "LDPlayer-4" Or $Title == "LDPlayer4" Then
    Global $emuport = 5562
 EndIf
-If $Title == "LDPlayer-5" Then
+If $Title == "LDPlayer-5" Or $Title == "LDPlayer5" Then
    Global $emuport = 5564
+EndIf
+If $Title == "LDPlayer-6" Or $Title == "LDPlayer6" Then
+   Global $emuport = 5566
+EndIf
+If $Title == "LDPlayer-7" Or $Title == "LDPlayer7" Then
+   Global $emuport = 5568
 EndIf
 ;config end
 Global $statusNoxx = IniRead($pathAuto&$Title&".tmp", $run, $statusNox, $onl)
@@ -1344,7 +1350,9 @@ Func _findIconMenu($Handle)
 			Sleep(500)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 500 750 400 300"); di chuyen cuon len 1 chut
 		 EndIf
-
+		 If Mod($loopindex,6) == 0 Then
+			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
+		 EndIf
 		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
 		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 		 If Not @error Then

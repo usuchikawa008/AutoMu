@@ -74,7 +74,13 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 			EndIf
 		 WEnd
 	  EndIf
-
+	  ;check het luot lan 2
+	  $Rshetluot = _HandleImgWaitExist($Handle,$Imagehetluot,1, 390, 230, 80, 60,$x_tolerance_hetluotboss, 2);search icon het luot boss
+	  If not @error Then ; thay icon mua them luot => het luot boss ca nhan
+		 writelog("Het Luot " & _NowTime() & @CRLF) ; write console
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
+		 return SetError(3)
+	  EndIf
 	  ;check lan 3
 	  $Imagexacnhan = @ScriptDir & "\Images\Xacnhan1.bmp"
 	  $ResultXacNhan = _HandleImgWaitExist($Handle,$Imagexacnhan,1, 0, 0, -1, -1,105, 2);search xac nhan
