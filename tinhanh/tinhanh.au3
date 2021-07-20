@@ -446,7 +446,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 	     Local $p = _HandleImgSearch($Handle,$Imagebosstoihotro, 0, 0, -1, -1,89, 4);search btn toi ho tro
 		 If not @error Then ; thay hon 3 b
 			if $p[0][0] > 3 Then
-			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 300 200"); di chuyen cuon len den trang cuoi
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 650 750 250 100"); di chuyen cuon len den trang cuoi
 			   Sleep(2000)
 		    EndIf
 		 Else ; ko thay ho tro nao

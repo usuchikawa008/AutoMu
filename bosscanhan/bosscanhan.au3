@@ -81,14 +81,29 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
 		 return SetError(3)
 	  EndIf
+
 	  ;check lan 3
-	  $Imagexacnhan = @ScriptDir & "\Images\Xacnhan1.bmp"
+	  $Imagexacnhan = @ScriptDir & "\image\Xacnhan1.bmp"
 	  $ResultXacNhan = _HandleImgWaitExist($Handle,$Imagexacnhan,1, 0, 0, -1, -1,105, 2);search xac nhan
 	  If not @error Then ; neu van tim thay toi ngay icon -> thoat auto boss
 		 _ControlClickExactly($Title, "", "","", 1,$ResultXacNhan[1][0], $ResultXacNhan[1][1]) ; click toi cho vua tim
 	  EndIf
-	  writelog("chuan bi vo boss ca nhan.... waiting 30s " & _NowTime() & @CRLF) ; write console
-	  Sleep(30000)
+	  ;check lan 4
+	  $Imagexacnhan = @ScriptDir & "\image\xacnhanbtn.bmp"
+	  $ResultXacNhan = _HandleImgWaitExist($Handle,$Imagexacnhan,1, 0, 0, -1, -1,105, 2);search xac nhan
+	  If not @error Then ; neu van tim thay toi ngay icon -> thoat auto boss
+		 _ControlClickExactly($Title, "", "","", 1,$ResultXacNhan[1][0], $ResultXacNhan[1][1]) ; click toi cho vua tim
+	  EndIf
+	  Sleep(5000)
+	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+      _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+	  If @error Then
+		  writelog("Lỗi không thể vô BOSS Cá Nhân lúc này " & _NowTime() & @CRLF) ; write console
+		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
+		 return
+	  EndIf
+	  writelog("Vao Boss Ca Nhan " & _NowTime() & @CRLF) ; write console
+	  Sleep(20000)
 	  writelog("cho pb ket thuc...." & _NowTime() & @CRLF) ; write console
 	  $ImagePath = @ScriptDir & "\image\menu.bmp"
 	  $Result = _HandleImgWaitExist($Handle, $ImagePath,420, 660,30, 60, 50,$x_toler_menu, 2);search nut menu max 7p

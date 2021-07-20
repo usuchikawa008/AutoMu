@@ -1,6 +1,0 @@
-[Run]
-PID=18120
-Finish=True
-Name_In_Game=
-StatusNox=Off
-cmdStart=Nox.exe -clone:Nox_2

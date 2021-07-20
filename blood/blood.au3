@@ -204,4 +204,54 @@ Func _GotoPhaoDaiDo($Title,$emuport,$Handle)
 		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,660, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 	  EndIf
 	  Sleep(2000)
+   EndFunc   ;==>GotoPB
+
+
+Func _GotoDiaLao($Title,$emuport,$Handle)
+	If BitAND(WinGetState($Title), 16) Then
+		MsgBox(0,"Message",WinGetState($Title))
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	 EndIf
+	  Sleep(1000)
+	  Local $Imagedialao = @ScriptDir & "\image\dialaonguyento.bmp" ;image dia lao nguyen to
+	  Local $p = _HandleImgWaitExist($Handle,$Imagedialao,2, 0, 0, -1, -1,100, 2);search icon dia lao
+	  If @error Then ; ko tim thay -> lam lai luc khac
+		 Return
+	  Else
+		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon dia lao
+		 Sleep(1500)
+		 ;check het luot
+		 Local $x_hetluotdialao_tolerance = 100
+		 If $isLDPlayer == True Then
+			$x_hetluotdialao_tolerance = 109
+		 EndIf
+		 Local $Imagehetluot = @ScriptDir & "\image\hetluotdialao.bmp" ;image het luot
+		 _HandleImgWaitExist($Handle,$Imagehetluot,1, 0, 0, -1, -1,$x_hetluotdialao_tolerance, 2);search icon het luot
+		 If not @error Then ; tim thay -> het luot
+			Return SetError(3)
+		 EndIf
+		 Local $Imagefight = @ScriptDir & "\image\fightdialao.bmp" ;image chien dau
+		 Local $p = _HandleImgWaitExist($Handle,$Imagefight,2, 0, 0, -1, -1,100, 2);search icon chien dau
+		 If @error Then ; ko tim thay -> lam lai luc khac
+			Return
+		 Else
+			_ControlClickExactly($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click image
+			Sleep(1500)
+			 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click toi khieu chien
+			 Sleep(2000)
+			 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+			_HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+			If @error Then ; ko tim thay -> lam lai luc khac
+			   Return
+			Else
+			   writelog("Vào khiêu chiến địa lao...." & _NowTime() & @CRLF) ; write console
+			   Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+			   Local $Result = _HandleImgWaitExist($Handle, $ImagePath,71, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
+			EndIf
+
+		 EndIf
+	  EndIf
+	  Sleep(2000)
 EndFunc   ;==>GotoPB

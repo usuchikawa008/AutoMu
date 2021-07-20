@@ -47,7 +47,7 @@ Func GotoDaoMo($Title,$emuport,$Handle)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1212 780");click bat dau
 			Sleep(1000)
 			$Imagetieuhao = @ScriptDir & "\image\tieuhao.bmp"
-			$p1 = _HandleImgWaitExist($Handle,$Imagetieuhao,2,0, 0, -1, -1,90, 2);search image tieu hao
+			_HandleImgWaitExist($Handle,$Imagetieuhao,2,445, 450, -1, -1,90, 2);search image tieu hao
 			If not @error Then ;neu het luot tang cap quoc
 			   writelog("Het luot nang cap quoc " & _NowTime() & @CRLF) ; write console
 			Else
@@ -67,7 +67,7 @@ Func GotoDaoMo($Title,$emuport,$Handle)
 			For $i = 0 to 7 Step + 1
 			   Sleep(1000)
 			   $Imagetieuhao = @ScriptDir & "\image\tieuhao.bmp"
-		       $p1 = _HandleImgWaitExist($Handle,$Imagetieuhao, 1,0, 0, -1, -1,96, 2);search image tieu hao
+		       _HandleImgWaitExist($Handle,$Imagetieuhao, 1,445, 450, -1, -1,90, 2);search image tieu hao
 			   If not @error Then ;neu het luot tang cap quoc
 				  writelog("Het luot nang cap quoc " & _NowTime() & @CRLF) ; write console
 				  ExitLoop

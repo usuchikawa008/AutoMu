@@ -84,8 +84,13 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 		 Sleep(1000)
 		 _closeSimple($Handle)
 		 Sleep(3000)
+		 Local $x_tolerance_khaitac = 90
+		 If $isLDPlayer == True Then
+			$x_tolerance_khaitac = 105
+		 EndIf
+
 		 Local $Imagekhaithac = @ScriptDir & "\image\khaithacmo.bmp"
-		 Local $rs2 = _HandleImgWaitExist($Handle, $Imagekhaithac,8, 0, 0, -1, -1,90, 2);search image duoc khai thac
+		 Local $rs2 = _HandleImgWaitExist($Handle, $Imagekhaithac,8, 0, 0, -1, -1,$x_tolerance_khaitac, 2);search image duoc khai thac
 		 If Not @error Then
 			writelog("Khai Thac" & _NowTime() & @CRLF) ; write console
 			_ControlClickExactly($Title, "", "","", 1,$rs2[1][0], $rs2[1][1]) ; click khai thac
@@ -223,7 +228,7 @@ Func _GotoMaHoa($Title,$emuport,$Handle)
 	  Sleep(2000)
 	  ;check con soi noi hay ko
 	  Local $Imagesoinoi = @ScriptDir & "\image\soinoi0diem.bmp"
-	  _HandleImgWaitExist($Handle, $Imagesoinoi,1, 310, 320, 200, 60,90, 2);search soi noi 0 diem
+	  _HandleImgWaitExist($Handle, $Imagesoinoi,1, 310, 320, 200, 60,119, 2);search soi noi 0 diem
       If Not @error Then ;neu thay nghia la da het soi noi
 		 Return SetError(3)
 	  EndIf
@@ -254,10 +259,11 @@ Func _GotoMaHoa($Title,$emuport,$Handle)
 			If not @error Then ; da vo pho ban
 			   writelog("Da vo Ma Hoa" & _NowTime() & @CRLF) ; write console
 			   While 1
-				  Local $Imagexacnhanbtn = @ScriptDir & "\image\xacnhanbtn.bmp"
-				  Local $rs_xacnhanbtn = _HandleImgWaitExist($Handle, $Imagexacnhanbtn,2, 0, 0, -1, -1,90, 2);search icon thoat pho ban
+				  Local $Imagexacnhanbtn = @ScriptDir & "\image\endmahoa.bmp"
+				  Local $rs_xacnhanbtn = _HandleImgWaitExist($Handle, $Imagexacnhanbtn,2, 0, 0, -1, -1,70, 2);search icon thoat pho ban
 				  If not @error Then ; thay image nay la ma hoa ket thuc
 					 writelog("Ma Hoa Ket Thuc" & _NowTime() & @CRLF) ; write console
+					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 815 626");click to xac nhan
 					 Return SetError(3)
 				  EndIf
 				  Local $ImageMenu = @ScriptDir & "\image\menu.bmp"
@@ -269,7 +275,6 @@ Func _GotoMaHoa($Title,$emuport,$Handle)
 			   WEnd
 			EndIf
 		 EndIf
-
 	  Else
 		 writelog("Ko tim thay lich su train lan truoc" & _NowTime() & @CRLF) ; write console
 	  EndIf
@@ -278,7 +283,7 @@ EndFunc   ;==>GotoPB
 
 Func _checkToaDo($pointer,$Handle)
    	  Local $Imagekct = @ScriptDir & "\image\kct.bmp"
-	  Local $x_tolerance_kct = 80
+	  Local $x_tolerance_kct = 93
 	  If $isLDPlayer == True Then
 		 $Imagekct = @ScriptDir & "\image\kct_ld.bmp"
 		 $x_tolerance_kct = 92

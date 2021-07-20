@@ -78,6 +78,7 @@ Global Const $bossthegioi = "BossTheGioi"
 Global Const $bosschientruong = "BossChienTruong"
 Global Const $mahoa = "MaHoa"
 Global Const $chinhtuyen = "ChinhTuyen"
+Global Const $dialao = "DiaLao"
 ;config auto Run
 Global Const $run = "Run"
 Global Const $finish = "Finish"
@@ -311,7 +312,8 @@ EndIf
 _resizeAuto()
 
 Func _resizeAuto()
-   If isLDPlayer() Then ; ko phai Nox -> LD player
+   If $isLDPlayer == True Then ; ko phai Nox -> LD player
+	  WinActivate($Title)
 	  Local $ImageminiLD = @ScriptDir & "\image\miniModel.bmp"
 	  Local	$ResultLD = _HandleImgWaitExist($hwnd,$ImageminiLD,1, 0, 0, -1, -1,90, 10);search mini
 	  If not @error Then ; thay
@@ -553,7 +555,7 @@ Func Auto()
 	   Local $statustreomay = IniRead($pathstatus&$Title&".tmp", $status, $treomay, $notyet)
 	   If $scheckboxtreomay == True And $statustreomay <> $done Then
 		  $countNV = $countNV + 1
-		  $rs = _openHoatDong()
+		  Local $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
 			 Return
 		  EndIf
@@ -582,7 +584,7 @@ Func Auto()
 	   If $scheckboxnvguild == True And $statusnvguild <> $done Then
 ;~ 		  _outParty()
 		  $countNV = $countNV + 1
-		  $rs = _openHoatDong()
+		  Local $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
 			 Return
 		  EndIf
@@ -610,7 +612,7 @@ Func Auto()
 	   Local $statustinhanh = IniRead($pathstatus&$Title&".tmp", $status, $tinhanh, $notyet)
 	   If $scheckboxtinhanh == True And $statustinhanh <> $done Then
 		  $countNV = $countNV + 1
-		  $rs = _openHoatDong()
+		  Local $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
 			 Return
 		  EndIf
@@ -635,7 +637,7 @@ Func Auto()
 	   Local $statuslaythanhvat = IniRead($pathstatus&$Title&".tmp", $status, $laythanhvat, $notyet)
 	   If $scheckboxlaythanhvat == True And $statuslaythanhvat <> $done Then
 		  $countNV = $countNV + 1
-		  $rs = _openHoatDong()
+		  Local $rs = _openHoatDong()
 		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
 			 Return
 		  EndIf
@@ -644,13 +646,34 @@ Func Auto()
 		  _GotoLayThanhVat($Title,$emuport,$hwnd) ; nv lay thanh vat #laythanhvat
 		  If @error Then
 			 IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$done) ; change status done
-			 writelog("10. Hoan Thanh Lay Thanh Vat..." & _NowTime() & @CRLF) ; write console
+			 writelog("10. Hoàn thành lấy thánh vât..." & _NowTime() & @CRLF) ; write console
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$notyet) ; change status wait
 		  EndIf
 		  Sleep(2000)
 	   EndIf
-
+	  #cs
+	10.1. DiaLao
+	#ce
+	   Local $scheckboxdialao = IniRead($path&$Title&".tmp", $hoatdong, $dialao, False)
+	   Local $statusdialao = IniRead($pathstatus&$Title&".tmp", $status, $dialao, $notyet)
+	   If $scheckboxdialao == True And $statusdialao <> $done Then
+		  $countNV = $countNV + 1
+		  Local $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $dialao,$doing) ; change status doing
+		  _GotoDiaLao($Title,$emuport,$hwnd) ; dia lao nguyen to #blood.au3
+		  If @error Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $dialao,$done) ; change status done
+			 writelog("20. Hoàn thành địa lao..." & _NowTime() & @CRLF) ; write console
+		  Else
+			  IniWrite($pathstatus&$Title&".tmp", $status, $dialao,$notyet) ; change status wait
+		  EndIf
+		  Sleep(2000)
+	   EndIf
 	#cs
 	11. Boss guild 12h
 	#ce
@@ -1350,7 +1373,7 @@ Func _findIconMenu($Handle)
 			Sleep(500)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 750 500 750 400 300"); di chuyen cuon len 1 chut
 		 EndIf
-		 If Mod($loopindex,6) == 0 Then
+		 If Mod($loopindex,20) == 0 Then
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 		 EndIf
 		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
@@ -1484,6 +1507,7 @@ Func _startAndLogin()
 	 WEnd
 	 Local $count = 0
 	 AdLibRegister("_resolveBug", 6000);auto run every 6 s
+	 AdLibRegister("_openGame", 15000);auto run this function every 15 s
 	 While 1 ;buoc dang nhap
 		$count = $count + 1
 		If $count > 50 Then
@@ -1492,7 +1516,7 @@ Func _startAndLogin()
 		   Exit 0
 		EndIf
 		 Local $ImageiconTK = @ScriptDir & "\image\icontaikhoan.bmp"
-		 Local $ResultTK = _HandleImgWaitExist($hwnd, $ImageiconTK,2, 0, 0, -1, -1,70, 2);search icon Tai Khoan
+		 Local $ResultTK = _HandleImgWaitExist($hwnd, $ImageiconTK,5, 0, 0, -1, -1,70, 2);search icon Tai Khoan
 		 If not @error Then
 			Sleep(5000)
 			ExitLoop
@@ -1501,7 +1525,6 @@ Func _startAndLogin()
 			Sleep(5000)
 		 EndIf
 	  WEnd
-	  AdlibUnRegister("_resolveBug")
 		 writelog("Dang Nhap " & _NowTime() & @CRLF) ; write console
 		 Sleep(4000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 669") ;click to dang nhap
@@ -1529,6 +1552,7 @@ Func _startAndLogin()
 			EndIf
 		 Else
 		 EndIf
+		 AdlibUnRegister("_resolveBug")
 	  EndFunc
 Func _openGame()
       If $flag_in_game == False Then
