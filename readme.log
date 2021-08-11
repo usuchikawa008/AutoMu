@@ -2,6 +2,11 @@ Mặc dù chỉ lấy phí 100k/tháng những vẫn nhiệt tình support các 
 nhằm cải tiến auto cho tốt hơn
 Liên Hệ Zalo 0902485321 để được hỗ trợ nếu auto ko chạy được
 
+Auto Mu Vượt thời đại cập nhập 4.8
+- Thêm lĩnh thưởng sôi nổi sau khi xong hết NV
+- Tự mở hòm boss sau khi xong hết NV
+- Hỗ trợ NV Guild Rank S chạy đc 2 người 
+- Tăng tầng xuất đi pb Boss TG và Boss CTC
 
 Auto Mu Vượt thời đại cập nhập 4.7
 - Fix 1 số lỗi đứng map
@@ -15,7 +20,7 @@ Chạy trên giả lập NOX phiên bản 7.0.10 trở xuống và Ldplayer vớ
  - Mún thao tác nhân vật thì tắt auto rồi làm sau đó bật lại
 Phiên bản hiện tại bao gồm những tính năng :
  - Huyễn cảnh trên không (Tự cổ vũ và giảm tốc)
- - Blood (Tự cổ vũ + ghép vé khi hết)
+ - Blood (Tự cổ vũ + ghép vé khi hết, mỗi lần ghép 10 cái)
  - Boss cá nhân
  - NV tiền thưởng (sét mặc định 10 phút mỗi vòng)
  - Đào mỏ (Tự nâng cấp quốc : lần đầu tiên nâng cấp 1 lần . Lần thứ 2 nâng hết khi hết lượt)
@@ -26,7 +31,7 @@ Phiên bản hiện tại bao gồm những tính năng :
  - Lấy thánh vật thưởng (chỉ lấy thánh vật thường)
  - Boss guild 12h (tự cổ vũ )
  - Tụ hội guild + Boss guild 8h (tự ăn thịt + cổ vũ boss + truyền công)
- - Devil (Tự cổ vũ + ghép vé khi hết)
+ - Devil (Tự cổ vũ + ghép vé khi hết, mỗi lần ghép 10 cái)
  - Hộ Tống (lần đầu đi bảo tàng vàng, lần 2 đi bảo tàng bạc)
  - Pháo đài đỏ 
  - Hỗ trợ guild (tùy chỉnh tại mục config)

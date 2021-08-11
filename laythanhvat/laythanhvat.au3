@@ -228,7 +228,7 @@ Func _GotoMaHoa($Title,$emuport,$Handle)
 	  Sleep(2000)
 	  ;check con soi noi hay ko
 	  Local $Imagesoinoi = @ScriptDir & "\image\soinoi0diem.bmp"
-	  _HandleImgWaitExist($Handle, $Imagesoinoi,1, 310, 320, 200, 60,119, 2);search soi noi 0 diem
+	  _HandleImgWaitExist($Handle, $Imagesoinoi,1, 310, 320, 200, 60,122, 2);search soi noi 0 diem
       If Not @error Then ;neu thay nghia la da het soi noi
 		 Return SetError(3)
 	  EndIf

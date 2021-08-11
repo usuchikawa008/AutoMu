@@ -548,7 +548,11 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 				  $index = $index + 1
 				  _ControlClickExactly($Title, "", "","", 1,$p[$index][0]+300+320, $p[$index][1]+20+120) ; click toi ho tro
 				  Local $Imagehuychuong = @ScriptDir & "\image\huychuongdanhvong.bmp"
-				  Local $Rs_Huychuong = _HandleImgWaitExist($Handle,$Imagehuychuong,1, 400, 240, 50, 50,110, 2);search hcdv
+				  Local $x_tolerance_huychuong = 110
+				  If $isLDPlayer == True Then
+					 $x_tolerance_huychuong = 115
+				  EndIf
+				  Local $Rs_Huychuong = _HandleImgWaitExist($Handle,$Imagehuychuong,1, 400, 240, 50, 50,$x_tolerance_huychuong, 2);search hcdv
 				  If not @error Then ; thay huy chuong
 					 Sleep(500)
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
@@ -717,7 +721,7 @@ Func _checkBossCTC($y)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1288 475");click cau cuu
 			AdLibRegister("_cauGiupGuild", 8000);auto run this function every 8 s trigger cau giup guild
 			Local $i
-			For $i = 1 to 50 Step + 1
+			For $i = 1 to 65 Step + 1
 			   Local $rs = _HandleImgWaitExist($hwnd, $ImageCauGiupGuild,11,648, 258, 110, 50,80, 2 );search icon cau giup guild
 			   If not @error Then
 				  Sleep(10000)

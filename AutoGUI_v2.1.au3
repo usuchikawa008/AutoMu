@@ -103,6 +103,7 @@ Global Const $T7 = "Saturday"
 ;config path start
 Global Const $config = "Configuration"
 Global Const $nvguildRankS = "NvGuildRankS"
+Global Const $nvguilddoi3nguoi = "NVGuildDoi3ng"
 Global Const $timewaitNvS = "WaitNvS"
 Global Const $weaktinhanh = "WeakTinhAnh"
 Global Const $baotang11h = "BaoTang11h"
@@ -405,6 +406,7 @@ Func Gui()
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $cmdStart, _setCmdStart($aList[$i][0]))
 		   ; init Config
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguildRankS, True)
+		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguilddoi3nguoi, True)
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $timewaitNvS, 60);60s
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $weaktinhanh, False)
 		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang11h, False)
@@ -491,9 +493,9 @@ Func Gui()
 	_GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
     #Region tab 2 start
 	GUICtrlCreateTabItem("Tiện ích")
-	Local $idCheckBoxAnExp = GUICtrlCreateCheckbox("Tự ăn đan EXP khi làm xong hết NV ", 20, 145, 200, 25)
+	Local $idCheckBoxAnExp = GUICtrlCreateCheckbox("Tự ăn đan EXP và mở hòm boss khi làm xong hết NV ", 20, 145, 280, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
-	Local $idCheckBoxCamTrain = GUICtrlCreateCheckbox("Cắm train khi hết NV ", 20, 170, 120, 25)
+	Local $idCheckBoxCamTrain = GUICtrlCreateCheckbox("Lĩnh thưởng sôi nổi và cắm train khi hết NV ", 20, 170, 250, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
 	Local $idCheckBoxGhepVeBlood = GUICtrlCreateCheckbox("Tự ghép vé blood/devil khi hết ", 20, 195, 200, 25)
 	GUICtrlSetState(-1, $GUI_CHECKED) ;Default checked
@@ -524,7 +526,8 @@ Func Gui()
     Global $idCheckBoxNVGuildRankS = GUICtrlCreateCheckbox("NV cấp S", 10, 20, 70, 25)
 	Global $idInputTimeWaitNVRankS = GUICtrlCreateInput("",110,23,25,15,$ES_NUMBER)
 	Global $idLableText = GUICtrlCreateLabel("Đợi",90,25,20,15)
-	Global $idLableText2 = GUICtrlCreateLabel("giây sau đó bỏ qua NV này",138,25,140,15)
+	Global $idLableText2 = GUICtrlCreateLabel("giây ",138,25,30,15)
+	Global $idCheckBox3Nguoi = GUICtrlCreateCheckbox("Đợi đủ 3 người", 170, 20, 100, 25)
 	GUICtrlSetLimit(-1, 3) ; to limit the entry to 3 chars
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;group NV Tinh Anh
@@ -1502,6 +1505,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $cmdStart, _setCmdStart($NoxOff))
 	    ; init Config
 		IniWrite($pathconfig&$NoxOff&".config", $config, $nvguildRankS, True)
+		IniWrite($pathconfig&$NoxOff&".config", $config, $nvguilddoi3nguoi, True)
 		IniWrite($pathconfig&$NoxOff&".config", $config, $timewaitNvS, 60);60s
 		IniWrite($pathconfig&$NoxOff&".config", $config, $weaktinhanh, False)
 		IniWrite($pathconfig&$NoxOff&".config", $config, $baotang11h, False)
@@ -1627,6 +1631,13 @@ Func readconfig()
 	 EndIf
      Local $checkbox_config_time_wait = IniRead($pathconfig&$currentAuto&".config", $config, $timewaitNvS, 60)
 	 GUICtrlSetData($idInputTimeWaitNVRankS,$checkbox_config_time_wait)
+	 ;3 ng
+	 Local $checkbox_config_NvGuildS_3nguoi = IniRead($pathconfig&$currentAuto&".config", $config, $nvguilddoi3nguoi, False)
+	 If $checkbox_config_NvGuildS_3nguoi == True Then
+		GUICtrlSetState($idCheckBox3Nguoi,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBox3Nguoi,$GUI_UNCHECKED)
+	 EndIf
 	 ;NV San Tinh Anh
 	 Local $checkbox_config_weaktinhanh = IniRead($pathconfig&$currentAuto&".config", $config, $weaktinhanh, False)
 	 If $checkbox_config_weaktinhanh == True Then
@@ -1787,6 +1798,12 @@ Func writeconfig()
 		IniWrite($pathconfig&$currentAuto&".config", $config, $nvguildRankS, True)
 	 Else
 		IniWrite($pathconfig&$currentAuto&".config", $config, $nvguildRankS, False)
+	 EndIf
+	 ;3ng
+	 If GUICtrlRead($idCheckBox3Nguoi) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $nvguilddoi3nguoi, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $nvguilddoi3nguoi, False)
 	 EndIf
 	 IniWrite($pathconfig&$currentAuto&".config", $config, $timewaitNvS, GUICtrlRead($idInputTimeWaitNVRankS)) ; luu time wait
 	 ;NV San Tinh Anh

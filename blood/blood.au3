@@ -223,12 +223,12 @@ Func _GotoDiaLao($Title,$emuport,$Handle)
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon dia lao
 		 Sleep(1500)
 		 ;check het luot
-		 Local $x_hetluotdialao_tolerance = 100
+		 Local $x_hetluotdialao_tolerance = 105
 		 If $isLDPlayer == True Then
-			$x_hetluotdialao_tolerance = 109
+			$x_hetluotdialao_tolerance = 136
 		 EndIf
 		 Local $Imagehetluot = @ScriptDir & "\image\hetluotdialao.bmp" ;image het luot
-		 _HandleImgWaitExist($Handle,$Imagehetluot,1, 0, 0, -1, -1,$x_hetluotdialao_tolerance, 2);search icon het luot
+		 _HandleImgWaitExist($Handle,$Imagehetluot,1, 400, 240, 100, 100,$x_hetluotdialao_tolerance, 2);search icon het luot
 		 If not @error Then ; tim thay -> het luot
 			Return SetError(3)
 		 EndIf
