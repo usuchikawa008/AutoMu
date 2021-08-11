@@ -1325,7 +1325,10 @@ Func _anDanExp()
 		 $x_balo = 114
    EndIf
    Local $flagAnExp = IniRead($pathImage&"1.tmp", $general, $anExp, ""); check flag an exp
-   If $flagAnExp <> True Then Return
+   If $flagAnExp == "False" Then
+	  Return
+   EndIf
+
    ;check an Dan
    _findIconMenu($hwnd)
    Local $count = 0

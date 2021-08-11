@@ -293,7 +293,7 @@ Func _checkToaDo($pointer,$Handle)
 	  Sleep(500)
 	  Local $rs= _HandleImgWaitExist($Handle, $Imagekct,1, 0, 0, -1, -1,$x_tolerance_kct, 2);search image kct
 	  If Not @error Then
-		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+120) ; click toi ngay ma hoa
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+60) ; click toi ngay ma hoa
 		 Sleep(600)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 600");click  kien tri toi
 		 Return 2
@@ -303,7 +303,7 @@ Func _checkToaDo($pointer,$Handle)
 	  Sleep(500)
 	  Local $rs= _HandleImgWaitExist($Handle, $Imagekct,1, 0, 0, -1, -1,$x_tolerance_kct, 2);search image kct
 	  If Not @error Then
-		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+120) ; click toi ngay ma hoa
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+60) ; click toi ngay ma hoa
 		 Sleep(600)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 600");click  kien tri toi
 		 Return 2
@@ -313,7 +313,7 @@ Func _checkToaDo($pointer,$Handle)
 	  Sleep(500)
 	  Local $rs= _HandleImgWaitExist($Handle, $Imagekct,1, 0, 0, -1, -1,$x_tolerance_kct, 2);search image kct
 	  If Not @error Then
-		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+120) ; click toi ngay ma hoa
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]+60) ; click toi ngay ma hoa
 		 Sleep(600)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 600");click  kien tri toi
 		 Return 2
