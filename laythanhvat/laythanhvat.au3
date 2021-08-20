@@ -286,7 +286,7 @@ Func _checkToaDo($pointer,$Handle)
 	  Local $x_tolerance_kct = 93
 	  If $isLDPlayer == True Then
 		 $Imagekct = @ScriptDir & "\image\kct_ld.bmp"
-		 $x_tolerance_kct = 92
+		 $x_tolerance_kct = 95
 	  EndIf
 
 	  _ControlClickExactly($Title, "", "","", 1,$pointer[1][0]+60, $pointer[1][1]-50) ; click toa do 1

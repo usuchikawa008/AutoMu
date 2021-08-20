@@ -6,18 +6,16 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 		WinActivate($myLastWin)
 	 EndIf
 	 Sleep(1000)
-	 ; check xem blood het luot hay chua
-    Local $ImagePathHetLuot = @ScriptDir & "\image\bloodhetluot.bmp"
-	Local $result = _HandleImgWaitExist($Handle, $ImagePathHetLuot,1, 0, 0, -1, -1,105, 10);search blood het luot
-	 If not @error Then
-		Return SetError(3)
-	 EndIf
-    Local $ImagePath = @ScriptDir & "\image\bloodconluot.bmp"
-	Local $p = _HandleImgSearch($Handle, $ImagePath, 0, 0, -1, -1,120, 10);search so luot pb blood
-	If @error Then
-	   writelog("Blood chua san sang ...." & _NowTime() & @CRLF) ; write console
-	   Return
-	 EndIf
+   Local $ImagePath = @ScriptDir & "\image\bloodconluot.bmp"
+   Local $ImagePathHetLuot = @ScriptDir & "\image\bloodhetluot.bmp"
+   Local $p = _searchNVAdvance($Handle,$ImagePathHetLuot,$ImagePath,105,120);search nv tien thuong
+   If @error Then ; het luot
+	  Return SetError(3)
+   EndIf
+   If $p == 2 Then ; ko tim thay hinh nao het
+	  _closeSimple($Handle);tat cua so
+	  Return
+   EndIf
 	 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi pb
 	 ;cho menu blood xuat hien start
 	 Sleep(1000)
@@ -214,43 +212,46 @@ Func _GotoDiaLao($Title,$emuport,$Handle)
 		WinActivate($Title)
 		WinActivate($myLastWin)
 	 EndIf
+ 	  Local $Imageconluotdialao = @ScriptDir & "\image\dialaonguyento_con.bmp"
+	  Local $Imagehetluotdialao = @ScriptDir & "\image\dialaonguyento_het.bmp"
+	  Local $p = _searchNVAdvance($Handle,$Imagehetluotdialao,$Imageconluotdialao,100,120);search nv tien thuong
+	  If @error Then ; het luot
+		 Return SetError(3)
+	  EndIf
+	  If $p == 2 Then ; ko tim thay hinh nao het
+		 _closeSimple($Handle);tat cua so
+	  Return
+	  EndIf
 	  Sleep(1000)
-	  Local $Imagedialao = @ScriptDir & "\image\dialaonguyento.bmp" ;image dia lao nguyen to
-	  Local $p = _HandleImgWaitExist($Handle,$Imagedialao,2, 0, 0, -1, -1,100, 2);search icon dia lao
+	 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon dia lao
+	  Sleep(1500)
+	  ;check het luot
+	  Local $x_hetluotdialao_tolerance = 105
+	  If $isLDPlayer == True Then
+		 $x_hetluotdialao_tolerance = 136
+	  EndIf
+	  Local $Imagehetluot = @ScriptDir & "\image\hetluotdialao.bmp" ;image het luot
+	  _HandleImgWaitExist($Handle,$Imagehetluot,1, 400, 240, 100, 100,$x_hetluotdialao_tolerance, 2);search icon het luot
+	  If not @error Then ; tim thay -> het luot
+		 Return SetError(3)
+	  EndIf
+	  Local $Imagefight = @ScriptDir & "\image\fightdialao.bmp" ;image chien dau
+	  Local $p = _HandleImgWaitExist($Handle,$Imagefight,2, 0, 0, -1, -1,100, 2);search icon chien dau
 	  If @error Then ; ko tim thay -> lam lai luc khac
 		 Return
 	  Else
-		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon dia lao
+		 _ControlClickExactly($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click image
 		 Sleep(1500)
-		 ;check het luot
-		 Local $x_hetluotdialao_tolerance = 105
-		 If $isLDPlayer == True Then
-			$x_hetluotdialao_tolerance = 136
-		 EndIf
-		 Local $Imagehetluot = @ScriptDir & "\image\hetluotdialao.bmp" ;image het luot
-		 _HandleImgWaitExist($Handle,$Imagehetluot,1, 400, 240, 100, 100,$x_hetluotdialao_tolerance, 2);search icon het luot
-		 If not @error Then ; tim thay -> het luot
-			Return SetError(3)
-		 EndIf
-		 Local $Imagefight = @ScriptDir & "\image\fightdialao.bmp" ;image chien dau
-		 Local $p = _HandleImgWaitExist($Handle,$Imagefight,2, 0, 0, -1, -1,100, 2);search icon chien dau
+		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click toi khieu chien
+		  Sleep(2000)
+		  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+		 _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 		 If @error Then ; ko tim thay -> lam lai luc khac
 			Return
 		 Else
-			_ControlClickExactly($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click image
-			Sleep(1500)
-			 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click toi khieu chien
-			 Sleep(2000)
-			 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-			_HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
-			If @error Then ; ko tim thay -> lam lai luc khac
-			   Return
-			Else
-			   writelog("Vào khiêu chiến địa lao...." & _NowTime() & @CRLF) ; write console
-			   Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-			   Local $Result = _HandleImgWaitExist($Handle, $ImagePath,71, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
-			EndIf
-
+			writelog("Vào khiêu chiến địa lao...." & _NowTime() & @CRLF) ; write console
+			Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,71, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 		 EndIf
 	  EndIf
 	  Sleep(2000)

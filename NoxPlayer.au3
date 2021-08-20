@@ -146,7 +146,7 @@ Global $x_toler_close = 94
 Global $x_toler_nvtienthuong = 110
 
 If isLDPlayer() Then ; -> LDplayer
-   $x_toler_menu = 103
+   $x_toler_menu = 112
    $x_toler_thoatpb = 90
    $x_toler_close = 102
    $x_toler_nvtienthuong = 115
