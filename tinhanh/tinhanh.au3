@@ -152,7 +152,7 @@ Func _GotoBossTheGioi($Title,$emuport,$Handle)
 				  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 800");click toi ngay
 				  Sleep(4000)
 				  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-				  Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,7, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+				  Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,15, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 				  If not @error Then ; da vo pho ban
 					 writelog("Vo PB Boss The Gioi" & _NowTime() & @CRLF) ; write console
 					 Sleep(2000)
@@ -182,7 +182,7 @@ Func _GotoBossTheGioi($Title,$emuport,$Handle)
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 800");click toi ngay
 					 Sleep(4000)
 					 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-					 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,7, 0, 0, -1, -1,$x_toler_thoatpb, 2);search icon thoat pho ban
+					 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,15, 0, 0, -1, -1,$x_toler_thoatpb, 2);search icon thoat pho ban
 					 If not @error Then ; da vo pho ban
 						writelog("Vo PB Boss The Gioi" & _NowTime() & @CRLF) ; write console
 						Sleep(2000)
@@ -211,7 +211,7 @@ Func _GotoBossTheGioi($Title,$emuport,$Handle)
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 800");click toi ngay
 					 Sleep(4000)
 					 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-					 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,7, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+					 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,15, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 					 If not @error Then ; da vo pho ban
 						writelog("Vo PB Boss The Gioi" & _NowTime() & @CRLF) ; write console
 						Sleep(2000)
@@ -433,8 +433,10 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 	  $Imageyeucauhotro = @ScriptDir & "\image\hotroguild.bmp"
 	  Local $p = _HandleImgWaitExist($Handle,$Imageyeucauhotro,2, 0, 0, -1, -1,90, 2);search icon ho tro guild
 	  If not @error Then ; thay yeu cau ho tro
+		 writelog("Option 1"& @CRLF) ; write console
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+2, $p[1][1]+2) ; click toi yeu cau ho tro
 	  Else
+		 writelog("Option 2"& @CRLF) ; write console
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 366 683");click to ho tro
 	  EndIf
 	  Sleep(2000)
@@ -707,7 +709,7 @@ Func _checkBossCTC($y)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 800");click toi ngay
 	  Sleep(5000)
 	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-	  Local $rsthoatpb = _HandleImgWaitExist($hwnd, $Imagethoatpb,4, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+	  Local $rsthoatpb = _HandleImgWaitExist($hwnd, $Imagethoatpb,10, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 	  If not @error Then ; da vo pho ban
 		 writelog("Vao pb CTC" & _NowTime() & @CRLF) ; write console
 		 Sleep(10000); cho toi boss
@@ -835,12 +837,12 @@ EndFunc
 Func _SendByLD($dapan)
    _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 359 855");click khung chat
    Local $Imageok = @ScriptDir & "\image\ok_ld.bmp"
-   _HandleImgWaitExist($hwnd,$Imageok,2, 0,0, -1, -1,80, 5)
+   Local $result = _HandleImgWaitExist($hwnd,$Imageok,2, 0,0, -1, -1,80, 5)
    If Not @error Then
 	  Opt("WinTitleMatchMode", 3)
 	  ControlSend($Title,"","",_ANSIToUnicode($dapan));gui dap an vo box chat
-	  Sleep(300)
-	  _ControlClickExactly($Title, "", "","", 1,$Imageok[1][0], $Imageok[1][1]) ; click icon ok
+	  Sleep(500)
+	  _ControlClickExactly($Title, "", "","", 1, $result[1][0], $result[1][1]) ; click icon ok
    EndIf
 EndFunc
 Func _SendByNox($dapan)
@@ -855,6 +857,11 @@ Func _SendByNox($dapan)
    EndIf
 EndFunc
 Func _traloi()
+   Local $x_tolerance_cauhoi = 90
+   If $isLDPlayer == True Then
+	  $x_tolerance_cauhoi = 124
+   EndIf
+
    While 1
 	  Local $Now = _NowTime(4);time hien tai
 	  Local $var1 = StringRegExpReplace($Now, "[:]", "")
@@ -864,7 +871,7 @@ Func _traloi()
 	  For $i = 1 To UBound($listcauhoi)-1
 	  Local $name = StringSplit($listcauhoi[$i],".")[1]
 	  Local $Imagepath = @ScriptDir & "\image\cauhoi\"&$name&".bmp"
-	  _HandleImgSearch($hwnd,$Imagepath,0,0, -1, -1,90, 5)
+	  _HandleImgSearch($hwnd,$Imagepath,0,0, -1, -1,$x_tolerance_cauhoi, 5)
 	  If Not @error Then ; tim thay  cau hoi
 		 Local $dapan = IniRead($pathDapan, "Answer", $name, ""); doc
 		 If $dapan <> "" Then

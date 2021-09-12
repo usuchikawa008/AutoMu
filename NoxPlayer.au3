@@ -79,6 +79,7 @@ Global Const $bosschientruong = "BossChienTruong"
 Global Const $mahoa = "MaHoa"
 Global Const $chinhtuyen = "ChinhTuyen"
 Global Const $dialao = "DiaLao"
+Global Const $thanhdan = "ThanhDan"
 ;config auto Run
 Global Const $run = "Run"
 Global Const $finish = "Finish"
@@ -140,7 +141,7 @@ Global Const $tolerance_nvtienthuong = "Tolerance_NvTienthuong"
 ;~ IniWrite($pathImage&"tolerance.ini", $noxplayer, $tolerance_menu,94) ;
 ;~ IniWrite($pathImage&"tolerance.ini", $ldplayer, $tolerance_menu,103) ;
 ;get properties
-Global $x_toler_menu = 94
+Global $x_toler_menu = 95
 Global $x_toler_thoatpb = 85
 Global $x_toler_close = 94
 Global $x_toler_nvtienthuong = 110
@@ -719,6 +720,29 @@ Func Auto()
 			 writelog("20. Hoàn thành địa lao..." & _NowTime() & @CRLF) ; write console
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $dialao,$notyet) ; change status wait
+		  EndIf
+		  Sleep(2000)
+	   EndIf
+
+	    #cs
+	10.2. ThanhDan
+	#ce
+	   Local $scheckbox_thanhdan = IniRead($path&$Title&".tmp", $hoatdong, $thanhdan, False)
+	   Local $status_thanhdan = IniRead($pathstatus&$Title&".tmp", $status, $thanhdan, $notyet)
+	   If $scheckbox_thanhdan == True And $status_thanhdan <> $done Then
+		  $countNV = $countNV + 1
+		  Local $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $thanhdan,$doing) ; change status doing
+		  _GotoThanhDan($Title,$emuport,$hwnd) ; thanh dan nguyen to #blood.au3
+		  If @error Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $thanhdan,$done) ; change status done
+			 writelog("21. Hoàn thành thánh đàn..." & _NowTime() & @CRLF) ; write console
+		  Else
+			  IniWrite($pathstatus&$Title&".tmp", $status, $thanhdan,$notyet) ; change status wait
 		  EndIf
 		  Sleep(2000)
 	   EndIf
@@ -1343,6 +1367,7 @@ Func _anDanExp()
 		 ;search Dan Exp
 		 While 1
 			;search exp lon
+			Sleep(500)
 			Local $Imageexplon = @ScriptDir & "\image\expLon.bmp"
 			$Result = _HandleImgWaitExist($hwnd,$Imageexplon,1, 0, 0, -1, -1,90, 10);search exp lon
 			If not @error Then ; thay exp -> click
@@ -1370,14 +1395,56 @@ Func _anDanExp()
 				  ContinueLoop
 			   EndIf
 			EndIf
+			;search exp Cam
+			Local $Imageexpcam = @ScriptDir & "\image\expCam.bmp"
+			$Result = _HandleImgWaitExist($hwnd,$Imageexpcam,1, 0, 0, -1, -1,90, 10);search exp cam
+			If not @error Then ; thay exp -> click
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
+			   Sleep(1000)
+			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
+			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,90, 10);search btn su dung
+			   If not @error Then ; thay su dung btn -> click
+				  _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
+				  Sleep(1000)
+				  ContinueLoop
+			   EndIf
+			EndIf
+			;search exp xanh
+			Local $Imageexpxanh = @ScriptDir & "\image\expXanh.bmp"
+			$Result = _HandleImgWaitExist($hwnd,$Imageexpxanh,1, 0, 0, -1, -1,90, 10);search exp cam
+			If not @error Then ; thay exp -> click
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
+			   Sleep(1000)
+			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
+			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,90, 10);search btn su dung
+			   If not @error Then ; thay su dung btn -> click
+				  _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
+				  Sleep(1000)
+				  ContinueLoop
+			   EndIf
+			EndIf
+			;search exp green
+			Local $Imageexpgreen = @ScriptDir & "\image\expGreen.bmp"
+			$Result = _HandleImgWaitExist($hwnd,$Imageexpgreen,1, 0, 0, -1, -1,90, 10);search exp green
+			If not @error Then ; thay exp -> click
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0], $Result[1][1]) ; click vo exp nho
+			   Sleep(1000)
+			   Local $Imagesudungbtn = @ScriptDir & "\image\thembtn.bmp"
+			   $Result = _HandleImgWaitExist($hwnd,$Imagesudungbtn,1, 0, 0, -1, -1,90, 10);search btn su dung
+			   If not @error Then ; thay su dung btn -> click
+				  _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+200, $Result[1][1]) ; click su dung btn
+				  Sleep(1000)
+				  ContinueLoop
+			   EndIf
+			EndIf
 			writelog("Da an het dan exp" & @CRLF) ; write console
 			ExitLoop
 		 WEnd
 		 #Region mo hom
 		 writelog("Mở rương boss" & @CRLF) ; write console
-		 Local $x_tolerance_RuongVang = 85
+		 Local $x_tolerance_RuongVang = 90
 		 If $isLDPlayer == True Then
-			Local $x_tolerance_RuongVang = 95
+			Local $x_tolerance_RuongVang = 97
 		 EndIf
 		 Local $x_tolerance_MoLanNua = 85
 		 If $isLDPlayer == True Then
@@ -1385,7 +1452,7 @@ Func _anDanExp()
 		 EndIf
 		 Local $x_tolerance_HuyChuong = 90
 		 If $isLDPlayer == True Then
-			Local $x_tolerance_HuyChuong = 95
+			Local $x_tolerance_HuyChuong = 97
 		 EndIf
 		 For $i = 1 To 5 Step + 1
 			Local $Image_RuongVang = @ScriptDir & "\image\ruongvang.bmp"
@@ -1403,7 +1470,7 @@ Func _anDanExp()
 					 Sleep(1500)
 				  Else
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 550") ;click dong
-					 Sleep(1000)
+					 Sleep(1500)
 					 ExitLoop
 				  EndIf
 			   Next
@@ -1424,7 +1491,7 @@ Func _anDanExp()
 					 Sleep(1500)
 				  Else
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 800 550") ;click dong
-					 Sleep(1000)
+					 Sleep(1500)
 					 ExitLoop
 				  EndIf
 			   Next
@@ -1482,6 +1549,12 @@ EndFunc
 Func _findIconMenu($Handle)
    Local $loopindex = 0
    While 1 ;tim den khi thay menu
+	  Local $Imagehuy1 = @ScriptDir & "\image\huy1.bmp"
+	  Local $rs_huy1 = _HandleImgSearch($Handle,$Imagehuy1, 0, 0, -1, -1,89, 4);search btn huy
+	  If not @error Then
+		 _ControlClickExactly($Title, "", "","", 1,$rs_huy1[1][0], $rs_huy1[1][1]) ; click huy
+	  EndIf
+
 	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
 	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,1, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
       If @error Then ; ko thay menu

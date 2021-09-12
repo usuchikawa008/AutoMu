@@ -8,7 +8,7 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 	 Sleep(1000)
    Local $ImagePath = @ScriptDir & "\image\bloodconluot.bmp"
    Local $ImagePathHetLuot = @ScriptDir & "\image\bloodhetluot.bmp"
-   Local $p = _searchNVAdvance($Handle,$ImagePathHetLuot,$ImagePath,105,120);search nv tien thuong
+   Local $p = _searchNVAdvance($Handle,$ImagePathHetLuot,$ImagePath,105,120,2);search nv tien thuong
    If @error Then ; het luot
 	  Return SetError(3)
    EndIf
@@ -198,6 +198,7 @@ Func _GotoPhaoDaiDo($Title,$emuport,$Handle)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
 		 ;click confirm neu dang trong party
 		 writelog("Cho ket thuc phao dai...." & _NowTime() & @CRLF) ; write console
+		 Sleep(180000)
 		 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
 		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,660, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 	  EndIf
@@ -253,6 +254,45 @@ Func _GotoDiaLao($Title,$emuport,$Handle)
 			Local $ImagePath = @ScriptDir & "\image\menu.bmp"
 			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,71, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 		 EndIf
+	  EndIf
+	  Sleep(2000)
+   EndFunc   ;==>GotoPB
+
+
+Func _GotoThanhDan($Title,$emuport,$Handle)
+	If BitAND(WinGetState($Title), 16) Then
+		MsgBox(0,"Message",WinGetState($Title))
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	 EndIf
+ 	  Local $Imageconluotthanhdan = @ScriptDir & "\image\thanhdannguyento_con.bmp"
+	  Local $Imagehetluotthanhdan = @ScriptDir & "\image\thanhdannguyento_het.bmp"
+	  Local $p = _searchNVAdvance($Handle,$Imagehetluotthanhdan,$Imageconluotthanhdan,100,120);search nv thanhdan
+	  If @error Then ; het luot
+		 Return SetError(3)
+	  EndIf
+	  If $p == 2 Then ; ko tim thay hinh nao het
+		 _closeSimple($Handle);tat cua so
+		 Return
+	  EndIf
+	  Sleep(1000)
+	 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon thanh dan
+	  Sleep(2000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click toi khieu chien
+	  Sleep(4000)
+	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+	  _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+	  If @error Then ; ko tim thay -> lam lai luc khac
+		 Return
+	  Else
+		 writelog("Vào khiêu chiến thánh đàn...." & _NowTime() & @CRLF) ; write console
+		 Sleep(5000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 250 300");click focus vo 1 tru
+		 ;cho 60s
+		 Sleep(60000)
+		 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
+		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,300, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 	  EndIf
 	  Sleep(2000)
 EndFunc   ;==>GotoPB

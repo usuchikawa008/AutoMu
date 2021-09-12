@@ -244,7 +244,7 @@ Func _GotoMaHoa($Title,$emuport,$Handle)
 		 Sleep(2000)
 	  EndIf
 	  Local $Imagemahoatrc = @ScriptDir & "\image\mahoalantruoc.bmp"
-	  Local $x_tolerance_mahoa = 65
+	  Local $x_tolerance_mahoa = 67
 	  If $isLDPlayer == True Then
 		 $x_tolerance_mahoa = 66
 	  EndIf
@@ -254,13 +254,14 @@ Func _GotoMaHoa($Title,$emuport,$Handle)
 		 Local $result = _checkToaDo($rs,$Handle)
 		 If $result == "Exit" Then Return
 		 If $result == 2 Then
+			Sleep(4000)
 			Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
 			Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,6, 0, 0, -1, -1,$x_toler_thoatpb, 2);search icon thoat pho ban
 			If not @error Then ; da vo pho ban
 			   writelog("Da vo Ma Hoa" & _NowTime() & @CRLF) ; write console
 			   While 1
 				  Local $Imagexacnhanbtn = @ScriptDir & "\image\endmahoa.bmp"
-				  Local $rs_xacnhanbtn = _HandleImgWaitExist($Handle, $Imagexacnhanbtn,2, 0, 0, -1, -1,70, 2);search icon thoat pho ban
+				  Local $rs_xacnhanbtn = _HandleImgWaitExist($Handle, $Imagexacnhanbtn,2, 390, 350, 100, 45,100, 2);search icon thoat pho ban
 				  If not @error Then ; thay image nay la ma hoa ket thuc
 					 writelog("Ma Hoa Ket Thuc" & _NowTime() & @CRLF) ; write console
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 815 626");click to xac nhan
