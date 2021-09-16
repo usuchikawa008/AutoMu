@@ -1,6 +1,6 @@
 [Run]
-PID=
+PID=40004
 Finish=True
 Name_In_Game=
-StatusNox=Off
+StatusNox=Onl
 cmdStart=ldconsole.exe launch --index 2
