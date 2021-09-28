@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>vRO Market</title>
+<meta name="description" content="Tìm kiếm vật phẩm đang được bán ở vRO">
+<meta name="keywords" content="vRO, Ragnarok, Ragnarok Online">
+<meta name="author" content="Vietlubu">
+<link rel="stylesheet" type="text/css" href="https://vro-market.com/css/style.css?v=210814.0">
+<link rel="icon" href="https://vro-market.com/images/icons/icon48.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<script data-ad-client="ca-pub-9180911420156999" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6P8KJHC4D1"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-6P8KJHC4D1');
+    </script>
+</head>
+<body>
+<div class="" id="wrapper">
+<div class="" id="container">
+<div class="" id="animation">
+</div>
+<div class="" id="app">
+<div id="body">
+<div class="ro-titlebar">
+<div class="ro-btn ro-win-btn"></div>
+<p class="ro-win-title">vRO Market beta version 0.00000000000000000001</p>
+</div>
+<div class="ro-win-content">
+<div class="container info alert alert-warning">
+<div class="row">
+<a href="https://vro-market.com/">http://vro-market.com/</a>
+<p class="fw-bold">* Đây không phải là công cụ chính thức từ vRO</p>
+<p>Đây là công cụ tìm kiếm các vật phẩm đang được bày bán tại vRO.</p>
+<p>Công cụ vẫn được được phát triển. Nếu có góp ý, thắc mắc bạn có thể tham gia vào <a class="fs-5 fw-bold" href="https://discord.gg/S3JU5gNZQp" target="_blank">Discord</a> của vRO Market</p>
+</div>
+</div>
+<form class="form-search container" method="get">
+<div class="row mb-3">
+<label for="searchItem" class="col-sm-2 col-form-label">Tìm kiếm</label>
+<div class="col-sm-10">
+<input name="search-item" value="6962" type="text" class="form-control info" id="searchItem" placeholder="Tìm theo tên hoặc ID vật phẩm">
+</div>
+</div>
+<div class="row advance-search mb-3">
+<div class="card card-body">
+<div class="row mb-3">
+<label class="col-sm-2 col-form-label">Giá tiền</label>
+<div class="col-sm-5">
+<input name="min-price" value="" type="text" class="form-control" placeholder="Thấp nhất">
+</div>
+<div class="col-sm-5">
+<input name="max-price" value="" type="text" class="form-control" placeholder="Cao nhất">
+</div>
+</div>
+<div class="row mb-3">
+<label for="refine-point" class="col-sm-2 col-form-label">Refine >= <span class="text-green fw-bold refine-value">0</span></label>
+<div class="col-sm-10">
+<input style="margin-top: 6px" value="0" name="upgrade" type="range" class="form-range" min="0" max="20" id="refine-range" />
+</div>
+</div>
+<div class="row mb-3">
+<label for="options" class="col-sm-2 col-form-label">Options (beta)</label>
+<div class="col-sm-10">
+<select name="option" id="options" class="form-control">
+<option selected value="0">Không chọn</option>
+<option value="175">thuộc tính vũ khí: trung tính (neutral)</option>
+<option value="176">thuộc tính vũ khí: nước (water)</option>
+<option value="177">thuộc tính vũ khí: đất (earth)</option>
+<option value="178">thuộc tính vũ khí: lửa (fire)</option>
+<option value="179">thuộc tính vũ khí: gió (wind)</option>
+<option value="180">thuộc tính vũ khí: độc (poison)</option>
+<option value="181">thuộc tính vũ khí: thánh (holy)</option>
+<option value="182">thuộc tính vũ khí: bóng tối (shadow)</option>
+<option value="183">thuộc tính vũ khí: hồn ma (ghost)</option>
+<option value="184">thuộc tính vũ khí: xác sống (undead)</option>
+<option value="185">không bị hư trong giao tranh</option>
+</select>
+</div>
+</div>
+<div class="row mb-3">
+<label class="col-sm-2 col-form-label">Loại vật phẩm</label>
+<div class="col-sm-10">
+<div class="row">
+<div class="col-sm-4">
+<select name="item_type_id" id="itemType" class="form-control">
+<option value="-1">Chọn loại vật phẩm</option>
+<option value="1">
+Weapon
+</option>
+<option value="2">
+Armor
+</option>
+<option value="6">
+Card
+</option>
+<option value="9">
+Costume
+</option>
+<option value="10">
+Shadow Equipment
+</option>
+<option value="3">
+Consumable
+</option>
+ <option value="4">
+Ammo
+</option>
+<option value="5">
+Ect
+</option>
+</select>
+</div>
+<div class="col-sm-4">
+<select name="item_sub_type_id" id="itemSubType" class="form-control" disabled>
+<option value="-1">Chọn loại vật phẩm</option>
+</select>
+</div>
+<div class="col-sm-4">
+<select name="item_location_id" id="itemLocation" class="form-control" disabled>
+<option value="-1">Chọn vị trí trang bị</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-6 align-content-center">
+<button class="btn btn-info" type="submit">
+Tìm kiếm
+</button>
+</div>
+<div class="col-sm-6 align-content-center">
+<a class="btn btn-link" href="https://vro-market.com">
+Xóa tìm kiếm
+</a>
+</div>
+</div>
+</form>
+<div class="container mt-3">
+<span class="updated-info">Đang cập nhật cho <span class="fw-bold">Prontera</span> từ lúc <span class="fst-italic">2021-09-27 20:00:53</span> (222 giây trước)</span>
+<span class="mb-3 d-block fst-italic text-black-50">Nếu thời gian cập nhật kéo dài hơn 3 phút. Vui lòng tát thẳng mặt mình trong <a target="_blank" href="https://discord.gg/S3JU5gNZQp">Discord</a> để mình kiểm tra</span>
+<h5>Kết quả (7)</h5>
+<table class="table list-item">
+<thead>
+<tr>
+<th scope="col">Item Name</th>
+<th scope="col">
+Price
+<a class="fw-bold" href="https://vro-market.com/?search-item=6962&amp;sort-price-type=desc">
+<i class="bi bi-sort-numeric-down"></i>
+</a>
+</th>
+<th scope="col">Shop Name</th>
+<th scope="col">Người bán</th>
+<th scope="col">Map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>490,000z</td>
+<td>Tank/Poison</td>
+<td>HShot</td>
+<td>
+<span class="vender-map" onclick="copyNavi('prontera', '154', '120')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Prontera 154/120
+</span>
+</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>Taòp Hoìa CHIKAPU</td>
+<td>Imber</td>
+<td>
+<span class="vender-map" onclick="copyNavi('prontera', '154', '76')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Prontera 154/76
+</span>
+</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>480,000z</td>
+<td>Thanh Ly&#039; !!!!!!!!!!!!!!!!!!</td>
+<td>Knight10</td>
+<td>
+<span class="vender-map" onclick="copyNavi('prontera', '155', '74')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Prontera 155/74
+</span>
+</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>419,999z</td>
+<td>Cheap</td>
+<td>Izakumai</td>
+<td>
+<span class="vender-map" onclick="copyNavi('prontera', '164', '81')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Prontera 164/81
+</span>
+</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>soc cu card, old fuel</td>
+<td>KaoKnight</td>
+<td>
+<span class="vender-map" onclick="copyNavi('prontera', '152', '100')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Prontera 152/100
+</span>
+</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>WW Brooch 2 dex</td>
+<td>MrZenny</td>
+<td>
+<span class="vender-map" onclick="copyNavi('prontera', '146', '106')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Prontera 146/106
+</span>
+ </td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                <div class="item-desc-window">
+                                    <span>
+                                        <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                        <div class="item-name">Old Fuel Tank</div>
+                                        <div class="item-desc">
+                                            Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                        </div>
+                                        <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                    </span>
+                                </div>
+                                                            '>
+Old Fuel Tank
+</a>
+<td>470,000z</td>
+<td>S&gt;1k2 Honer Token</td>
+<td>Cinder</td>
+<td>
+<span class="vender-map" onclick="copyNavi('moc_para01', '27', '23')" data-toggle="tooltip" data-bs-html="true" data-bs-placement="left" title='<div class="map-tooltip">Click để copy lệnh /navi</div>'>
+Eden group 27/23
+</span>
+</td>
+</tr>
+</tbody>
+</table>
+<h5 class="mt-5">Giá sản phẩm này trước đây</h5>
+Khoảng giá 250,000z ~ 600,000z
+<table class="table list-item list-item-history">
+<thead>
+<tr>
+<th scope="col">Item Name</th>
+<th scope="col">Price</th>
+<th scope="col">Người bán</th>
+<th scope="col">Ngày bán</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>399,999z</td>
+<td>Izakumai</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>400,000z</td>
+<td>Cafedenda</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>480,000z</td>
+<td>Overload</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>480,000z</td>
+<td>Knight10</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>480,000z</td>
+<td>OhMyGod</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>490,000z</td>
+<td>SADDD</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>490,000z</td>
+<td>Knight10</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>499,999z</td>
+<td>RangerRok</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>499,999z</td>
+<td>CEOCompany</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>499,999z</td>
+<td>Raizoha</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>Seller2</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>PeNgoc</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>Knight10</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>buonbanmer</td>
+<td>2021-09-27</td>
+</tr>
+<tr>
+<td>
+<img class="item-icon" src="https://static.divine-pride.net/images/items/item/6962.png" alt="icon">
+<a class="item-name" href="http://vro-market.com?search-item=6962" data-bs-placement="right" data-toggle="tooltip" data-bs-html="true" title='
+                                    <div class="item-desc-window">
+                                        <span>
+                                            <img src="https://static.divine-pride.net/images/items/collection/6962.png" class="img-collection">
+                                            <div class="item-name">Old Fuel Tank</div>
+                                            <div class="item-desc">
+                                                Bản thân bình xăng đã cũ, nhưng dường như vẫn còn một ít nhiên liệu bên trong. Nó có vẻ hữu ích.&lt;br&gt;&lt;font color=&quot;#ffffff&quot;&gt;_&lt;/font&gt;&lt;br&gt;Nặng: &lt;font color=&quot;#777777&quot;&gt;10&lt;/font&gt;
+                                    </div>
+                                    <img src="http://vro-market.com/images/basic_interface/desc_bg_end.png" data-toybox-uid="681" class="img-bottom-bg">
+                                        </span>
+                                    </div>
+                                                                '>
+Old Fuel Tank
+</a>
+<td>500,000z</td>
+<td>MVPDealer</td>
+<td>2021-09-27</td>
+</tr>
+</tbody>
+</table>
+<nav>
+<ul class="pagination">
+<li class="page-item disabled" aria-disabled="true">
+<span class="page-link">&laquo; Trang trước</span>
+</li>
+<li class="page-item">
+<a class="page-link" href="http://vro-market.com?search-item=6962&amp;page-history=2" rel="next">Trang sau &raquo;</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="col" style="text-align: center;">
+<span class="text-white">Ragnarok Online is © 2002-2021 <a href="http://www.gravity.co.kr/" target="_blank">Gravity Co., Ltd.</a> &amp; Lee Myoungjin.</span>
+</div>
+</footer>
+</div>
+</div>
+<script type="text/javascript" src="https://vro-market.com/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://vro-market.com/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://vro-market.com/js/dragable.js"></script>
+<script type="text/javascript" src="https://vro-market.com/js/app.js?version=0.0.1"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+        $(document).ready(function() {
+            $('input[name="upgrade"]').on('input', function () {
+                $('.refine-value').text($('input[name="upgrade"]').val());
+            });
+        });
+
+
+        // Load item type
+        let itemTypes = JSON.parse('{"1":{"id":1,"name":"Weapon","item_sub_types":[{"id":256,"name":"Dagger"},{"id":257,"name":"Sword"},{"id":258,"name":"Two-handed Sword"},{"id":259,"name":"Spear"},{"id":260,"name":"Two-handed Spear"},{"id":261,"name":"Axe"},{"id":262,"name":"Two-handed Axe"},{"id":263,"name":"Mace"},{"id":264,"name":"Two-handed Mace"},{"id":265,"name":"Rod"},{"id":266,"name":"Two-handed Rod"},{"id":267,"name":"Bow"},{"id":268,"name":"Fist weapon"},{"id":269,"name":"Instrument"},{"id":270,"name":"Whip"},{"id":271,"name":"Book"},{"id":272,"name":"Katar"},{"id":273,"name":"Pistol"},{"id":274,"name":"Rifle"},{"id":275,"name":"Gatling Gun"},{"id":276,"name":"Shotgun"},{"id":277,"name":"Grenade Launcher"},{"id":278,"name":"Shuriken"}]},"2":{"id":2,"name":"Armor","item_sub_types":[{"id":512,"name":"Helm"},{"id":513,"name":"Armor"},{"id":514,"name":"Shield"},{"id":515,"name":"Garment"},{"id":516,"name":"Shoes"},{"id":517,"name":"Accessory"},{"id":510,"name":"Accessory (Right)"},{"id":511,"name":"Accessory (Left)"},{"id":518,"name":"Pet"}],"item_locations":[{"id":256,"name":"Upper Headgear"},{"id":512,"name":"Middle Headgear"},{"id":1,"name":"Lower Headgear"},{"id":769,"name":"Upper\/Mid\/Lower Headgear"},{"id":768,"name":"Upper\/Mid Headgear"},{"id":513,"name":"Mid\/Lower Headgear"},{"id":16,"name":"Armor"},{"id":2,"name":"Weapon"},{"id":32,"name":"Shield"},{"id":34,"name":"Two-Handed"},{"id":50,"name":"Armor\/Hands"},{"id":4,"name":"Garment"},{"id":64,"name":"Footgear"},{"id":136,"name":"Accessories"},{"id":32768,"name":"Arrow\/Ammo"}]},"6":{"id":6,"name":"Card","item_sub_types":[{"id":769,"name":"Headgear"},{"id":16,"name":"Armor"},{"id":0,"name":"Weapon"},{"id":32,"name":"Shield"},{"id":4,"name":"Garment"},{"id":64,"name":"Shoes"},{"id":136,"name":"Accessory"},{"id":8,"name":"Accessory (Right)"},{"id":128,"name":"Accessory (Left)"}]},"9":{"id":9,"name":"Costume","item_sub_types":[{"id":519,"name":"Costume Helm"},{"id":522,"name":"Costume Garment"},{"id":525,"name":"Costume Floor"}],"item_locations":[{"id":4096,"name":"Costume Low Headgear"},{"id":2048,"name":"Costume Mid Headgear"},{"id":1024,"name":"Costume Top Headgear"},{"id":7168,"name":"Costume Low\/Mid\/Top Headgear"},{"id":3072,"name":"Costume Mid\/Top Headgear"},{"id":6144,"name":"Costume Low\/Mid Headgear"}]},"10":{"id":10,"name":"Shadow Equipment","item_sub_types":[{"id":526,"name":"Shadow Armor"},{"id":527,"name":"Shadow Shield"},{"id":528,"name":"Shadow Shoes"},{"id":531,"name":"Shadow Accessory"},{"id":529,"name":"Shadow Acc. (Right)"},{"id":530,"name":"Shadow Acc. (Left)"},{"id":280,"name":"Shadow Weapon"}]},"3":{"id":3,"name":"Consumable"},"4":{"id":4,"name":"Ammo"},"5":{"id":5,"name":"Ect"}}');
+
+        let selectItemType = document.getElementById("itemType");
+        let selectItemSubType = document.getElementById("itemSubType");
+        let selectItemLocation = document.getElementById("itemLocation");
+
+        // Load to select box item type
+        // for (let itemTypeIndex in itemTypes) {
+        //     let itemType = itemTypes[itemTypeIndex];
+        //     let option = document.createElement("option");
+        //     option.text = itemType['name'];
+        //     option.value = itemType['id'];
+        //     selectItemType.appendChild(option);
+        // }
+
+        selectItemType.addEventListener('change', (event) => {
+            // Set to default
+            selectItemSubType.innerHTML = '';
+            let defaultOptionSubType = document.createElement("option");
+            defaultOptionSubType.value = -1;
+            defaultOptionSubType.text = 'Chọn loại vật phẩm';
+            selectItemSubType.appendChild(defaultOptionSubType);
+            selectItemSubType.setAttribute('disabled', true);
+
+            selectItemLocation.innerHTML = '';
+            let defaultOptionLocation = document.createElement("option");
+            defaultOptionLocation.value = -1;
+            defaultOptionLocation.text = 'Chọn vị trí trang bị';
+            selectItemLocation.appendChild(defaultOptionLocation);
+            selectItemLocation.setAttribute('disabled', true);
+
+            let itemType = itemTypes[event.target.value];
+            if (itemType['item_sub_types'] && itemType['item_sub_types'].length > 0) {
+                for (let subTypeIndex in itemType['item_sub_types']) {
+                    let subType = itemType['item_sub_types'][subTypeIndex];
+
+                    let option = document.createElement("option");
+                    option.text = subType['name'];
+                    option.value = subType['id'];
+                    selectItemSubType.appendChild(option);
+                    selectItemSubType.removeAttribute('disabled');
+                }
+            }
+            if (itemType['item_locations'] && itemType['item_locations'].length > 0) {
+                for (let locationIndex in itemType['item_locations']) {
+                    let itemLocation = itemType['item_locations'][locationIndex];
+                    let option = document.createElement("option");
+                    option.text = itemLocation['name'];
+                    option.value = itemLocation['id'];
+                    selectItemLocation.appendChild(option);
+                    selectItemLocation.removeAttribute('disabled');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
   "ClientName": "Trial",
   "MAC": "TEST",
   "Social": "",
-  "DateExpire": "2021/09/03"
+  "DateExpire": "2021/09/28"
  },
  {
   "id": "2",
@@ -27,7 +27,7 @@
   "id": "4",
   "Code": "DGZRLD1RKC",
   "ClientName": "CodeVersion",
-  "MAC": "10.0.0.1.6",
+  "MAC": "10.0.0.1.8",
   "Social": "",
   "DateExpire": ""
  },
@@ -37,39 +37,39 @@
   "ClientName": "BinhPham",
   "MAC": "D0:37:45:0B:56:51",
   "Social": "ZALO",
-  "DateExpire": "2021/09/06"
+  "DateExpire": "2021/10/07"
  },
  {
   "id": "6",
   "Code": "QCITOA2VPS",
-  "ClientName": "VUI",
-  "MAC": "3C:7C:3F:23:E8:D3",
+  "ClientName": "Lam Aton",
+  "MAC": "4C:ED:FB:76:52:30",
   "Social": "ZALO",
-  "DateExpire": "2021/07/20"
+  "DateExpire": "2021/10/16"
  },
  {
   "id": "7",
   "Code": "ZM4NFCDCU7",
-  "ClientName": "Duong Dinh Vu",
-  "MAC": "FC:AA:14:76:B9:62",
-  "Social": "FB",
-  "DateExpire": "2021/08/19"
+  "ClientName": "TEST",
+  "MAC": "50:2B:73:D5:32:FE",
+  "Social": "ZL",
+  "DateExpire": "2021/09/26"
  },
  {
   "id": "8",
   "Code": "YPEM5NZAD8",
-  "ClientName": "Dung Nguyen",
-  "MAC": "D0:AB:D5:36:6B:63",
+  "ClientName": "TEST",
+  "MAC": "D4:3D:7E:DF:24:62",
   "Social": "ZALO",
-  "DateExpire": "2021/08/29"
+  "DateExpire": "2021/09/18"
  },
  {
   "id": "9",
   "Code": "5PNW4JO1O2",
-  "ClientName": "TEST",
-  "MAC": "1C:1B:0D:3E:F5:6B",
+  "ClientName": "Ngia Ngay Ngo",
+  "MAC": "F0:1F:AF:5A:FB:5A",
   "Social": "ZALO",
-  "DateExpire": "2021/09/02"
+  "DateExpire": "2021/10/27"
  },
  {
   "id": "10",
@@ -91,33 +91,33 @@
   "id": "12",
   "Code": "YNWUYOQEF3",
   "ClientName": "TEST",
-  "MAC": "B4:2E:99:62:8C:E0",
+  "MAC": "4C:80:93:BA:54:82",
   "Social": "ZALO",
-  "DateExpire": "2021/09/04"
+  "DateExpire": "2021/09/19"
  },
  {
   "id": "13",
   "Code": "JHV9TRGPBK",
-  "ClientName": "Ha Ngoc Thanh-AgentSell",
-  "MAC": "C4:46:19:04:CA:FF",
+  "ClientName": "TEST",
+  "MAC": "",
   "Social": "FB",
-  "DateExpire": "2021/08/14"
+  "DateExpire": "2021/09/18"
  },
  {
   "id": "14",
   "Code": "JHVR0IE6KQ",
-  "ClientName": "TEST",
+  "ClientName": "Duy Phat Nguyen",
   "MAC": "F4:B5:20:14:45:80",
   "Social": "ZL",
-  "DateExpire": "2021/08/30"
+  "DateExpire": "2021/10/24"
  },
  {
   "id": "15",
   "Code": "LEFE0Z0T53",
-  "ClientName": "Doan Van Quang-Hikary",
-  "MAC": "E8:DE:27:9E:D6:A8",
-  "Social": "FB",
-  "DateExpire": "2021/07/16"
+  "ClientName": "TEST",
+  "MAC": "F8:34:41:F8:94:A9",
+  "Social": "ZL",
+  "DateExpire": "2021/09/20"
  },
  {
   "id": "16",
@@ -125,23 +125,23 @@
   "ClientName": "Nguyen Huu Tung",
   "MAC": "B4:2E:99:79:17:73",
   "Social": "ZALO",
-  "DateExpire": "2021/08/24"
+  "DateExpire": "2021/10/05"
  },
  {
   "id": "17",
   "Code": "RGQHKZWLCE",
-  "ClientName": "Nguyen Lam",
-  "MAC": "FC:AA:14:51:97:86",
+  "ClientName": "TEST",
+  "MAC": "34:97:F6:86:E7:C7",
   "Social": "ZALO",
-  "DateExpire": "2021/07/24"
+  "DateExpire": "2021/09/21"
  },
  {
   "id": "18",
   "Code": "FHNXXX1KK1",
-  "ClientName": "LAM TRIEU PHU",
-  "MAC": "C0:CB:38:52:28:47",
-  "Social": "FB",
-  "DateExpire": "2021/07/25"
+  "ClientName": "Khanh Gian",
+  "MAC": "00:E0:6B:68:19:1C",
+  "Social": "ZALO",
+  "DateExpire": "2021/10/23"
  },
  {
   "id": "19",
@@ -181,7 +181,7 @@
   "ClientName": "Sala Huynh",
   "MAC": "18:0F:76:FA:65:C1",
   "Social": "ZALO",
-  "DateExpire": "2021/09/11"
+  "DateExpire": "2021/10/11"
  },
  {
   "id": "24",
@@ -221,15 +221,15 @@
   "ClientName": "Nguyen",
   "MAC": "2C:FD:A1:59:9C:D5",
   "Social": "ZALO",
-  "DateExpire": "2021/08/30"
+  "DateExpire": "2021/10/07"
  },
  {
   "id": "29",
   "Code": "KUX64EPAL3",
-  "ClientName": "Long Nguyen",
-  "MAC": "70:18:8B:51:CA:A3",
+  "ClientName": "Hieu Tran",
+  "MAC": "",
   "Social": "ZALO",
-  "DateExpire": "2021/09/01"
+  "DateExpire": "2021/10/28"
  },
  {
   "id": "30",
@@ -251,9 +251,9 @@
   "id": "32",
   "Code": "5DF723N12J",
   "ClientName": "John",
-  "MAC": "B8:DE:5E:53:64:26",
+  "MAC": "D0:50:99:87:C5:70",
   "Social": "ZALO",
-  "DateExpire": "2021/09/09"
+  "DateExpire": "2021/10/11"
  },
  {
   "id": "33",
@@ -269,7 +269,7 @@
   "ClientName": "Nguyen Duc Anh",
   "MAC": "A8:A1:59:4A:33:A9",
   "Social": "ZALO",
-  "DateExpire": "2021/09/14"
+  "DateExpire": "2021/10/16"
  },
  {
   "id": "35",
@@ -472,331 +472,123 @@
   "DateExpire": ""
  },
  {
-  "id": "60",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "60"
  },
  {
-  "id": "61",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "61"
  },
  {
-  "id": "62",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "62"
  },
  {
-  "id": "63",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "63"
  },
  {
-  "id": "64",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "64"
  },
  {
-  "id": "65",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "65"
  },
  {
-  "id": "66",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "66"
  },
  {
-  "id": "67",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "67"
  },
  {
-  "id": "68",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "68"
  },
  {
-  "id": "69",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "69"
  },
  {
-  "id": "70",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "70"
  },
  {
-  "id": "71",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "71"
  },
  {
-  "id": "72",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "72"
  },
  {
-  "id": "73",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "73"
  },
  {
-  "id": "74",
   "Code": "",
   "ClientName": "",
   "MAC": "",
   "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "75",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "76",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "77",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "78",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "79",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "80",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "81",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "82",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "83",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "84",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "85",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "86",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "87",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "88",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "89",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "90",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "91",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "92",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "93",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "94",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "95",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "96",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "97",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "98",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "99",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
- },
- {
-  "id": "100",
-  "Code": "",
-  "ClientName": "",
-  "MAC": "",
-  "Social": "",
-  "DateExpire": ""
+  "DateExpire": "",
+  "id": "74"
  }
 ]

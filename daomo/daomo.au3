@@ -67,7 +67,7 @@ Func GotoDaoMo($Title,$emuport,$Handle)
 			For $i = 0 to 7 Step + 1
 			   Sleep(1000)
 			   $Imagetieuhao = @ScriptDir & "\image\tieuhao.bmp"
-		       _HandleImgWaitExist($Handle,$Imagetieuhao, 1,445, 450, 30, 30,90, 2);search image tieu hao
+		       _HandleImgWaitExist($Handle,$Imagetieuhao, 1,445, 450, 30, 30,108, 2);search image tieu hao
 			   If not @error Then ;neu het luot tang cap quoc
 				  writelog("Het luot nang cap quoc " & _NowTime() & @CRLF) ; write console
 				  ExitLoop

@@ -118,6 +118,7 @@ Global Const $cuop_mo_trang = "MoTrang"
 Global Const $cuop_mo_xanh = "MoXanh"
 Global Const $cuop_mo_tim = "MoTim"
 Global Const $cuop_mo_do = "MoDo"
+Global Const $mahoa_5phut = "MaHoa5Phut"
 Global Const $bossTG_top1= "BossTGTop1"
 Global Const $bossTG_top2 = "BossTGTop2"
 Global Const $bossTG_top3 = "BossTGTop3"
@@ -1548,11 +1549,15 @@ Func _diCamTrain()
 EndFunc
 Func _findIconMenu($Handle)
    Local $loopindex = 0
+   Local $x_huy_torlerance = 89
+   If $isLDPlayer == True Then
+	  $x_huy_torlerance = 110
+   EndIf
    While 1 ;tim den khi thay menu
 	  Local $Imagehuy1 = @ScriptDir & "\image\huy1.bmp"
-	  Local $rs_huy1 = _HandleImgSearch($Handle,$Imagehuy1, 0, 0, -1, -1,89, 4);search btn huy
+	  Local $rs_huy1 = _HandleImgSearch($Handle,$Imagehuy1, 290, 330, 80, 40,$x_huy_torlerance, 4);search btn huy
 	  If not @error Then
-		 _ControlClickExactly($Title, "", "","", 1,$rs_huy1[1][0], $rs_huy1[1][1]) ; click huy
+		 _ControlClickExactly($Title, "", "","", 1,$rs_huy1[1][0]+290, $rs_huy1[1][1]+330) ; click huy
 	  EndIf
 
 	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"

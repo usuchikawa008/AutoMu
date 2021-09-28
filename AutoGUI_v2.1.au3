@@ -121,6 +121,7 @@ Global Const $cuop_mo_trang = "MoTrang"
 Global Const $cuop_mo_xanh = "MoXanh"
 Global Const $cuop_mo_tim = "MoTim"
 Global Const $cuop_mo_do = "MoDo"
+Global Const $mahoa_5phut = "MaHoa5Phut"
 Global Const $bossTG_top1= "BossTGTop1"
 Global Const $bossTG_top2 = "BossTGTop2"
 Global Const $bossTG_top3 = "BossTGTop3"
@@ -345,7 +346,6 @@ Func Gui()
 		   _FileCreate($pathAuto&$aList[$i][0]&".tmp")
 		   _FileCreate($pathstatus&$aList[$i][0]&".tmp")
 		   _FileCreate($pathLog&$aList[$i][0]&".log")
-		   _FileCreate($pathconfig&$aList[$i][0]&".config")
 		   ; init checkbox
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $huyencanh, True)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $blood, True)
@@ -408,35 +408,41 @@ Func Gui()
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $statusNox, $onl)
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $cmdStart, _setCmdStart($aList[$i][0]))
 		   ; init Config
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguildRankS, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguilddoi3nguoi, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $timewaitNvS, 60);60s
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $weaktinhanh, False)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang11h, False)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang21h, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossTG, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossctc, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spcuopmo, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_nvguildRankS, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_timewaitNvS, 60);60s
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_de, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_thuong, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_kho, False)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_trang, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_xanh, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_tim, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_do, True)
-			;init config boss
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top1, True)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top2, False)
-		   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top3, False)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss1, False)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss2, False)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss3, False)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss4, True)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss5, True)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss6, True)
-			IniWrite($pathconfig&$aList[$i][0]&".config", $config, $traloicauhoi, False)
+		   Local $iFileExists = FileExists($pathconfig&$aList[$i][0]&".config")
+		   If Not $iFileExists Then
+			  _FileCreate($pathconfig&$aList[$i][0]&".config")
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguildRankS, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $nvguilddoi3nguoi, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $timewaitNvS, 60);60s
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $weaktinhanh, False)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang11h, False)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $baotang21h, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossTG, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossctc, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spcuopmo, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_nvguildRankS, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_timewaitNvS, 60);60s
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_de, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_thuong, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_kho, False)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_trang, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_xanh, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_tim, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_do, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $mahoa_5phut, False)
+			   ;init config boss
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top1, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top2, False)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top3, False)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss1, False)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss2, False)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss3, False)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss4, True)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss5, True)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bosCTC_boss6, True)
+			   IniWrite($pathconfig&$aList[$i][0]&".config", $config, $traloicauhoi, False)
+		    EndIf
+
 	    EndIf
 	 Next
 	 ;search tat ca gia lap da tung chay o foler config
@@ -471,20 +477,20 @@ Func Gui()
 	Global $idItemBossCaNhan = GUICtrlCreateListViewItem("Boss Cá Nhân||", $hListHoatDong)
 	Global $idItemTienThuong = GUICtrlCreateListViewItem("Tiền Thưởng||", $hListHoatDong)
 	Global $idItemDaoMo = GUICtrlCreateListViewItem("Đào Mỏ||", $hListHoatDong)
-	Global $idItemCuopMo = GUICtrlCreateListViewItem("Cướp Mỏ||Config", $hListHoatDong)
+	Global $idItemCuopMo = GUICtrlCreateListViewItem("Cướp Mỏ||Cài đặt", $hListHoatDong)
 	Global $idItemTreoMay = GUICtrlCreateListViewItem("Treo Máy||", $hListHoatDong)
-	Global $idItemNVGuild = GUICtrlCreateListViewItem("Nhiệm Vụ Guild||Config", $hListHoatDong)
-	Global $idItemTinhAnh = GUICtrlCreateListViewItem("Săn Tinh Anh||Config", $hListHoatDong)
+	Global $idItemNVGuild = GUICtrlCreateListViewItem("Nhiệm Vụ Guild||Cài đặt", $hListHoatDong)
+	Global $idItemTinhAnh = GUICtrlCreateListViewItem("Săn Tinh Anh||Cài đặt", $hListHoatDong)
 	Global $idItemLayThanhVat = GUICtrlCreateListViewItem("Lấy Thánh Vật Thường ||", $hListHoatDong)
 	Global $idItemBossGuild12h = GUICtrlCreateListViewItem("Boss Guild 12h ||", $hListHoatDong)
-	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 20h ||Config", $hListHoatDong)
+	Global $idItemTuHoiGuild12h = GUICtrlCreateListViewItem("Tụ Hội + Boss Guild 20h ||Cài đặt", $hListHoatDong)
 	Global $idItemDevil = GUICtrlCreateListViewItem("Devil Square ||", $hListHoatDong)
-	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||Config", $hListHoatDong)
+	Global $idItemBaoTang = GUICtrlCreateListViewItem("Hộ Tống Bảo Tàng ||Cài đặt", $hListHoatDong)
 	Global $idItemPhaoDai = GUICtrlCreateListViewItem("Pháo Đài Đỏ ||", $hListHoatDong)
-	Global $idItemHoTro = GUICtrlCreateListViewItem("Hỗ Trợ Guild ||Config", $hListHoatDong)
-	Global $idItemBossTG = GUICtrlCreateListViewItem("Boss Thế Giới ||Config", $hListHoatDong)
-	Global $idItemBossCTC = GUICtrlCreateListViewItem("Boss Chiến Trường ||Config", $hListHoatDong)
-	Global $idItemMaHoa = GUICtrlCreateListViewItem("Ma Hóa (thử nghiệm) ||", $hListHoatDong)
+	Global $idItemHoTro = GUICtrlCreateListViewItem("Hỗ Trợ Guild ||Cài đặt", $hListHoatDong)
+	Global $idItemBossTG = GUICtrlCreateListViewItem("Boss Thế Giới ||Cài đặt", $hListHoatDong)
+	Global $idItemBossCTC = GUICtrlCreateListViewItem("Boss Chiến Trường ||Cài đặt", $hListHoatDong)
+	Global $idItemMaHoa = GUICtrlCreateListViewItem("Ma Hóa ||Cài đặt", $hListHoatDong)
 	Global $idItemChinhTuyen = GUICtrlCreateListViewItem("Nhiệm Vụ Chính ||", $hListHoatDong)
 	Global $idItemDiaLao = GUICtrlCreateListViewItem("Địa Lao Nguyên Tố ||", $hListHoatDong)
 	Global $idItemThanhDan = GUICtrlCreateListViewItem("Thánh Đàn Nguyên Tố ||", $hListHoatDong)
@@ -566,6 +572,11 @@ Func Gui()
 	Global $idCheckBoxMoXanh = GUICtrlCreateCheckbox("Mỏ xanh", 90, 275, 70, 25)
 	Global $idCheckBoxMoTim = GUICtrlCreateCheckbox("Mỏ tím", 170, 275, 70, 25)
 	Global $idCheckBoxMoDo = GUICtrlCreateCheckbox("Mỏ đỏ", 250, 275, 70, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group NV Tinh Anh
+	GUICtrlCreateGroup("Ma Hóa", 2, 315, 320, 45)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idCheckBoxMaHoa = GUICtrlCreateCheckbox("Quay lại sau 5 phút nếu có người đang train", 10, 330, 250, 25)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;Button Save
     Local $idBtn_Save = GUICtrlCreateButton("Save", 250, 420, 70, 25)
@@ -1465,7 +1476,6 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		 $countDevices = $countDevices + 1
 		 $aCheck[$countDevices] = GUICtrlCreateListViewItem($NoxOff, $hListEmulators) ;add emulators
 		 _FileCreate($pathLog&$NoxOff&".log")
-		 _FileCreate($pathconfig&$NoxOff&".config")
 		 ; init checkbox
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $huyencanh, True)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $blood, True)
@@ -1528,36 +1538,41 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $statusNox, $off)
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $cmdStart, _setCmdStart($NoxOff))
 	    ; init Config
-		IniWrite($pathconfig&$NoxOff&".config", $config, $nvguildRankS, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $nvguilddoi3nguoi, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $timewaitNvS, 60);60s
-		IniWrite($pathconfig&$NoxOff&".config", $config, $weaktinhanh, False)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $baotang11h, False)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $baotang21h, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $spbossTG, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $spbossctc, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $spcuopmo, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $sp_nvguildRankS, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $sp_timewaitNvS, 60);60s
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_de, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_thuong, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_kho, False)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_trang, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_xanh, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_tim, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_do, True)
-		 ;init config boss
+		Local $iFileExists = FileExists($pathconfig&$NoxOff&".config")
+		If Not $iFileExists Then
+		    _FileCreate($pathconfig&$NoxOff&".config")
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $nvguildRankS, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $nvguilddoi3nguoi, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $timewaitNvS, 60);60s
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $weaktinhanh, False)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $baotang11h, False)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $baotang21h, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $spbossTG, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $spbossctc, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $spcuopmo, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $sp_nvguildRankS, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $sp_timewaitNvS, 60);60s
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_de, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_thuong, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_kho, False)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_trang, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_xanh, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_tim, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_do, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $mahoa_5phut, False)
+			;init config boss
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top1, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top2, False)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top3, False)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss1, False)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss2, False)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss3, False)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss4, True)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss5, True)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss6, True)
+			IniWrite($pathconfig&$NoxOff&".config", $config, $traloicauhoi, False)
+	    EndIf
 
-		IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top1, True)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top2, False)
-		IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top3, False)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss1, False)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss2, False)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss3, False)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss4, True)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss5, True)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $bosCTC_boss6, True)
-		 IniWrite($pathconfig&$NoxOff&".config", $config, $traloicauhoi, False)
 	 EndIf
    Next
  EndFunc
@@ -1574,8 +1589,8 @@ Func deleteItemEmulator()
 	  FileDelete($path&$sItemText&".tmp");delete file in config hoat dong
 	  FileDelete($pathstatus&$sItemText&".tmp");delete file in config status
 	  FileDelete($pathAuto&$sItemText&".tmp");delete file in config auto
-	  FileDelete($pathconfig&$sItemText&".tmp");delete file in config log
-	  FileDelete($pathLog&$sItemText&".tmp");delete file in config-config
+	  FileDelete($pathconfig&$sItemText&".config");delete file in config-config
+	  FileDelete($pathLog&$sItemText&".log");delete file in config-Log
 	  if $indexItem == 0 Then ; neu xoa vi tri 0.. update lai current Auto
 		 $currentAuto = _GUICtrlListView_GetItemText($hListEmulators,0)
 		 _reloadEmu($currentAuto)
@@ -1635,7 +1650,7 @@ EndFunc   ;==>
 Func checkConfigurator()
    ConsoleWrite($sItemTextHoatDong&@CRLF)
    ConsoleWrite($indexItemHoatDong&@CRLF)
-   if $sItemTextHoatDong == "Config" Then
+   if $sItemTextHoatDong == "Cài đặt" Then
 	  WinSetState($hWndListHoatDong,"",@SW_HIDE)
 	  readconfig()
 	  If $indexItemHoatDong == 16 Or $indexItemHoatDong == 17 Or $indexItemHoatDong == 11 then ;config boss
@@ -1754,6 +1769,14 @@ Func readconfig()
 	 Else
 		GUICtrlSetState($idCheckBoxMoDo,$GUI_UNCHECKED)
 	 EndIf
+	 ;mahoa 5phut start
+	 Local $checkbox_config_mahoa_5p = IniRead($pathconfig&$currentAuto&".config", $config, $mahoa_5phut, False)
+	 If $checkbox_config_mahoa_5p == True Then
+		GUICtrlSetState($idCheckBoxMaHoa,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxMaHoa,$GUI_UNCHECKED)
+	 EndIf
+	 ;mahoa 5phut end
      ;Boss TG config
      Local $checkbox_config_bosstop1 = IniRead($pathconfig&$currentAuto&".config", $config, $bossTG_top1, False)
      If $checkbox_config_bosstop1 == True Then
@@ -1906,6 +1929,11 @@ Func writeconfig()
 		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_do, True)
 	 Else
 		IniWrite($pathconfig&$currentAuto&".config", $config, $cuop_mo_do, False)
+	 EndIf
+	 If GUICtrlRead($idCheckBoxMaHoa) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $mahoa_5phut, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $mahoa_5phut, False)
 	 EndIf
 	  ;Boss TG write config
      If GUICtrlRead($idRadio1) = $GUI_CHECKED Then

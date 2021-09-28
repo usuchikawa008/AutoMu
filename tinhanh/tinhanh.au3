@@ -431,7 +431,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 	 EndIf
 	  Sleep(1000)
 	  $Imageyeucauhotro = @ScriptDir & "\image\hotroguild.bmp"
-	  Local $p = _HandleImgWaitExist($Handle,$Imageyeucauhotro,2, 0, 0, -1, -1,90, 2);search icon ho tro guild
+	  Local $p = _HandleImgWaitExist($Handle,$Imageyeucauhotro,2, 0, 0, -1, -1,101, 2);search icon ho tro guild
 	  If not @error Then ; thay yeu cau ho tro
 		 writelog("Option 1"& @CRLF) ; write console
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+2, $p[1][1]+2) ; click toi yeu cau ho tro
@@ -505,7 +505,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
 			   Sleep(6000)
 			   Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-			   Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+			   Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,9, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 			   If not @error Then ; da vo pho ban
 				  $flagbosstg = True
 				  ExitLoop
@@ -530,7 +530,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
 			   Sleep(6000)
 			   Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-			   Local $rsthoatpbCTC = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+			   Local $rsthoatpbCTC = _HandleImgWaitExist($Handle, $Imagethoatpb,9, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 			   If not @error Then ; da vo pho ban
 				  $flagbossctc = True
 				  ExitLoop
@@ -576,7 +576,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 		 writelog("Vo PB Boss TG"& @CRLF) ; write console
 		 While 1
 			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
-			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,$X_toibtn, 2);search toi trong 15s
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,13, 19, 278, 50, 28,$X_toibtn, 2);search toi trong 15s
 			If not @error Then ; thay toi ho tro\
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+26, $Result[1][1]+280) ; click toi
 			   Sleep(10000)
@@ -701,6 +701,7 @@ Func _doiTangCaoNhatBossCTC()
    #EndRegion
 EndFunc   ;==>doi tang
 Func _checkBossCTC($y)
+   _ControlClickExactly($Title, "", "","", 1,334, 13+$y) ; click vo toa do y
    Local $Imagedahoisinh = @ScriptDir & "\image\bosstghoisinh.bmp"
    Local $p = _HandleImgWaitExist($hwnd,$Imagedahoisinh,1, 320, $y, 100, 40,120, 5);search boss 6 toa do hoi sinh
    If not @error Then
@@ -836,8 +837,11 @@ Func _traLoiCauDo()
 EndFunc
 Func _SendByLD($dapan)
    _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 359 855");click khung chat
-   Local $Imageok = @ScriptDir & "\image\ok_ld.bmp"
-   Local $result = _HandleImgWaitExist($hwnd,$Imageok,2, 0,0, -1, -1,80, 5)
+   Local $Imageok = @ScriptDir & "\image\ok_nox.bmp"
+   If $isLDPlayer == True Then
+	  $Imageok = @ScriptDir & "\image\ok_ld.bmp"
+   EndIf
+   $result = _HandleImgWaitExist($hwnd,$Imageok,2, 0,0, -1, -1,80, 5)
    If Not @error Then
 	  Opt("WinTitleMatchMode", 3)
 	  ControlSend($Title,"","",_ANSIToUnicode($dapan));gui dap an vo box chat
