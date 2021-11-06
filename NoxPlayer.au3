@@ -80,6 +80,8 @@ Global Const $mahoa = "MaHoa"
 Global Const $chinhtuyen = "ChinhTuyen"
 Global Const $dialao = "DiaLao"
 Global Const $thanhdan = "ThanhDan"
+Global Const $khieuchien = "KhieuChien"
+Global Const $kalima = "Kalima"
 ;config auto Run
 Global Const $run = "Run"
 Global Const $finish = "Finish"
@@ -119,6 +121,7 @@ Global Const $cuop_mo_xanh = "MoXanh"
 Global Const $cuop_mo_tim = "MoTim"
 Global Const $cuop_mo_do = "MoDo"
 Global Const $mahoa_5phut = "MaHoa5Phut"
+Global Const $tangthanhdan = "TANGTHANHDAN"
 Global Const $bossTG_top1= "BossTGTop1"
 Global Const $bossTG_top2 = "BossTGTop2"
 Global Const $bossTG_top3 = "BossTGTop3"
@@ -333,7 +336,12 @@ Func _resizeAuto()
 	  EndIf
    Else ;-> LDplayer
 	  Opt("WinTitleMatchMode", 3)
-	  WinMove($Title, "",Default ,Default , 849, 509) ;resize auto
+	  $version =  FileGetVersion ($Nox_Path & "\Nox.exe", $FV_PRODUCTVERSION  )
+	  Local $size = IniRead(@ScriptDir&"\version.ini", "NoxVersion", $version, "849, 509")
+	  Local $x = StringSplit($size,",")[1]
+	  Local $y = StringSplit($size,",")[2]
+	  WinMove($Title, "",Default ,Default , $x, $y) ;resize auto
+	  Sleep(4)
    EndIf
 EndFunc
 ;~ _outParty()
@@ -634,10 +642,7 @@ Func Auto()
 	   If $scheckboxnvguild == True And $statusnvguild <> $done Then
 ;~ 		  _outParty()
 		  $countNV = $countNV + 1
-		  Local $rs = _openHoatDong()
-		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
-			 Return
-		  EndIf
+		  _findIconMenu($hwnd)
 		  Sleep(500)
 		  IniWrite($pathstatus&$Title&".tmp", $status, $nvguild,$doing) ; change status running
 		  _GotoNVGuide($Title,$emuport,$hwnd,$pos) ; nv guide #nvtienthuong.au3
@@ -687,11 +692,7 @@ Func Auto()
 	   Local $statuslaythanhvat = IniRead($pathstatus&$Title&".tmp", $status, $laythanhvat, $notyet)
 	   If $scheckboxlaythanhvat == True And $statuslaythanhvat <> $done Then
 		  $countNV = $countNV + 1
-		  Local $rs = _openHoatDong()
-		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
-			 Return
-		  EndIf
-		  Sleep(500)
+		  _findIconMenu($hwnd)
 		  IniWrite($pathstatus&$Title&".tmp", $status, $laythanhvat,$doing) ; change status doing
 		  _GotoLayThanhVat($Title,$emuport,$hwnd) ; nv lay thanh vat #laythanhvat
 		  If @error Then
@@ -744,6 +745,28 @@ Func Auto()
 			 writelog("21. Hoàn thành thánh đàn..." & _NowTime() & @CRLF) ; write console
 		  Else
 			  IniWrite($pathstatus&$Title&".tmp", $status, $thanhdan,$notyet) ; change status wait
+		  EndIf
+		  Sleep(2000)
+	   EndIf
+	#cs
+	10.3. Khieu Chien Dau Truong
+	#ce
+	   Local $scheckbox_khieuchien = IniRead($path&$Title&".tmp", $hoatdong, $khieuchien, False)
+	   Local $status_khieuchien = IniRead($pathstatus&$Title&".tmp", $status, $khieuchien, $notyet)
+	   If $scheckbox_khieuchien == True And $status_khieuchien <> $done Then
+		  $countNV = $countNV + 1
+		  Local $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $khieuchien,$doing) ; change status doing
+		  _GotoKhieuChien($Title,$emuport,$hwnd) ; khieu chien  #laythanhvat.au3
+		  If @error Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $khieuchien,$done) ; change status done
+			 writelog("22. Hoàn thành khiêu chiến..." & _NowTime() & @CRLF) ; write console
+		  Else
+			  IniWrite($pathstatus&$Title&".tmp", $status, $khieuchien,$notyet) ; change status wait
 		  EndIf
 		  Sleep(2000)
 	   EndIf
@@ -966,7 +989,28 @@ Func Auto()
 		  EndIf
 		  Sleep(2000)
 	  EndIf
-
+   #cs
+	22. Boss Kalima
+	#ce
+	   Local $scheckbox_kalima = IniRead($path&$Title&".tmp", $hoatdong, $kalima, False)
+	   Local $status_kalima = IniRead($pathstatus&$Title&".tmp", $status, $kalima, $notyet)
+	   If $scheckbox_kalima == True And $status_kalima <> $done Then
+		  $countNV = $countNV + 1
+		  $rs = _openHoatDong()
+		  If $rs == 1 Then ; da nhan thuong soi noi xong chay lai vong lap
+			 Return
+		  EndIf
+		  Sleep(500)
+		  IniWrite($pathstatus&$Title&".tmp", $status, $kalima,$doing) ; change status doing
+		  _GotoKalima($Title,$emuport,$hwnd) ; nv mieu kalima #tinhanh.au3
+		  If @error Then
+			 IniWrite($pathstatus&$Title&".tmp", $status, $kalima,$done) ; change status done
+			 writelog("22. Hoan Thanh Kalima..." & _NowTime() & @CRLF) ; write console
+		  Else
+			 IniWrite($pathstatus&$Title&".tmp", $status, $kalima,$notyet) ; change status wait
+		  EndIf
+		  Sleep(2000)
+	   EndIf
       #cs
 	18. Ma Hoa
 	#ce
@@ -1073,7 +1117,7 @@ Func _closeSimple($Handle)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 		 Else
 		 Opt("WinTitleMatchMode", 3)
-		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+2, $Result[1][1]+27) ; click close
+		 _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+2, $Result[1][1]+20) ; click close
 		 EndIf
 	  EndIf
 EndFunc   ;==>Example
@@ -1345,7 +1389,7 @@ Func _getNameCharacter()
 	   Return 1
 	EndFunc   ;==> Get Name Character
 Func _anDanExp()
-   Local $x_balo = 80
+   Local $x_balo = 90
    If $isLDPlayer == True Then ; -> LDplayer
 		 $x_balo = 114
    EndIf
@@ -1451,13 +1495,13 @@ Func _anDanExp()
 		 If $isLDPlayer == True Then
 			Local $x_tolerance_MoLanNua = 95
 		 EndIf
-		 Local $x_tolerance_HuyChuong = 90
+		 Local $x_tolerance_HuyChuong = 120
 		 If $isLDPlayer == True Then
-			Local $x_tolerance_HuyChuong = 97
+			Local $x_tolerance_HuyChuong = 110
 		 EndIf
-		 For $i = 1 To 5 Step + 1
+		 For $i = 1 To 6 Step + 1
 			Local $Image_RuongVang = @ScriptDir & "\image\ruongvang.bmp"
-			Local $Result = _HandleImgWaitExist($hwnd,$Image_RuongVang,1, 0, 0, -1, -1,$x_tolerance_RuongVang, 10);search ruong vang
+			Local $Result = _HandleImgWaitExist($hwnd,$Image_RuongVang,2, 0, 0, -1, -1,$x_tolerance_RuongVang, 10);search ruong vang
 			If Not @error Then
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+5, $Result[1][1]+5) ; click ruong vang
 			   Sleep(1200)
@@ -1478,9 +1522,9 @@ Func _anDanExp()
 			EndIf
 			;Huy Chuong start
 			Local $Image_HuyChuong = @ScriptDir & "\image\huychuongboss.bmp"
-			Local $Result = _HandleImgWaitExist($hwnd,$Image_HuyChuong,1, 0, 0, -1, -1,$x_tolerance_HuyChuong, 10);search ruong vang
+			Local $Result = _HandleImgWaitExist($hwnd,$Image_HuyChuong,2, 0, 0, -1, -1,$x_tolerance_HuyChuong, 10);search ruong vang
 			If Not @error Then
-			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+5, $Result[1][1]+5) ; click ruong vang
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+5, $Result[1][1]+5) ; click huy chuong
 			   Sleep(1200)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 900 750") ;click to mo
 			   Sleep(1000)

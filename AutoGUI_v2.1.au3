@@ -80,6 +80,8 @@ Global Const $mahoa = "MaHoa"
 Global Const $chinhtuyen = "ChinhTuyen"
 Global Const $dialao = "DiaLao"
 Global Const $thanhdan = "ThanhDan"
+Global Const $khieuchien = "KhieuChien"
+Global Const $kalima = "Kalima"
 ;config hoat dong End
 ;config start Auto
 Global Const $run = "Run"
@@ -122,6 +124,7 @@ Global Const $cuop_mo_xanh = "MoXanh"
 Global Const $cuop_mo_tim = "MoTim"
 Global Const $cuop_mo_do = "MoDo"
 Global Const $mahoa_5phut = "MaHoa5Phut"
+Global Const $tangthanhdan = "TANGTHANHDAN"
 Global Const $bossTG_top1= "BossTGTop1"
 Global Const $bossTG_top2 = "BossTGTop2"
 Global Const $bossTG_top3 = "BossTGTop3"
@@ -378,6 +381,8 @@ Func Gui()
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $chinhtuyen, False)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $dialao, False)
 		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $thanhdan, False)
+		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $khieuchien, False)
+		   IniWrite($path&$aList[$i][0]&".tmp", $hoatdong, $kalima, False)
 		   ; init status
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $huyencanh, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $blood, $notyet)
@@ -401,6 +406,8 @@ Func Gui()
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $chinhtuyen, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $dialao, $notyet)
 		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $thanhdan, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $khieuchien, $notyet)
+		   IniWrite($pathstatus&$aList[$i][0]&".tmp", $status, $kalima, $notyet)
 		   ; init Run
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $pid, "")
 		   IniWrite($pathAuto&$aList[$i][0]&".tmp", $run, $finish, "")
@@ -430,6 +437,7 @@ Func Gui()
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_tim, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_do, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $mahoa_5phut, False)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $tangthanhdan, 0)
 			   ;init config boss
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top1, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $bossTG_top2, False)
@@ -493,7 +501,9 @@ Func Gui()
 	Global $idItemMaHoa = GUICtrlCreateListViewItem("Ma Hóa ||Cài đặt", $hListHoatDong)
 	Global $idItemChinhTuyen = GUICtrlCreateListViewItem("Nhiệm Vụ Chính ||", $hListHoatDong)
 	Global $idItemDiaLao = GUICtrlCreateListViewItem("Địa Lao Nguyên Tố ||", $hListHoatDong)
-	Global $idItemThanhDan = GUICtrlCreateListViewItem("Thánh Đàn Nguyên Tố ||", $hListHoatDong)
+	Global $idItemThanhDan = GUICtrlCreateListViewItem("Thánh Đàn Nguyên Tố ||Cài đặt", $hListHoatDong)
+	Global $idItemKhieuChien = GUICtrlCreateListViewItem("Khiêu Chiến Đấu Trường||", $hListHoatDong)
+	Global $idItemKalima = GUICtrlCreateListViewItem("Miếu Kalima||", $hListHoatDong)
 	_GUICtrlListView_DeleteItem($hListHoatDong, 19)
 ;~ 	_GUICtrlStatusBar_SetText($g_hStatus, "Current Emulator: " & $currentAuto); set default
 	GUICtrlSetData($JblNotify,"Current Emulator: " & $currentAuto)
@@ -577,6 +587,13 @@ Func Gui()
 	GUICtrlCreateGroup("Ma Hóa", 2, 315, 320, 45)
 	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
     Global $idCheckBoxMaHoa = GUICtrlCreateCheckbox("Quay lại sau 5 phút nếu có người đang train", 10, 330, 250, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
+	;group NV Thanh Dan Nguyen To
+	GUICtrlCreateGroup("Thánh Đàn", 2, 365, 320, 45)
+	GUICtrlSetFont(-1, 9, 800, 0,"",$DEFAULT_QUALITY)
+    Global $idLableText_Tang = GUICtrlCreateLabel("Chọn tầng",12,385,60,15)
+	Global $idInputTang = GUICtrlCreateInput("",70,384,25,15,$ES_NUMBER)
+	Global $idLableText_ChuThich = GUICtrlCreateLabel('(0 là để mặc định)',100,385,200,15)
 	GUICtrlCreateGroup("", -99, -99, 1, 1) ;close group
 	;Button Save
     Local $idBtn_Save = GUICtrlCreateButton("Save", 250, 420, 70, 25)
@@ -948,6 +965,18 @@ EndFunc
 			  Else
 				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $thanhdan, False)
 			  EndIf
+		  Case 21 ; Khieu chien
+			  If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $khieuchien, True)
+			  Else
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $khieuchien, False)
+			  EndIf
+		  Case 22 ; Kalima
+			  If $sState == True Then
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $kalima, True)
+			  Else
+				 IniWrite($path&$currentAuto&".tmp", $hoatdong, $kalima, False)
+			  EndIf
 		EndSwitch
 	 EndFunc
 Func WM_NOTIFY($hWnd, $iMsg, $wParam, $lParam)
@@ -1281,6 +1310,26 @@ Func _updateAcTion()
 	 Else
 		_GUICtrlListView_SetItemChecked($hListHoatDong, 20,False)
 	 EndIf
+	 ;auto khieu chien line 21
+	 Local $sReadKhieuChien = IniRead($path&$currentAuto&".tmp", $hoatdong, $khieuchien, False)
+	 Local $statusKhieuChien = IniRead($pathstatus&$currentAuto&".tmp", $status, $khieuchien, $notyet)
+	 GUICtrlSetData($idItemKhieuChien, "|"&$statusKhieuChien)
+	 GUICtrlSetColor($idItemKhieuChien,_changeColor($statusKhieuChien))
+	 If $sReadKhieuChien == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 21)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 21,False)
+	 EndIf
+	 ;auto Kalima line 22
+	 Local $sReadKalima = IniRead($path&$currentAuto&".tmp", $hoatdong, $kalima, False)
+	 Local $statusKalima = IniRead($pathstatus&$currentAuto&".tmp", $status, $kalima, $notyet)
+	 GUICtrlSetData($idItemKalima, "|"&$statusKalima)
+	 GUICtrlSetColor($idItemKalima,_changeColor($statusKalima))
+	 If $sReadKalima == True Then
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 22)
+	 Else
+		_GUICtrlListView_SetItemChecked($hListHoatDong, 22,False)
+	 EndIf
 	 ;Auto resize column
 	 _GUICtrlListView_SetColumnWidth($hListHoatDong, 1, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
 	 _GUICtrlListView_SetColumnWidth($hListEmulators, 0, $LVSCW_AUTOSIZE_USEHEADER) ;auto size column status
@@ -1323,6 +1372,8 @@ Func _resetStatus()
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $chinhtuyen, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $dialao, $notyet)
 	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $thanhdan, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $khieuchien, $notyet)
+	 IniWrite($pathstatus&$currentAuto&".tmp", $status, $kalima, $notyet)
      _updateAcTion()
 
 EndFunc
@@ -1367,6 +1418,8 @@ Func _checkAndUncheckAll($sState)
 	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $chinhtuyen, $sState)
 	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $dialao, $sState)
 	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $thanhdan, $sState)
+	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $khieuchien, $sState)
+	  IniWrite($path&$currentAuto&".tmp", $hoatdong, $kalima, $sState)
      _updateAcTion()
 
 EndFunc
@@ -1508,6 +1561,8 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $chinhtuyen, False)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $dialao, False)
 		IniWrite($path&$NoxOff&".tmp", $hoatdong, $thanhdan, False)
+		IniWrite($path&$NoxOff&".tmp", $hoatdong, $khieuchien, False)
+		IniWrite($path&$NoxOff&".tmp", $hoatdong, $kalima, False)
 		; init status
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $huyencanh, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $blood, $notyet)
@@ -1531,6 +1586,8 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $chinhtuyen, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $dialao, $notyet)
 		IniWrite($pathstatus&$NoxOff&".tmp", $status, $thanhdan, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $khieuchien, $notyet)
+		IniWrite($pathstatus&$NoxOff&".tmp", $status, $kalima, $notyet)
 		; init Run
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $pid, "")
 		IniWrite($pathAuto&$NoxOff&".tmp", $run, $finish, "")
@@ -1560,6 +1617,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_tim, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_do, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $mahoa_5phut, False)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $tangthanhdan, False)
 			;init config boss
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top1, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $bossTG_top2, False)
@@ -1644,6 +1702,10 @@ Func changeStatus($statusHoatDong)
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $dialao, $statusHoatDong)
 		  Case 20 ; thanhdan
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $thanhdan, $statusHoatDong)
+		  Case 21 ; khieu chien
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $khieuchien, $statusHoatDong)
+		  Case 21 ; kalima
+			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $kalima, $statusHoatDong)
 	  EndSwitch
 	  _updateAcTion()
 EndFunc   ;==>
@@ -1777,6 +1839,10 @@ Func readconfig()
 		GUICtrlSetState($idCheckBoxMaHoa,$GUI_UNCHECKED)
 	 EndIf
 	 ;mahoa 5phut end
+	 ;tang thanh dan start
+	 Local $checkbox_config_tang_td = IniRead($pathconfig&$currentAuto&".config", $config, $tangthanhdan, 0)
+	 GUICtrlSetData($idInputTang,$checkbox_config_tang_td)
+	 ;tang thanh dan end
      ;Boss TG config
      Local $checkbox_config_bosstop1 = IniRead($pathconfig&$currentAuto&".config", $config, $bossTG_top1, False)
      If $checkbox_config_bosstop1 == True Then
@@ -1935,6 +2001,7 @@ Func writeconfig()
 	 Else
 		IniWrite($pathconfig&$currentAuto&".config", $config, $mahoa_5phut, False)
 	 EndIf
+	 IniWrite($pathconfig&$currentAuto&".config", $config, $tangthanhdan, GUICtrlRead($idInputTang)) ; luu tang thanh dan
 	  ;Boss TG write config
      If GUICtrlRead($idRadio1) = $GUI_CHECKED Then
 		IniWrite($pathconfig&$currentAuto&".config", $config, $bossTG_top1, True)

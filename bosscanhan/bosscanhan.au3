@@ -32,7 +32,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 800");click TOI NGAY
       Sleep(3000)
 	  $Imagehetluot = @ScriptDir & "\image\hetluotbosscanhan3.bmp"
-	  Local $x_tolerance_hetluotboss = 120
+	  Local $x_tolerance_hetluotboss = 129
 	  If $isLDPlayer == True Then
 		 $x_tolerance_hetluotboss = 130
 	  EndIf

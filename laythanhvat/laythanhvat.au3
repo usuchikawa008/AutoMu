@@ -25,20 +25,19 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 	   Else
 		 Return
 	   EndIf
-	  Local $Imagelaythanhvat = @ScriptDir & "\image\laythanhvatconluot.bmp"
-	  Local $Imagehetluotlaythanhvat = @ScriptDir & "\image\hetluotlaythanhvat.bmp"
-	  $p = _searchNVAdvance($Handle,$Imagehetluotlaythanhvat,$Imagelaythanhvat,98,115);search nv tien thuong
-	  If @error Then ; het luot
-		 Return SetError(3)
-	  EndIf
-	  If $p == 2 Then ; ko tim thay hinh nao het
-		 _closeSimple($Handle);tat cua so
-		 Return
+	  Sleep(2000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1010 45") ;click SV The Gioi
+	  Local $Image_svtg = @ScriptDir & "\image\hdsvthegioi.bmp"
+	  Local $rs_svtg = _HandleImgWaitExist($Handle, $Image_svtg,5, 0, 0, -1, -1,80, 2);search icon HD sv the gioi
+	  If @error Then
+		 Return ;thoat
+	  Else
+		 _ControlClickExactly($Title, "", "","", 1,$rs_svtg[1][0], $rs_svtg[1][1]) ; click
+		 Sleep(2000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 300 200");click chien truong vang
+		 Sleep(2000)
 	  EndIf
 	  writelog("Vô Lấy Thánh Vật" & _NowTime() & @CRLF) ; write console
-	  Opt("WinTitleMatchMode", 3)
-	  _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
-	  Sleep(1000)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1260 800");click toi ngay
 	  Local $maxloop = 0
 	  Local $count = 0;
@@ -351,3 +350,39 @@ Func _checkDaCoNguoiTrain($Handle)
 
 EndFunc   ;==>GotoPB
 
+Func _GotoKhieuChien($Title,$emuport,$Handle)
+	  If BitAND(WinGetState($Title), 16) Then
+		MsgBox(0,"Message",WinGetState($Title))
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	 EndIf
+
+	  Local $ImageKhieuChien = @ScriptDir & "\image\khieuchien.bmp"
+	  Local $ImagehetluotKhieuChien = @ScriptDir & "\image\khieuchienhetluot.bmp"
+	  Local $p = _searchNVAdvance($Handle,$ImagehetluotKhieuChien,$ImageKhieuChien,110,125,3);search nv ho tong
+	  If @error Then ; het luot
+		 Return SetError(3)
+	  EndIf
+	  If $p == 2 Then ; ko tim thay hinh nao het
+		 Return
+	  EndIf
+	  Opt("WinTitleMatchMode", 3)
+	  _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
+	  Sleep(3000)
+	  Local $ImageGhepNgay = @ScriptDir & "\image\ghepngay.bmp"
+	  Local $rs= _HandleImgWaitExist($Handle, $ImageGhepNgay,2, 0, 0, -1, -1,97, 5);search image ghep ngay
+	  If Not @error Then ; thay co nghia~ la chuan bi vao dau truong
+		 writelog("Ghép trận"& @CRLF) ; write console
+		 _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click ghep
+		 Sleep(8000)
+		 Local $ImageAuto = @ScriptDir & "\image\auto.bmp"
+		 Local $rs= _HandleImgWaitExist($Handle, $ImageAuto,10, 0, 0, -1, -1,97, 5);search image ghep ngay
+		 If Not @error Then ; thay thi click
+			_ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click ghep
+		 EndIf
+	  Else
+		 Return
+	  EndIf
+
+EndFunc   ;==>GotoPB

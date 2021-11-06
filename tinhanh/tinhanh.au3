@@ -44,6 +44,48 @@ Func _GotoNVTinhAnh($Title,$emuport,$Handle)
 		 EndIf
 	   Sleep(2000)
 	EndFunc   ;==>GotoPB
+ Func _GotoKalima($Title,$emuport,$Handle)
+	$count_covu = 0
+	If BitAND(WinGetState($Title), 16) Then
+		MsgBox(0,"Message",WinGetState($Title))
+		Local $myLastWin = WinGetTitle(WinActive("[ACTIVE]"))
+		WinActivate($Title)
+		WinActivate($myLastWin)
+	 EndIf
+		 Local $Imageconluotkalima = @ScriptDir & "\image\mieukalima.bmp"
+		 Local $Imagehetluotkalima = @ScriptDir & "\image\mieukalima_hetluot.bmp"
+		 Local $p = _searchNVAdvance($Handle,$Imagehetluotkalima,$Imageconluotkalima,95,120);search nv tien thuong
+		 If @error Then ; het luot
+			Return SetError(3)
+		 EndIf
+		 If $p == 2 Then ; ko tim thay hinh nao het
+			_closeSimple($Handle);tat cua so
+			Return
+		 EndIf
+		 writelog("Di Kalima " & _NowTime() & @CRLF) ; write console
+		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi
+		 Sleep(4000)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 800");click TOI NGAY
+		 Sleep(45000);cho 45s
+		 Local $Image_doitang = @ScriptDir & "\image\doitang.bmp"
+		 _HandleImgWaitExist($Handle, $Image_doitang,4, 610, 40, 40, 40,80, 2);search icon doi tang
+		 If Not @error Then ;da vo pho ban
+			writelog("Boss chưa hồi sinh " & _NowTime() & @CRLF) ; write console
+			Return
+		 EndIf
+		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+		 If Not @error Then ;da vo pho ban
+			writelog("Bắt đầu " & _NowTime() & @CRLF) ; write console
+			_cauGiupGuild()
+			AdLibRegister("_cauGiupGuild", 10000);auto run this function every 10 s trigger cau giup guild
+			Local $ImageDoiTang = @ScriptDir & "\image\doitang.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImageDoiTang,1800, 610, 40, 40, 40,80, 2);search doi tang trong 15p
+			AdlibUnRegister("_cauGiupGuild")
+			writelog("Ket Thuc Boss Kalima" & _NowTime() & @CRLF) ; write console
+		 EndIf
+	   Sleep(2000)
+ EndFunc   ;==>GotoPB
 Func _GotoBossCTC($Title,$emuport,$Handle)
    $count_covu = 0
    If BitAND(WinGetState($Title), 16) Then
@@ -158,7 +200,7 @@ Func _GotoBossTheGioi($Title,$emuport,$Handle)
 					 Sleep(2000)
 					 _Covu()
 					 _cauGiupGuild()
-					 AdLibRegister("_cauGiupGuild", 10000);auto run this function every 13 s trigger cau giup guild
+					 AdLibRegister("_cauGiupGuild", 10000);auto run this function every 10 s trigger cau giup guild
 					 Local $ImageMenu = @ScriptDir & "\image\menu.bmp"
 					 Local $Result = _HandleImgWaitExist($Handle, $ImageMenu,300, 660,30, 60, 50,$x_toler_menu, 2);search nut menu trong 300 de ket thuc
 					 AdlibUnRegister("_cauGiupGuild")
@@ -277,13 +319,14 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 		 If @error Then ;het luot
 			writelog("Ko thay icon boss guild -> cach 2" & _NowTime() & @CRLF) ; write console
 			_closeSimple($Handle); dong cua so NV
-		    While 1 ; tim icon boss guild
+		    For $i = 0 to 30 Step + 1
 			   Local $Imagexnho = @ScriptDir & "\image\xnho.bmp"
-			   Local $p = _HandleImgWaitExist($Handle,$Imagexnho,1, 630, 190, 20, 20,100, 2);search dau X
+			   Local $p = _HandleImgWaitExist($Handle,$Imagexnho,2, 630, 190, 20, 20,100, 2);search dau X
 			   If Not @error Then ; thay x nho
 				  Local $ImageIconBossGuild = @ScriptDir & "\image\iconboss12h.bmp"
+				  Sleep(500)
 				  Local $pBossGuild = _HandleImgWaitExist($Handle,$ImageIconBossGuild,1, 550, 225, 100, 100,80, 2);search icon boss guild
-				  If Not @error Then ; thay exp Lon
+				  If Not @error Then ; thay icon boss guild
 					 _ControlClickExactly($Title, "", "","", 1,$pBossGuild[1][0]+550, $pBossGuild[1][1]+320) ; click vo boss guild
 					 Sleep(2000)
 					 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1150 800");click xac nhan
@@ -296,7 +339,7 @@ Func _GotoNVBossGuild($Title,$emuport,$Handle)
 				  EndIf
 				  _ControlClickExactly($Title, "", "","", 1,$p[1][0]+631, $p[1][1]+191) ; click tat notify
 			   EndIf
-		    WEnd
+		    Next
 		 Else
 			writelog("Vao Boss Guild 12h " & _NowTime() & @CRLF) ; write console
 			_ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+15) ; click toi
@@ -378,6 +421,11 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  AdLibRegister("_xacNhan", 5000);auto run this function every 5 s
 	  Sleep(2000)
 	  _traLoiCauDo()
+	  _closeSimple($Handle); dong cua so
+	  Sleep(1000)
+	  _closeSimple($Handle); dong cua so
+	  Sleep(1000)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
 	  While 1
 		 Sleep(10000)
 		 Local $Imagecovukiem = @ScriptDir & "\image\covukiem.bmp"
@@ -398,7 +446,6 @@ Func _GotoNVTuHoiGuild($Title,$emuport,$Handle)
 	  _closeSimple($Handle); dong cua so
 	  _Covu()
 	  Sleep(1000)
-	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1431 700");click auto
 		 ;wait boss die
 	  Local $Now = _NowTime(4);time hien tai
 	  Local $var1 = StringRegExpReplace($Now, "[:]", "")
@@ -419,9 +466,11 @@ EndFunc   ;==>GotoPB
 Func _GotoHoTroGuild($Title,$emuport,$Handle)
     Global $flagbosstg = False
 	Global $flagbossctc = False
+	Global $flagboss_kalima = False
 	Local $X_toibtn = 80
-	If StringInStr($Title, "NoxPlayer",$STR_CASESENSE) == 0 Then ; -> LDplayer
-		 $X_toibtn = 95
+	Local $X_hotro = 80
+	If $isLDPlayer == True Then
+		 $X_hotro = 97
     EndIf
 	If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
@@ -431,7 +480,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 	 EndIf
 	  Sleep(1000)
 	  $Imageyeucauhotro = @ScriptDir & "\image\hotroguild.bmp"
-	  Local $p = _HandleImgWaitExist($Handle,$Imageyeucauhotro,2, 0, 0, -1, -1,101, 2);search icon ho tro guild
+	  Local $p = _HandleImgWaitExist($Handle,$Imageyeucauhotro,2, 0, 0, -1, -1,$X_hotro, 2);search icon ho tro guild
 	  If not @error Then ; thay yeu cau ho tro
 		 writelog("Option 1"& @CRLF) ; write console
 		 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+2, $p[1][1]+2) ; click toi yeu cau ho tro
@@ -538,6 +587,31 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			EndIf
 		 EndIf
 		 #EndRegion support Boss CTC
+		 #Region Support Boss Kalima
+		 Local $flag_sp_BossCTC = IniRead($pathconfig&$Title&".config", $config, $spbossctc, False)
+		 If $flag_sp_BossCTC == True Then ; support boss TG
+			Local $x_tolrance_boskalimatext = 107
+			Local $Imagebosskalimatext = @ScriptDir & "\image\mieukalima_text.bmp"
+			If $isLDPlayer == True Then
+			   $x_tolrance_boskalimatext = 107
+			   $Imagebosskalimatext = @ScriptDir & "\image\mieukalima_text.bmp"
+			EndIf
+			Local $p = _HandleImgSearch($Handle,$Imagebosskalimatext,320, 120, 200, 350,$x_tolrance_boskalimatext, 10);search boss ctc text
+			If not @error Then ; thay boss ctc
+			   writelog("Ho Tro Boss Kalima"& @CRLF) ; write console
+			   _ControlClickExactly($Title, "", "","", 1,$p[1][0]+300+320, $p[1][1]+20+120) ; click ho tro
+			   Sleep(600)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
+			   Sleep(6000)
+			   Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+			   Local $rsthoatpbCTC = _HandleImgWaitExist($Handle, $Imagethoatpb,9, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+			   If not @error Then ; da vo pho ban
+				  $flagboss_kalima = True
+				  ExitLoop
+			   EndIf
+			EndIf
+		 EndIf
+		 #EndRegion support Boss Kalima
 		 #Region Support Doat Mo
 		 Local $flag_sp_cuopmo = IniRead($pathconfig&$Title&".config", $config, $spcuopmo, False)
 		 If $flag_sp_cuopmo == True Then ; support boss TG
@@ -576,7 +650,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 		 writelog("Vo PB Boss TG"& @CRLF) ; write console
 		 While 1
 			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
-			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,13, 19, 278, 50, 28,$X_toibtn, 2);search toi trong 15s
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,13, 17, 278, 50, 28,$X_toibtn, 2);search toi trong 15s
 			If not @error Then ; thay toi ho tro\
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+26, $Result[1][1]+280) ; click toi
 			   Sleep(10000)
@@ -589,10 +663,23 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 		 writelog("Vo PB Boss CTC"& @CRLF) ; write console
 		 While 1
 			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
-			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 19, 278, 50, 28,$X_toibtn, 2);search toi
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,15, 17, 278, 50, 28,$X_toibtn, 2);search toi
 			If not @error Then ; thay toi ho tro\
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
 			   Sleep(5000)
+			Else ;ket thuc bos
+			   ExitLoop
+			EndIf
+		 WEnd
+	  EndIf
+	  If $flagboss_kalima == True Then
+		 writelog("Vo PB Boss Kalima"& @CRLF) ; write console
+		 While 1
+			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,11, 17, 278, 50, 28,$X_toibtn, 2);search toi
+			If not @error Then ; thay toi ho tro\
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
+			   Sleep(10000)
 			Else ;ket thuc bos
 			   ExitLoop
 			EndIf
@@ -622,6 +709,7 @@ Func _xacNhan()
    EndIf
 EndFunc   ;==>GotoXac Nhan
 Func _cauGiupGuild() ;config co vu 2 lan la max
+   _closeSimple($hwnd); dong cua so NV
    If $count_covu > 2 then Return
    Local $x = 78
    Local $ImageCauGiupGuild = @ScriptDir & "\image\caugiupguild.bmp"

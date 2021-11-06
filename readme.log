@@ -2,6 +2,11 @@ Mặc dù chỉ lấy phí 100k/tháng những vẫn nhiệt tình support các 
 nhằm cải tiến auto cho tốt hơn
 Liên Hệ Zalo 0902485321 để được hỗ trợ nếu auto ko chạy được
 
+Auto Mu Vượt thời đại cập nhập 5.0
+- Update theo phiên bản mới
+- Thêm chọn tầng thánh đàn nguyên tố 
+- Thêm khiêu chiến đấu trường
+
 Auto Mu Vượt thời đại cập nhập 4.9
 - Update Thánh Đàn Nguyên Tố
 - Thêm tùy chọn ma hóa chờ nếu có người khác đang train
@@ -29,21 +34,23 @@ Phiên bản hiện tại bao gồm những tính năng :
  - Boss cá nhân
  - NV tiền thưởng (sét mặc định 10 phút mỗi vòng)
  - Đào mỏ (Tự nâng cấp quốc : lần đầu tiên nâng cấp 1 lần . Lần thứ 2 nâng hết khi hết lượt)
- - Cướp mỏ (tùy chỉnh tại mục config)
+ - Cướp mỏ (tùy chỉnh tại mục cài đặt)
  - Treo quái dã ngoại
- - NV Guild (Tự động reload ra NV A nếu còn lượt, Nhiệm Vụ S tùy chỉnh tại mục config)
- - Săn tinh anh (tùy chỉnh tại mục config/ Mỗi lần vô phó bản đánh 1 phút xong out)
+ - NV Guild (Tự động reload ra NV A nếu còn lượt, Nhiệm Vụ S tùy chỉnh tại mục cài đặt)
+ - Săn tinh anh (tùy chỉnh tại mục cài đặt/ Mỗi lần vô phó bản đánh 1 phút xong out)
  - Lấy thánh vật thưởng (chỉ lấy thánh vật thường)
  - Boss guild 12h (tự cổ vũ )
  - Tụ hội guild + Boss guild 8h (tự ăn thịt + cổ vũ boss + truyền công)
  - Devil (Tự cổ vũ + ghép vé khi hết, mỗi lần ghép 10 cái)
  - Hộ Tống (lần đầu đi bảo tàng vàng, lần 2 đi bảo tàng bạc)
  - Pháo đài đỏ 
- - Hỗ trợ guild (tùy chỉnh tại mục config)
+ - Hỗ trợ guild (tùy chỉnh tại mục cài đặt)
  - Tự động login khi offline (đã support Nox va LD, Có thể bật auto bất kì lúc nào không nhất thiết phải vô game trước)
  - Boss TG (chọn boss top 1 : đánh con cao nhất, top 2: đánh 2 con cao nhất, top 3 tương tự)
  - Boss CTC (chọn 6 con trong tầng cao nhất)
  - Ma Hóa (chỉ đánh lại địa điểm đánh lần trước/ Chỉ làm khi tất cả các nhiệm vụ đã xong)
+ - Địa lao
+ - Thánh đàn  (tùy chỉnh chọn tầng)
 Tiện ích :
 - Ăn đan exp khi xong hết NV
 - Cắm train khi xong hết NV

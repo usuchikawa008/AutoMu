@@ -1,4 +1,3 @@
-
 Func GotoNVTienThuong($Title,$emuport,$Handle,$pos)
 	If BitAND(WinGetState($Title), 16) Then
 		MsgBox(0,"Message",WinGetState($Title))
@@ -197,21 +196,19 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 		WinActivate($myLastWin)
 	  EndIf
 	  Sleep(1000)
-	  $Imageconluotnvguide = @ScriptDir & "\image\conluotnvguide.bmp"
-	  $Imagehetluotnvguide = @ScriptDir & "\image\hetnhiemvuguildicon.bmp"
-	  $p = _searchNVAdvance($Handle, $Imagehetluotnvguide,$Imageconluotnvguide,95,115,7) ; search NV treo may
-	  If @error Then ; thay icon het luot
-		 Return SetError(3)
+
+	  Local $Image_muctieu = @ScriptDir & "\image\muctieu.bmp"
+      $rs_muctieu= _HandleImgWaitExist($Handle, $Image_muctieu,1, 0, 0, -1, -1,80, 2);search button muc tieu
+	  If Not @error Then
+		 _ControlClickExactly($Title, "", "","", 1,$rs_muctieu[1][0], $rs_muctieu[1][1]-40) ; click change
 	  EndIf
-	  If $p == 2 Then ; ko tim thay hinh nao het
-		 _closeSimple($Handle);tat cua so
-		 Return
-	  EndIf
-	  writelog("NV guild con luot" & _NowTime() & @CRLF) ; write console
-	  Sleep(500)
-	  Opt("WinTitleMatchMode", 3)
-	  _ControlClickExactly($Title, "", "","", 2,$p[1][0]+275, $p[1][1]+20) ; click toi
-	  Sleep(500)
+	  Sleep(2500)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1250 800");click guild
+	  Sleep(2500)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1470 350");click kien truc
+	  Sleep(2500)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 567");click nv guild
+	  Sleep(2000)
 	  $Imagelinhthuongstart = @ScriptDir & "\image\linhthuong.bmp"
 	  $linhthuong = _HandleImgSearch($Handle, $Imagelinhthuongstart, 0, 0, -1, -1,85, 2);search button linh thuong
 	  If Not @error Then
@@ -233,6 +230,15 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 	  $nhannv = _HandleImgWaitExist($Handle, $Imagelaynvguide,1, 0, 0, -1, -1,90, 2);search button lay nv guild
 	  If not @error Then ;bat dau nv
 		 While 1 ;loop cho toi khi het nv guild
+			$Image0tren5 = @ScriptDir & "\image\0tren5_nox.bmp"
+			If $isLDPlayer == True Then
+			   $Image0tren5 = @ScriptDir & "\image\0tren5.bmp"
+			EndIf
+
+			_HandleImgWaitExist($Handle, $Image0tren5,1, 0, 0, -1, -1,95, 2);search 0 tren 5
+			If not @error Then;neu thay nv rank S stop nv guild
+			   Return SetError(3)
+			EndIf
 			writelog("Start NV guild" & _NowTime() & @CRLF) ; write console
 			Local $ketqua = _reloadNV($Title,$Handle)
 			If @error Then;neu thay nv rank S stop nv guild
@@ -250,6 +256,8 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			Opt("WinTitleMatchMode", 3)
 			_ControlClickExactly($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click lay nv
 			writelog("Bắt đầu" & _NowTime() & @CRLF) ; write console
+			Sleep(2000)
+			_closeSimple($Handle);tat cua so
 			Sleep(40000) ;cho lam xong nv khoang 40s
 			$count = 0
 			While 1 ;loop click
@@ -275,7 +283,8 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 				  writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
 				  Opt("WinTitleMatchMode", 3)
 				  _ControlClickExactly($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click
-				  If $lastone Then
+				  If $lastone == True Then
+					 writelog("Ket thuc NV Guild" & _NowTime() & @CRLF) ; write console
 					 Return SetError(3)
 				  Else
 					 ExitLoop
@@ -312,6 +321,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			   Sleep(1500)
 			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1300 800");click toi ngay/lay nv
 			   Sleep(4000)
+			   _closeSimple($Handle);tat cua so
 			   Local $ImagevaopbrankS = @ScriptDir & "\image\vaopbrankS.bmp"
 			   Local $rs_vaopbRankS = _HandleImgWaitExist($Handle, $ImagevaopbrankS,10, 0, 0, -1, -1,$tor_vaopbrankS, 2);search icon vao pho ban
 			   If not @error Then ; thay icon vao pb ban
@@ -338,6 +348,8 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 		 Opt("WinTitleMatchMode", 3)
 		 _ControlClickExactly($Title, "", "","", 1,$nhannv[1][0], $nhannv[1][1]) ; click toi nv guild
 		 writelog("Bắt đầu" & _NowTime() & @CRLF) ; write console
+		 Sleep(2000)
+		 _closeSimple($Handle);tat cua so
 		 Sleep(40000) ;cho lam xong nv khoang 30s
 		 $count = 0
 		 While 1 ;loop click

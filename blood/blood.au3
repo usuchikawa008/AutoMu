@@ -86,7 +86,7 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 	  Sleep(80000);cho 80s
 	  writelog("Cho ket thuc pb blood...." & _NowTime() & @CRLF) ; write console
 	  Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,480, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
+	  Local $Result = _HandleImgWaitExist($Handle, $ImagePath,900, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
 EndFunc   ;==>GotoPB
 
 
@@ -279,20 +279,90 @@ Func _GotoThanhDan($Title,$emuport,$Handle)
 	  Sleep(1000)
 	 _ControlClickExactly($Title, "", "","", 1,$p[1][0]+275, $p[1][1]+25) ; click toi icon thanh dan
 	  Sleep(2000)
+	  _chonTangThanhDan($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1200 800");click toi khieu chien
+	  Sleep(1500)
+	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 600 600");click kien tri
 	  Sleep(4000)
 	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
 	  _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 	  If @error Then ; ko tim thay -> lam lai luc khac
 		 Return
 	  Else
+		 AdLibRegister("_toiNgay", 5000);auto run this function every 5 s
 		 writelog("Vào khiêu chiến thánh đàn...." & _NowTime() & @CRLF) ; write console
-		 Sleep(5000)
+		 Sleep(8000)
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 250 300");click focus vo 1 tru
 		 ;cho 60s
 		 Sleep(60000)
 		 Local $ImagePath = @ScriptDir & "\image\menu.bmp"
-		 Local $Result = _HandleImgWaitExist($Handle, $ImagePath,300, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
+		 _HandleImgWaitExist($Handle, $ImagePath,300, 660,30, 60, 50,$x_toler_menu, 2);search nut menu
+		 If not @error Then
+			writelog("Kết thúc thánh đàn...." & _NowTime() & @CRLF) ; write console
+		 EndIf
+		 AdlibUnRegister("_toiNgay")
 	  EndIf
 	  Sleep(2000)
-EndFunc   ;==>GotoPB
+   EndFunc   ;==>GotoPB
+Func _chonTangThanhDan($Title,$emuport,$Handle)
+   Local $readconfig = IniRead($pathconfig&$Title&".config", $config, $tangthanhdan, 0)
+   Switch $readconfig
+    Case 0
+        Return
+    Case 1
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 230 250 600 100"); cuon xuong
+		writelog("Chọn tầng 1"& @CRLF) ; write console
+		_clickToaDo(222)
+    Case 2
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 230 250 600 100"); cuon xuong
+		writelog("Chọn tầng 2"& @CRLF) ; write console
+		_clickToaDo(333)
+    Case 3
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 230 250 600 100"); cuon xuong
+		writelog("Chọn tầng 3"& @CRLF) ; write console
+		_clickToaDo(444)
+    Case 4
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 230 250 600 100"); cuon xuong
+		writelog("Chọn tầng 4"& @CRLF) ; write console
+		_clickToaDo(555)
+    Case 5
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 230 250 600 100"); cuon xuong
+		writelog("Chọn tầng 5"& @CRLF) ; write console
+		_clickToaDo(666)
+    Case 6
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 600 250 230 100"); cuon len
+		writelog("Chọn tầng 6"& @CRLF) ; write console
+		_clickToaDo(350)
+    Case 7
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 600 250 230 100"); cuon len
+		writelog("Chọn tầng 7"& @CRLF) ; write console
+		_clickToaDo(450)
+    Case 8
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 600 250 230 100"); cuon len
+		writelog("Chọn tầng 8"& @CRLF) ; write console
+		_clickToaDo(580)
+    Case 9
+        _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input swipe 250 600 250 230 100"); cuon len
+		writelog("Chọn tầng 9"& @CRLF) ; write console
+		_clickToaDo(681)
+    Case Else
+        writelog("Không tìm thấy tầng khiêu chiến....chạy mặc định" & _NowTime() & @CRLF) ; write console
+		Return
+   EndSwitch
+
+EndFunc
+
+Func _clickToaDo($y)
+   Sleep(2000)
+   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 250 "&$y);click
+   Sleep(1000)
+EndFunc
+
+Func _toiNgay()
+   Local $ImageXacNhan = @ScriptDir & "\image\toingay.bmp"
+   Local $rs = _HandleImgSearch($hwnd, $ImageXacNhan,0, 0, -1, -1,100,5 );search icon xac nhan
+   If not @error Then ; thay image
+	  _ControlClickExactly($Title, "", "","", 1,$rs[1][0], $rs[1][1]) ; click toi ngay
+	  AdlibUnRegister("_toiNgay")
+   EndIf
+EndFunc   ;==>GotoXac Nhan
