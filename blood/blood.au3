@@ -147,7 +147,6 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 			   $Imageghepve = @ScriptDir & "\image\ghepveblood_ld.bmp"
 			   $x_ghepve_tolerance = 80
 			EndIf
-			MsgBox(0,0,$x_ghepve_tolerance)
 		   Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,220, -1, -1,$x_ghepve_tolerance, 5);search icon gep ve
 		   If not @error Then
 				_ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0], $rsghepve[1][1]) ; click vao ghep ve
