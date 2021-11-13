@@ -40,7 +40,7 @@ Func GotoPBBlood($Title,$emuport,$Handle)
 					If isLDPlayer() Then
 					    $Imageghepve = @ScriptDir & "\image\ghepveblood_ld.bmp"
 					EndIf
-					Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,80, 2);search icon gep ve
+					Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,270, 60, 60,110, 2);search icon gep ve
 					If not @error Then
 						 _ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+270) ; click vao ghep ve
 					Else
@@ -128,7 +128,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 	  Sleep(2000)
 	  ;check devil da san sang
 	  Local $Imagetabhoatdongguild = @ScriptDir & "\image\tabhoatdongguild.bmp"
-	  _HandleImgWaitExist($Handle, $Imagetabhoatdongguild,12, 0,0, -1, -1,100, 5); cho menu devil xuat hien
+	  _HandleImgWaitExist($Handle, $Imagetabhoatdongguild,12, 740,250, 100, 100,120, 5); cho menu devil xuat hien
 	  ;check het ve hay ko ->>> here
 	  Local $Imagehetvedevil = @ScriptDir & "\image\hetvedevil.bmp"
 	  Local $rshetve = _HandleImgSearch($Handle, $Imagehetvedevil, 0,0, -1, -1,80, 5);search het ve devil
@@ -142,10 +142,13 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 		   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1000 130");click lay
 		   Sleep(1000)
 		   Local $Imageghepve = @ScriptDir & "\image\ghepveblood.bmp"
+		   Local $x_ghepve_tolerance = 140
 		   If isLDPlayer() Then
 			   $Imageghepve = @ScriptDir & "\image\ghepveblood_ld.bmp"
-		   EndIf
-		   Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,0,0, -1, -1,80, 5);search icon gep ve
+			   $x_ghepve_tolerance = 80
+			EndIf
+			MsgBox(0,0,$x_ghepve_tolerance)
+		   Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,220, -1, -1,$x_ghepve_tolerance, 5);search icon gep ve
 		   If not @error Then
 				_ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0], $rsghepve[1][1]) ; click vao ghep ve
 		   Else

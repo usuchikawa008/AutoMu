@@ -111,6 +111,7 @@ Global Const $baotang21h = "BaoTang21h"
 Global Const $spbossTG = "SpBossTG"
 Global Const $spbossctc = "SpBossCTC"
 Global Const $spcuopmo = "SpCuopMo"
+Global Const $spbossqd = "SpBossQD"
 Global Const $sp_nvguildRankS = "SpNvGuildRankS"
 Global Const $sp_timewaitNvS = "SpWaitNvS"
 Global Const $cuop_mo_de = "MoDe"
@@ -152,7 +153,7 @@ Global $x_toler_nvtienthuong = 110
 
 If isLDPlayer() Then ; -> LDplayer
    $x_toler_menu = 112
-   $x_toler_thoatpb = 90
+   $x_toler_thoatpb = 102
    $x_toler_close = 102
    $x_toler_nvtienthuong = 115
 EndIf
@@ -334,7 +335,7 @@ Func _resizeAuto()
 		 Opt("WinTitleMatchMode", 3)
 		 WinMove($Title, "",Default ,Default , 849, 512) ;resize auto again
 	  EndIf
-   Else ;-> LDplayer
+   Else ;-> Nox
 	  Opt("WinTitleMatchMode", 3)
 	  $version =  FileGetVersion ($Nox_Path & "\Nox.exe", $FV_PRODUCTVERSION  )
 	  Local $size = IniRead(@ScriptDir&"\version.ini", "NoxVersion", $version, "849, 509")
@@ -1389,7 +1390,7 @@ Func _getNameCharacter()
 	   Return 1
 	EndFunc   ;==> Get Name Character
 Func _anDanExp()
-   Local $x_balo = 90
+   Local $x_balo = 95
    If $isLDPlayer == True Then ; -> LDplayer
 		 $x_balo = 114
    EndIf
@@ -1623,14 +1624,14 @@ Func _findIconMenu($Handle)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111"); an esc
 		 EndIf
 		 Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+		 Local $rsthoatpb = _HandleImgWaitExist($Handle, $Imagethoatpb,1, 600, 40, 120, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 		 If Not @error Then
 			writelog("Dang Trong Pho Ban .. Thoat " & _NowTime() & @CRLF) ; write console
-			_ControlClickExactly($Title, "", "","", 1,$rsthoatpb[1][0]+655, $rsthoatpb[1][1]+40) ; click thoat
+			_ControlClickExactly($Title, "", "","", 1,$rsthoatpb[1][0]+600, $rsthoatpb[1][1]+40) ; click thoat
 			Sleep(700)
 			_ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 985 600") ;click Xac nhan
 			Sleep(6000)
-			$Result2 = _HandleImgWaitExist($Handle, $ImagePath,2, 660,30, 60, 50,$x_toler_menu, 2);search nut menu again trong 5s
+			$Result2 = _HandleImgWaitExist($Handle, $ImagePath,2, 660,30, 60, 50,$x_toler_menu, 2);search nut menu again trong 2s
 		 EndIf
 	  Else
 		 writelog("Tim thay menu " & _NowTime() & @CRLF) ; write console

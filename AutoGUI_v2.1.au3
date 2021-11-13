@@ -114,6 +114,7 @@ Global Const $baotang21h = "BaoTang21h"
 Global Const $spbossTG = "SpBossTG"
 Global Const $spbossctc = "SpBossCTC"
 Global Const $spcuopmo = "SpCuopMo"
+Global Const $spbossqd = "SpBossQD"
 Global Const $sp_nvguildRankS = "SpNvGuildRankS"
 Global Const $sp_timewaitNvS = "SpWaitNvS"
 Global Const $cuop_mo_de = "MoDe"
@@ -427,6 +428,7 @@ Func Gui()
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossTG, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossctc, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spcuopmo, True)
+			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $spbossqd, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_nvguildRankS, True)
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $sp_timewaitNvS, 60);60s
 			  IniWrite($pathconfig&$aList[$i][0]&".config", $config, $cuop_mo_de, True)
@@ -567,6 +569,7 @@ Func Gui()
     Global $idCheckBoxSPBossTG = GUICtrlCreateCheckbox("Boss TG", 10, 170, 70, 25)
 	Global $idCheckBoxSPBossCTC = GUICtrlCreateCheckbox("Boss CTC", 90, 170, 70, 25)
 	Global $idCheckBoxSPBossCuopLaiMo = GUICtrlCreateCheckbox("Cướp lại mỏ", 170, 170, 70, 25)
+	Global $idCheckBoxSPBossQD = GUICtrlCreateCheckbox("Boss QĐ", 250, 170, 70, 25)
 	Global $idCheckBoxSPNvS = GUICtrlCreateCheckbox("NV Guild S", 10, 195, 70, 25)
     Global $idInputSPWait = GUICtrlCreateInput("",110,198,25,15,$ES_NUMBER)
 	Global $idLableSPText = GUICtrlCreateLabel("Đợi",90,200,20,15)
@@ -1607,6 +1610,7 @@ Func _findAddEmulator($NoxList,$listNoxRunning)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $spbossTG, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $spbossctc, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $spcuopmo, True)
+		   IniWrite($pathconfig&$NoxOff&".config", $config, $spbossqd, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $sp_nvguildRankS, True)
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $sp_timewaitNvS, 60);60s
 		   IniWrite($pathconfig&$NoxOff&".config", $config, $cuop_mo_de, True)
@@ -1704,7 +1708,7 @@ Func changeStatus($statusHoatDong)
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $thanhdan, $statusHoatDong)
 		  Case 21 ; khieu chien
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $khieuchien, $statusHoatDong)
-		  Case 21 ; kalima
+		  Case 22 ; kalima
 			   IniWrite($pathstatus&$currentAuto&".tmp", $status, $kalima, $statusHoatDong)
 	  EndSwitch
 	  _updateAcTion()
@@ -1779,6 +1783,13 @@ Func readconfig()
 		GUICtrlSetState($idCheckBoxSPBossCuopLaiMo,$GUI_CHECKED)
 	 Else
 		GUICtrlSetState($idCheckBoxSPBossCuopLaiMo,$GUI_UNCHECKED)
+	 EndIf
+     ;~ SP boss QD
+	 Local $checkbox_config_sp_bossqd = IniRead($pathconfig&$currentAuto&".config", $config, $spbossqd, False)
+	 If $checkbox_config_sp_bossqd == True Then
+		GUICtrlSetState($idCheckBoxSPBossQD,$GUI_CHECKED)
+	 Else
+		GUICtrlSetState($idCheckBoxSPBossQD,$GUI_UNCHECKED)
 	 EndIf
 	 Local $checkbox_config_sp_NvS = IniRead($pathconfig&$currentAuto&".config", $config, $sp_nvguildRankS, False)
 	 If $checkbox_config_sp_NvS == True Then
@@ -1953,6 +1964,12 @@ Func writeconfig()
 		IniWrite($pathconfig&$currentAuto&".config", $config, $spcuopmo, True)
 	 Else
 		IniWrite($pathconfig&$currentAuto&".config", $config, $spcuopmo, False)
+	 EndIf
+     ;SP Boss QD
+	 If GUICtrlRead($idCheckBoxSPBossQD) = $GUI_CHECKED Then
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spbossqd, True)
+	 Else
+		IniWrite($pathconfig&$currentAuto&".config", $config, $spbossqd, False)
 	 EndIf
 	 If GUICtrlRead($idCheckBoxSPNvS) = $GUI_CHECKED Then
 		IniWrite($pathconfig&$currentAuto&".config", $config, $sp_nvguildRankS, True)

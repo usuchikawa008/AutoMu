@@ -236,7 +236,8 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			EndIf
 
 			_HandleImgWaitExist($Handle, $Image0tren5,1, 0, 0, -1, -1,95, 2);search 0 tren 5
-			If not @error Then;neu thay nv rank S stop nv guild
+			If not @error Then;
+			   writelog("Het NV Guild" & _NowTime() & @CRLF) ; write console
 			   Return SetError(3)
 			EndIf
 			writelog("Start NV guild" & _NowTime() & @CRLF) ; write console

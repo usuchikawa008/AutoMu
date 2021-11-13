@@ -467,6 +467,7 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
     Global $flagbosstg = False
 	Global $flagbossctc = False
 	Global $flagboss_kalima = False
+	Global $flagboss_qd = False
 	Local $X_toibtn = 80
 	Local $X_hotro = 80
 	If $isLDPlayer == True Then
@@ -612,6 +613,31 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			EndIf
 		 EndIf
 		 #EndRegion support Boss Kalima
+		 #Region Support Boss QD
+		 Local $flag_sp_BossQD = IniRead($pathconfig&$Title&".config", $config, $spbossqd, False)
+		 If $flag_sp_BossQD == True Then ; support boss TG
+			Local $x_tolrance_bossqd = 107
+			Local $Imagebossqdtext = @ScriptDir & "\image\lanhdiaquandoantrunglap.bmp"
+			If $isLDPlayer == True Then
+			   $x_tolrance_bossqd = 107
+			   $Imagebossqdtext = @ScriptDir & "\image\lanhdiaquandoantrunglap.bmp"
+			EndIf
+			Local $p = _HandleImgSearch($Handle,$Imagebossqdtext,320, 120, 200, 350,$x_tolrance_bossqd, 10);search boss qd text
+			If not @error Then ; thay boss qd text
+			   writelog("Ho Tro Boss Quan Doan"& @CRLF) ; write console
+			   _ControlClickExactly($Title, "", "","", 1,$p[1][0]+350+320, $p[1][1]+20+120) ; click ho tro
+			   Sleep(600)
+			   _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 821 600");click giup ngay
+			   Sleep(6000)
+			   Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
+			   Local $rsthoatpbCTC = _HandleImgWaitExist($Handle, $Imagethoatpb,10, 600, 40, 120, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+			   If not @error Then ; da vo pho ban
+				  $flagboss_qd = True
+				  ExitLoop
+			   EndIf
+			EndIf
+		 EndIf
+		 #EndRegion support Boss QD
 		 #Region Support Doat Mo
 		 Local $flag_sp_cuopmo = IniRead($pathconfig&$Title&".config", $config, $spcuopmo, False)
 		 If $flag_sp_cuopmo == True Then ; support boss TG
@@ -681,6 +707,20 @@ Func _GotoHoTroGuild($Title,$emuport,$Handle)
 			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
 			   Sleep(10000)
 			Else ;ket thuc bos
+			   ExitLoop
+			EndIf
+		 WEnd
+	  EndIf
+	  If $flagboss_qd == True Then
+		 writelog("Vo PB Boss Quan Doan"& @CRLF) ; write console
+		 While 1
+			Local $ImagePath = @ScriptDir & "\image\toibtn.bmp"
+			Local $Result = _HandleImgWaitExist($Handle, $ImagePath,11, 17, 278, 50, 28,$X_toibtn, 2);search toi
+			If not @error Then ; thay toi ho tro\
+			   _ControlClickExactly($Title, "", "","", 1,$Result[1][0]+21, $Result[1][1]+280) ; click toi
+			   Sleep(10000)
+			Else ;ket thuc bos
+			   writelog("Ket Thuc"& @CRLF) ; write console
 			   ExitLoop
 			EndIf
 		 WEnd

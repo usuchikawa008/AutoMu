@@ -76,7 +76,11 @@ Func _GotoLayThanhVat($Title,$emuport,$Handle)
 			Local $x = 765
 			Local $y = 325
 		 EndIf
+		 writelog("Còn lượt khai thác" & _NowTime() & @CRLF) ; write console
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1500 100");click to map
+		 Sleep(500)
+		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1500 100");click to map
+
 		 Sleep(3000)
 		 ;click to toa do 1
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap "&$x&" "&$y);click to map

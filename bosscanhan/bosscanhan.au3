@@ -32,12 +32,13 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input tap 1100 800");click TOI NGAY
       Sleep(3000)
 	  $Imagehetluot = @ScriptDir & "\image\hetluotbosscanhan3.bmp"
-	  Local $x_tolerance_hetluotboss = 129
+	  Local $x_tolerance_hetluotboss = 170
 	  If $isLDPlayer == True Then
 		 $x_tolerance_hetluotboss = 130
+		 $Imagehetluot = @ScriptDir & "\image\hetluotbosscanhan3_ld.bmp"
 	  EndIf
 
-	  $Rshetluot = _HandleImgWaitExist($Handle,$Imagehetluot,2, 390, 230, 80, 60,$x_tolerance_hetluotboss, 2);search icon het luot boss
+	  $Rshetluot = _HandleImgWaitExist($Handle,$Imagehetluot,2, 370, 230, 90, 80,$x_tolerance_hetluotboss, 2);search icon het luot boss
 	  If not @error Then ; thay icon mua them luot => het luot boss ca nhan
 		 writelog("Het Luot " & _NowTime() & @CRLF) ; write console
 		 _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
