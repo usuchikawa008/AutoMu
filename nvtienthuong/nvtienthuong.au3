@@ -235,7 +235,7 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 			   $Image0tren5 = @ScriptDir & "\image\0tren5.bmp"
 			EndIf
 
-			_HandleImgWaitExist($Handle, $Image0tren5,1, 0, 0, -1, -1,95, 2);search 0 tren 5
+			$hetnv = _HandleImgWaitExist($Handle, $Image0tren5,1, 0, 0, -1, -1,95, 2);search 0 tren 5
 			If not @error Then;
 			   writelog("Het NV Guild" & _NowTime() & @CRLF) ; write console
 			   Return SetError(3)
@@ -284,17 +284,14 @@ Func _GotoNVGuide($Title,$emuport,$Handle,$pos)
 				  writelog("Thay buttion linh thuong" & _NowTime() & @CRLF) ; write console
 				  Opt("WinTitleMatchMode", 3)
 				  _ControlClickExactly($Title, "", "","", 1,$p[1][0], $p[1][1]) ; click
-				  If $lastone == True Then
-					 writelog("Ket thuc NV Guild" & _NowTime() & @CRLF) ; write console
-					 Return SetError(3)
-				  Else
-					 ExitLoop
-				  EndIf
+				  Sleep(2000)
+				  Return
 			   EndIf
 			   $Imagelaynvguide = @ScriptDir & "\image\laynvguild.bmp"
 			   $p1 = _HandleImgSearch($Handle, $Imagelaynvguide, 0, 0, -1, -1,80, 2);search button lay nv guild
 			   If Not @error Then
-				  writelog("Thay buttion lay nv guild" & _NowTime() & @CRLF) ; write console
+				  writelog("Thay button lay nv guild" & _NowTime() & @CRLF) ; write console
+				  Sleep(2000)
 				  ExitLoop
 			   EndIf
 			   _close($Handle) ;close cua so

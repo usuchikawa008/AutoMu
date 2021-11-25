@@ -1,7 +1,7 @@
 [General]
 MAC=04:D9:F5:AD:B0:DA
 HardMode=False
-AnDonExp=False
+AnDonExp=True
 CamTrain=True
 GhepVeBlood=True
 AutoAnThit=True

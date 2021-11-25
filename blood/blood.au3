@@ -149,7 +149,7 @@ Func _GotoDevilSquare($Title,$emuport,$Handle)
 			EndIf
 		   Local $rsghepve = _HandleImgWaitExist($Handle, $Imageghepve,2,570,220, -1, -1,$x_ghepve_tolerance, 5);search icon gep ve
 		   If not @error Then
-				_ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0], $rsghepve[1][1]) ; click vao ghep ve
+				_ControlClickExactly($Title, "", "","", 1,$rsghepve[1][0]+570, $rsghepve[1][1]+220) ; click vao ghep ve
 		   Else
 				writelog("Loi..ko the ghep ve luc nay...." & _NowTime() & @CRLF) ; write console
 				Return

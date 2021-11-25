@@ -764,11 +764,12 @@ Func _cauGiupGuild() ;config co vu 2 lan la max
    EndIf
 EndFunc   ;==>GotoXac Nhan
 Func _sapXepLaiListBossTG()
+   writelog("Chon boss" & _NowTime() & @CRLF) ; write console
    Local $i
    For $i = 0 to 30 Step + 1
 	  Sleep(200)
 	  Local $Imagebosstgtab = @ScriptDir & "\image\bossthegioitab.bmp" ; check co dang o menu tab the gioi
-	  Local $rs = _HandleImgSearch($hwnd, $Imagebosstgtab,0, 0, -1, -1,80,5 );search icon xac nhan
+	  Local $rs = _HandleImgSearch($hwnd, $Imagebosstgtab,0, 0, -1, -1,100,5 );search icon xac nhan
 	  If @error Then
 		 Return
 	  EndIf

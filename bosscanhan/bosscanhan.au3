@@ -97,7 +97,7 @@ Func _GotoPBBossCaNhan($Title,$emuport,$Handle)
 	  EndIf
 	  Sleep(5000)
 	  Local $Imagethoatpb = @ScriptDir & "\image\thoatpb.bmp"
-      _HandleImgWaitExist($Handle, $Imagethoatpb,5, 655, 40, 40, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
+      _HandleImgWaitExist($Handle, $Imagethoatpb,5, 600, 40, 120, 40,$x_toler_thoatpb, 2);search icon thoat pho ban
 	  If @error Then
 		  writelog("Lỗi không thể vô BOSS Cá Nhân lúc này " & _NowTime() & @CRLF) ; write console
 		  _ADB_Command("nox_adb.exe -s 127.0.0.1:"&$emuport&" shell input keyevent 111") ; press 'esc'
